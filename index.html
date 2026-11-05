@@ -350,6 +350,56 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
 
 .leheriya{height:14px;background:repeating-linear-gradient(-45deg,var(--kesar) 0 9px,var(--rani) 9px 18px,var(--genda) 18px 27px,var(--patti) 27px 36px)}
 .sched{background-image:repeating-linear-gradient(-45deg,rgba(255,184,28,.05) 0 18px,transparent 18px 36px)}
+
+/* ---------- royal additions ---------- */
+@keyframes shimmer{to{background-position:-200% 0}}
+.shine{background:linear-gradient(100deg,var(--genda) 0%,var(--genda) 38%,#fff6cf 50%,var(--genda) 62%,var(--genda) 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:shimmer 7s linear infinite}
+@media (prefers-reduced-motion:reduce){.shine{animation:none}}
+/* procession */
+.procession{position:relative;overflow:hidden;background:linear-gradient(180deg,#fff4e0 0%,#fde3c0 78%,#f3c98b 78%,#e8b46a 100%);padding-top:12px;border-bottom:3px solid var(--sona)}
+.proc-track{display:flex;width:max-content;animation:march 48s linear infinite}
+.proc-track svg{height:132px;width:auto;flex:none;display:block}
+@keyframes march{to{transform:translateX(-50%)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes sway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.proc-track .b{animation:bob .7s ease-in-out infinite;transform-box:fill-box}
+.proc-track .s{animation:sway 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.proc-tag{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:6px;z-index:2;font-family:var(--f-label);font-weight:700;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--mewar);background:rgba(255,244,224,.9);padding:3px 12px;border-radius:999px;border:1px solid var(--sona);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.proc-track,.proc-track .b,.proc-track .s{animation:none}}
+@media (max-width:560px){.proc-track svg{height:100px}}
+/* 3D fort */
+.fort-sec{padding-block:96px;background:radial-gradient(ellipse at 50% 0%,rgba(240,125,26,.22),transparent 55%),radial-gradient(ellipse at 50% 100%,rgba(214,36,110,.25),transparent 60%),var(--raat);color:var(--patra)}
+.fort-sec .label{color:var(--sona)}
+.fort-sec .sec-head .sub{color:var(--sona-pale);opacity:.85}
+.fort3d{max-width:1120px;margin:0 auto}
+.fort3d .stage{position:relative;height:min(68vh,620px);min-height:440px;border-radius:50% 50% 18px 18px / 70px 70px 18px 18px;overflow:hidden;border:2px solid var(--sona);box-shadow:0 0 0 6px rgba(224,176,58,.14),0 30px 70px rgba(0,0,0,.45);background:linear-gradient(180deg,#2a1450,#d6246e 70%,#f07d1a);touch-action:pan-y}
+.fort3d canvas{display:block;width:100%;height:100%;cursor:grab}
+.fort3d canvas:active{cursor:grabbing}
+.fort3d .labels{position:absolute;inset:0;pointer-events:none}
+.lm{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;background:none;border:0;padding:0;cursor:pointer;font-family:var(--f-label);font-size:12.5px;font-weight:600;color:var(--syahi);transition:opacity .25s}
+.lm span{background:rgba(255,244,224,.94);padding:3px 10px;border-radius:999px;box-shadow:0 3px 10px rgba(0,0,0,.3);white-space:nowrap}
+.lm i{order:2;width:2px;height:16px;background:linear-gradient(var(--genda),transparent)}
+.lm:hover span,.lm.on span{background:var(--genda)}
+.lm:focus-visible{outline:none}.lm:focus-visible span{outline:2px solid var(--genda);outline-offset:2px}
+.fort3d .mood{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:4px;background:rgba(27,16,51,.62);backdrop-filter:blur(6px);padding:5px;border-radius:999px;border:1px solid rgba(224,176,58,.45)}
+.fort3d .mood button{background:transparent;border:0;color:var(--sona-pale);font-family:var(--f-label);font-size:13.5px;padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.fort3d .mood button[aria-pressed="true"]{background:var(--genda);color:var(--raat);font-weight:700}
+.fort3d .zoom{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:column;gap:6px}
+.fort3d .zoom button{width:38px;height:38px;border-radius:50%;border:1px solid rgba(224,176,58,.6);background:rgba(27,16,51,.62);color:var(--genda);font-size:20px;cursor:pointer}
+.fort3d .hint{position:absolute;left:18px;bottom:24px;font-family:var(--f-label);font-size:12.5px;color:var(--patra);opacity:.8;text-shadow:0 1px 4px #000}
+.fort3d .info{position:absolute;left:18px;top:110px;max-width:320px;background:rgba(255,244,224,.97);color:var(--syahi);border-radius:14px;padding:14px 38px 14px 16px;border-top:4px solid var(--kesar);box-shadow:0 14px 30px rgba(0,0,0,.35)}
+.fort3d .info b{font-family:var(--f-display);font-weight:400;font-size:24px;color:var(--mewar);display:block;line-height:1.1}
+.fort3d .info p{margin:6px 0 0;font-size:15px;line-height:1.5}
+.fort3d .info button{position:absolute;right:8px;top:8px;width:28px;height:28px;border:0;background:transparent;font-size:20px;cursor:pointer;color:var(--syahi-soft)}
+.fort3d .nogl-msg{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:24px;font-family:var(--f-label);color:var(--patra)}
+.fort3d.nogl .nogl-msg{display:grid}
+.fort3d.nogl .mood,.fort3d.nogl .zoom,.fort3d.nogl .hint{display:none}
+.fort-stats{max-width:1120px;margin:26px auto 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.fort-stats div{text-align:center;padding:14px 10px;border-top:1px solid rgba(224,176,58,.45)}
+.fort-stats b{display:block;font-family:var(--f-display);font-weight:400;font-size:34px;color:var(--genda);line-height:1.1}
+.fort-stats span{font-family:var(--f-label);font-size:13px;color:var(--sona-pale);opacity:.85}
+@media (max-width:600px){.fort3d .stage{height:480px;min-height:0}.lm{font-size:11px}.lm span{padding:2px 8px}.lm[data-k=kumbha],.lm[data-k=pols]{display:none}}
+@media (max-width:720px){.fort-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.fort3d .stage{border-radius:50% 50% 14px 14px / 40px 40px 14px 14px}.fort3d .info{left:12px;right:12px;top:auto;bottom:70px;max-width:none}.fort3d .hint{display:none}.fort3d .mood{left:16px;transform:none}.fort3d .mood button{padding:7px 10px;font-size:12.5px}}
 /* petals canvas for sections */
 #petals{position:fixed;inset:0;pointer-events:none;z-index:70;width:100%;height:100%}
 .reveal{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -379,6 +429,7 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
       <span class="e">D &amp; R</span><span class="h">दु &amp; रि</span>
     </a>
     <div class="nav-links">
+      <a href="#kila"><span class="e">The Fort</span><span class="h">किला</span></a>
       <a href="#utsav"><span class="e">Schedule</span><span class="h">कार्यक्रम</span></a>
       <a href="#raasta"><span class="e">Baraat route</span><span class="h">बारात मार्ग</span></a>
       <a href="#thikana"><span class="e">Venues</span><span class="h">स्थान</span></a>
@@ -428,6 +479,52 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
     </div>
   </div>
 </header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="haathi" viewBox="0 0 170 130">
+ <g fill="#5f6886"><rect x="60" y="78" width="15" height="42" rx="5"/><rect x="82" y="80" width="14" height="40" rx="5"/><rect x="118" y="80" width="14" height="40" rx="5"/><rect x="138" y="78" width="15" height="42" rx="5"/></g>
+ <g fill="#e0b03a"><rect x="60" y="110" width="15" height="4"/><rect x="82" y="110" width="14" height="4"/><rect x="118" y="110" width="14" height="4"/><rect x="138" y="110" width="15" height="4"/></g>
+ <path d="M154 58 q14 10 8 34" fill="none" stroke="#5f6886" stroke-width="3"/>
+ <ellipse cx="108" cy="64" rx="50" ry="32" fill="#6f7896"/>
+ <circle cx="56" cy="56" r="26" fill="#6f7896"/>
+ <path d="M36 62 C26 76 26 96 36 112 C40 117 47 114 44 108 C38 96 40 80 50 70 Z" fill="#6f7896"/>
+ <path d="M42 74 C34 80 30 84 24 82" fill="none" stroke="#fff4e0" stroke-width="4" stroke-linecap="round"/>
+ <path d="M70 40 H146 Q150 70 140 88 H78 Q66 70 70 40 Z" fill="#d6246e" stroke="#e0b03a" stroke-width="3"/>
+ <path d="M78 88 l6 8 6-8 6 8 6-8 6 8 6-8 6 8 6-8 6 8 6-8" fill="none" stroke="#e0b03a" stroke-width="2.5"/>
+ <g fill="#ffb81c"><circle cx="92" cy="58" r="3.4"/><circle cx="108" cy="68" r="3.4"/><circle cx="124" cy="58" r="3.4"/><circle cx="108" cy="50" r="3.4"/><circle cx="136" cy="68" r="2.4"/><circle cx="80" cy="68" r="2.4"/></g>
+ <path d="M64 36 C84 36 90 60 82 78 C74 86 62 80 62 68 Z" fill="#8a93b0"/>
+ <circle cx="47" cy="50" r="2.4" fill="#1b1033"/>
+ <path d="M38 34 Q52 26 62 32 L58 52 Q50 46 43 50 Z" fill="#e0b03a"/><circle cx="50" cy="41" r="3.2" fill="#d6246e"/>
+ <rect x="86" y="18" width="48" height="22" fill="#e0b03a" stroke="#b3121f" stroke-width="2"/>
+ <path d="M90 22 v14 M100 22 v14 M110 22 v14 M120 22 v14 M130 22 v14" stroke="#b3121f" stroke-width="1.5"/>
+ <path d="M84 18 Q110 -10 136 18 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="2"/>
+ <path d="M110 4 v-5" stroke="#e0b03a" stroke-width="2.5"/><circle cx="110" cy="-1" r="2" fill="#e0b03a"/>
+ <circle cx="70" cy="22" r="5" fill="#c98a5a"/><path d="M64 21 q6-11 12 0 z" fill="#f07d1a"/><path d="M65 27 h10 l2 13 h-14 z" fill="#fff4e0"/>
+</symbol>
+<symbol id="ghodi" viewBox="0 0 140 140">
+ <path d="M118 78 q18 6 12 38" fill="none" stroke="#e5d6bd" stroke-width="7" stroke-linecap="round"/>
+ <g fill="#f3eadc"><rect x="46" y="86" width="7" height="42" rx="3"/><rect x="60" y="88" width="7" height="40" rx="3"/><rect x="94" y="88" width="7" height="40" rx="3"/><rect x="108" y="86" width="7" height="42" rx="3"/>
+ <ellipse cx="82" cy="80" rx="40" ry="18"/><path d="M52 74 L36 42 Q31 31 23 35 L10 47 Q7 54 16 54 L28 52 L42 88 Z"/></g>
+ <path d="M36 42 Q46 50 52 72" fill="none" stroke="#d6246e" stroke-width="5"/>
+ <path d="M24 34 q-2-12 6-14" stroke="#f07d1a" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="29" cy="20" r="3" fill="#ffb81c"/>
+ <circle cx="20" cy="42" r="1.8" fill="#3a0d12"/>
+ <g fill="#e0b03a"><rect x="46" y="120" width="7" height="3"/><rect x="60" y="120" width="7" height="3"/><rect x="94" y="120" width="7" height="3"/><rect x="108" y="120" width="7" height="3"/></g>
+ <path d="M60 64 H106 L102 96 H64 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="2.5"/>
+ <path d="M64 96 l4 6 4-6 4 6 4-6 4 6 4-6 4 6 4-6 4 6" fill="none" stroke="#e0b03a" stroke-width="2"/>
+ <path d="M76 62 C74 76 72 86 70 96" stroke="#fff4e0" stroke-width="7" stroke-linecap="round"/>
+ <path d="M72 30 h20 l3 34 h-26 z" fill="#fff1c4" stroke="#e0b03a" stroke-width="1.5"/>
+ <path d="M82 30 v34" stroke="#e0b03a" stroke-width="1.5"/>
+ <circle cx="82" cy="22" r="7.5" fill="#c98a5a"/>
+ <path d="M73 21 Q82 5 92 19 Q88 25 74 23 Z" fill="#f07d1a"/><path d="M76 15 h14" stroke="#d6246e" stroke-width="2.5"/>
+ <path d="M90 12 q4-11 9-7" stroke="#e0b03a" stroke-width="2.5" fill="none"/><circle cx="99" cy="5" r="2" fill="#fff4e0"/>
+ <path d="M75 23 v9 M78 23 v10 M81 23 v10 M84 23 v10 M87 23 v10 M90 23 v9" stroke="#ffd84a" stroke-width="1.2" stroke-dasharray="2 1.5"/>
+ <path d="M94 36 l14-12" stroke="#c9902a" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+<symbol id="dholi" viewBox="0 0 60 120"><rect x="23" y="84" width="6" height="32" rx="2" fill="#3a0d12"/><rect x="32" y="84" width="6" height="32" rx="2" fill="#3a0d12"/><path d="M19 44 h22 l5 42 h-32 z" fill="#ffb81c"/><circle cx="30" cy="34" r="8" fill="#c98a5a"/><path d="M20 32 Q30 16 41 30 Q36 36 21 34 Z" fill="#d6246e"/><path d="M39 27 q11 6 6 20" stroke="#d6246e" stroke-width="3" fill="none"/><ellipse cx="30" cy="68" rx="17" ry="10" fill="#b3121f" stroke="#e0b03a" stroke-width="2"/><path d="M13 68 h34 M18 60 l24 16 M42 60 l-24 16" stroke="#e0b03a" stroke-width="1.5"/><path d="M6 54 l10 9 M54 54 l-10 9" stroke="#7a3b0c" stroke-width="2.5" stroke-linecap="round"/></symbol>
+<symbol id="baja" viewBox="0 0 60 120"><rect x="23" y="84" width="6" height="32" rx="2" fill="#3a0d12"/><rect x="32" y="84" width="6" height="32" rx="2" fill="#3a0d12"/><path d="M19 44 h22 l5 42 h-32 z" fill="#1f3a93"/><circle cx="30" cy="34" r="8" fill="#c98a5a"/><path d="M20 32 Q30 16 41 30 Q36 36 21 34 Z" fill="#f07d1a"/><path d="M39 27 q11 6 6 20" stroke="#f07d1a" stroke-width="3" fill="none"/><path d="M24 46 L4 40 L2 48 Z" fill="#e0b03a"/><circle cx="3" cy="44" r="5" fill="#e0b03a"/></symbol>
+<symbol id="nishan" viewBox="0 0 60 140"><g transform="translate(0,20)"><rect x="23" y="84" width="6" height="32" rx="2" fill="#3a0d12"/><rect x="32" y="84" width="6" height="32" rx="2" fill="#3a0d12"/><path d="M19 44 h22 l5 42 h-32 z" fill="#f07d1a"/><circle cx="30" cy="34" r="8" fill="#c98a5a"/><path d="M20 32 Q30 16 41 30 Q36 36 21 34 Z" fill="#b3121f"/><path d="M39 27 q11 6 6 20" stroke="#b3121f" stroke-width="3" fill="none"/></g><path d="M16 6 V124" stroke="#7a3b0c" stroke-width="3"/><path d="M16 6 L54 15 L16 30 Z" fill="#f07d1a" stroke="#e0b03a" stroke-width="1.5"/><circle cx="30" cy="17" r="5" fill="#ffd84a"/><g stroke="#ffd84a" stroke-width="1.2"><path d="M30 9 v-2 M30 25 v2 M22 17 h-2 M38 17 h2"/></g></symbol>
+<symbol id="nartaki" viewBox="0 0 60 120"><path d="M14 84 Q30 64 46 84 L50 114 H10 Z" fill="#d6246e"/><path d="M14 92 h36 M12 104 h38" stroke="#ffb81c" stroke-width="2"/><path d="M21 46 h18 l4 38 h-26 z" fill="#ffb81c"/><circle cx="30" cy="36" r="7.5" fill="#c98a5a"/><path d="M20 34 Q30 18 44 40 L46 84" fill="none" stroke="#f07d1a" stroke-width="5" opacity=".9"/><path d="M22 50 L8 34 M38 50 L52 34" stroke="#c98a5a" stroke-width="3.5" stroke-linecap="round"/></symbol>
+</defs></svg>
+<div class="procession" aria-hidden="true"><div class="proc-tag">Baraat ki Sawari · बारात की सवारी</div><div class="proc-track"><svg viewBox="0 0 1120 150" aria-hidden="true"><g fill="#c45d18" opacity=".55"><circle cx="40" cy="146" r="2.5"/><circle cx="330" cy="147" r="2"/><circle cx="620" cy="146" r="2.5"/><circle cx="900" cy="147" r="2"/></g><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="70" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="130" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="190" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="260" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="450" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="510" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="580" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#baja" x="730" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#dholi" x="790" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#nishan" x="860" y="10" width="60" height="140" class="s" style="animation-delay:-0.36s"/><use href="#haathi" x="930" y="20" width="170" height="130" class="" style="animation-delay:-0.54s"/></svg><svg viewBox="0 0 1120 150" aria-hidden="true"><g fill="#c45d18" opacity=".55"><circle cx="40" cy="146" r="2.5"/><circle cx="330" cy="147" r="2"/><circle cx="620" cy="146" r="2.5"/><circle cx="900" cy="147" r="2"/></g><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="70" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="130" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="190" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="260" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="450" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="510" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="580" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#baja" x="730" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#dholi" x="790" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#nishan" x="860" y="10" width="60" height="140" class="s" style="animation-delay:-0.36s"/><use href="#haathi" x="930" y="20" width="170" height="130" class="" style="animation-delay:-0.54s"/></svg><svg viewBox="0 0 1120 150" aria-hidden="true"><g fill="#c45d18" opacity=".55"><circle cx="40" cy="146" r="2.5"/><circle cx="330" cy="147" r="2"/><circle cx="620" cy="146" r="2.5"/><circle cx="900" cy="147" r="2"/></g><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="70" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="130" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="190" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="260" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="450" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="510" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="580" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#baja" x="730" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#dholi" x="790" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#nishan" x="860" y="10" width="60" height="140" class="s" style="animation-delay:-0.36s"/><use href="#haathi" x="930" y="20" width="170" height="130" class="" style="animation-delay:-0.54s"/></svg><svg viewBox="0 0 1120 150" aria-hidden="true"><g fill="#c45d18" opacity=".55"><circle cx="40" cy="146" r="2.5"/><circle cx="330" cy="147" r="2"/><circle cx="620" cy="146" r="2.5"/><circle cx="900" cy="147" r="2"/></g><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="70" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="130" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="190" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="260" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="450" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="510" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="580" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#baja" x="730" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#dholi" x="790" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#nishan" x="860" y="10" width="60" height="140" class="s" style="animation-delay:-0.36s"/><use href="#haathi" x="930" y="20" width="170" height="130" class="" style="animation-delay:-0.54s"/></svg></div></div>
 
 <div class="leheriya" aria-hidden="true"></div>
 <section class="farmaan-sec" id="nimantran">
@@ -498,11 +595,42 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
 </section>
 
 <div class="leheriya" aria-hidden="true"></div>
+<section class="fort-sec" id="kila">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="label"><span class="e">Chittor ka Kila</span><span class="h">चित्तौड़ का किला</span></div>
+      <h2 class="shine"><span class="e">Where Padmini's story lives</span><span class="h">जहाँ पद्मिनी की गाथा बसती है</span></h2>
+      <svg class="orn" viewBox="0 0 180 18" aria-hidden="true"><path d="M0 9h70M110 9h70" stroke="#e0b03a"/><path d="M90 1l8 8-8 8-8-8z" fill="#ffb81c"/><circle cx="74" cy="9" r="2.5" fill="#e0b03a"/><circle cx="106" cy="9" r="2.5" fill="#e0b03a"/></svg>
+      <p class="sub"><span class="e">Spin the fort, tap a landmark, and switch to night to see the wedding fireworks over Chittor.</span><span class="h">किले को घुमाइए, किसी स्मारक को छुइए, और रात चुनकर चित्तौड़ पर शादी की आतिशबाज़ी देखिए।</span></p>
+    </div>
+    <div class="fort3d" id="fort3d">
+      <div class="stage">
+        <div class="labels"></div>
+        <div class="hint"><span class="e">Drag to spin the fort</span><span class="h">घुमाने के लिए खींचें</span></div>
+        <div class="mood" role="group" aria-label="Time of day">
+          <button type="button" data-mood="dawn" aria-pressed="false"><span class="e">Dawn</span><span class="h">भोर</span></button>
+          <button type="button" data-mood="sunset" aria-pressed="true"><span class="e">Sunset</span><span class="h">सांझ</span></button>
+          <button type="button" data-mood="night" aria-pressed="false"><span class="e">Night ✦ fireworks</span><span class="h">रात ✦ आतिशबाज़ी</span></button>
+        </div>
+        <div class="zoom"><button type="button" class="zoom-in" aria-label="Zoom in">+</button><button type="button" class="zoom-out" aria-label="Zoom out">−</button></div>
+        <div class="info" hidden><button type="button" aria-label="Close">×</button><b></b><p></p></div>
+        <div class="nogl-msg"><span class="e">The 3D fort needs a browser with WebGL. Everything else on this page works as usual.</span><span class="h">3D किले के लिए WebGL वाला ब्राउज़र चाहिए।</span></div>
+      </div>
+    </div>
+    <div class="fort-stats">
+      <div><b>~700</b><span class="e">acres on a 180 m hill</span><span class="h">एकड़, 180 मीटर ऊँची पहाड़ी पर</span></div>
+      <div><b>7</b><span class="e">pols guard the climb</span><span class="h">पोल (द्वार)</span></div>
+      <div><b>9</b><span class="e">storeys of Vijay Stambh</span><span class="h">मंज़िला विजय स्तंभ</span></div>
+      <div><b>2013</b><span class="e">UNESCO World Heritage</span><span class="h">यूनेस्को विश्व धरोहर</span></div>
+    </div>
+  </div>
+</section>
+<div class="leheriya" aria-hidden="true"></div>
 <section class="dark sched" id="utsav">
   <div class="wrap">
     <div class="sec-head">
       <div class="label"><span class="e">Utsav ka kram</span><span class="h">उत्सव का क्रम</span></div>
-      <h2><span class="e">Three days of shubh muhurat</span><span class="h">मांगलिक कार्यक्रम</span></h2>
+      <h2 class="shine"><span class="e">Three days of shubh muhurat</span><span class="h">मांगलिक कार्यक्रम</span></h2>
       <svg class="orn" viewBox="0 0 180 18" aria-hidden="true"><path d="M0 9h70M110 9h70" stroke="#e0b03a"/><path d="M90 1l8 8-8 8-8-8z" fill="#ffb81c"/><circle cx="74" cy="9" r="2.5" fill="#e0b03a"/><circle cx="106" cy="9" r="2.5" fill="#e0b03a"/></svg>
       <p class="sub"><span class="e">Every ritual, meal and moment, in order. Tap a ceremony to save it to your calendar.</span><span class="h">हर रस्म, हर भोज और हर पल, क्रम से। किसी भी रस्म को अपने कैलेंडर में जोड़ें।</span></p>
     </div>
@@ -682,7 +810,7 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
   <div class="wrap">
     <div class="sec-head">
       <div class="label"><span class="e">Kindly respond</span><span class="h">कृपया उत्तर दें</span></div>
-      <h2><span class="e">Will you join the Riyasat?</span><span class="h">क्या आप पधारेंगे?</span></h2>
+      <h2 class="shine"><span class="e">Will you join the Riyasat?</span><span class="h">क्या आप पधारेंगे?</span></h2>
       <p class="sub"><span class="e">Fill this in and send it to the family on WhatsApp. It helps us plan rooms, buses and food.</span><span class="h">यह भरकर परिवार को व्हाट्सऐप पर भेजें — इससे कमरे, बस और भोजन की व्यवस्था में मदद मिलेगी।</span></p>
     </div>
     <form class="rsvp-box" id="rsvpForm" novalidate>
@@ -739,6 +867,7 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1098,6 +1227,269 @@ if(!reduce && 'IntersectionObserver' in window){
   document.querySelectorAll('.reveal').forEach(el=>{ const r=el.getBoundingClientRect(); if(r.top>innerHeight){ el.classList.add('pre'); io.observe(el);} });
 }
 if(reduce){ document.querySelectorAll('animateMotion').forEach(a=>a.remove()); $('#bus').setAttribute('transform','translate(210,200)'); $('#band').setAttribute('transform','translate(470,200)'); }
+})();
+</script>
+<script>
+/* ---------- 3D Chittorgarh Fort ---------- */
+(function(){
+const host=document.getElementById('fort3d'); if(!host) return;
+const stage=host.querySelector('.stage');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isHi=()=>document.body.classList.contains('lang-hi');
+if(!window.THREE){ host.classList.add('nogl'); return; }
+let renderer;
+try{ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'}); }catch(e){ host.classList.add('nogl'); return; }
+const T=THREE;
+renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=T.PCFSoftShadowMap;
+renderer.outputEncoding=T.sRGBEncoding;
+renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+stage.insertBefore(renderer.domElement,stage.firstChild);
+
+const scene=new T.Scene();
+const camera=new T.PerspectiveCamera(36,1,0.5,600);
+const target=new T.Vector3(0,6.5,0);
+
+/* sky */
+function skyTex(stops){ const c=document.createElement('canvas'); c.width=4; c.height=512; const g=c.getContext('2d'); const gr=g.createLinearGradient(0,0,0,512); stops.forEach(s=>gr.addColorStop(s[0],s[1])); g.fillStyle=gr; g.fillRect(0,0,4,512); const t=new T.CanvasTexture(c); t.encoding=T.sRGBEncoding; return t; }
+const skyMat=new T.MeshBasicMaterial({side:T.BackSide,depthWrite:false,fog:false});
+const sky=new T.Mesh(new T.SphereGeometry(300,32,24),skyMat); scene.add(sky);
+const orbMat=new T.MeshBasicMaterial({color:0xffd45a,fog:false});
+const orb=new T.Mesh(new T.SphereGeometry(9,24,16),orbMat); scene.add(orb);
+const glowC=document.createElement('canvas'); glowC.width=glowC.height=128; { const g=glowC.getContext('2d'); const r=g.createRadialGradient(64,64,0,64,64,64); r.addColorStop(0,'rgba(255,220,140,.9)'); r.addColorStop(1,'rgba(255,220,140,0)'); g.fillStyle=r; g.fillRect(0,0,128,128); }
+const glow=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(glowC),transparent:true,depthWrite:false,fog:false,blending:T.AdditiveBlending}));
+glow.scale.set(90,90,1); scene.add(glow);
+
+/* stars */
+const starGeo=new T.BufferGeometry(); const sp=[];
+for(let i=0;i<700;i++){ const th=Math.random()*Math.PI*2, ph=Math.random()*1.2; sp.push(Math.cos(th)*Math.cos(ph)*280, Math.sin(ph)*280+10, Math.sin(th)*Math.cos(ph)*280); }
+starGeo.setAttribute('position',new T.Float32BufferAttribute(sp,3));
+const stars=new T.Points(starGeo,new T.PointsMaterial({color:0xfff2d0,size:1.1,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false}));
+scene.add(stars);
+
+/* lights */
+const hemi=new T.HemisphereLight(0xffffff,0x443322,0.6); scene.add(hemi);
+const sun=new T.DirectionalLight(0xffffff,1.4);
+sun.castShadow=true; sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-34,right:34,top:22,bottom:-22,near:1,far:200}); sun.shadow.bias=-0.0006;
+scene.add(sun); scene.add(sun.target);
+const warm=new T.PointLight(0xffa040,0,28,2);  scene.add(warm);
+
+/* materials */
+const M=(c,o={})=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.9,metalness:0,flatShading:true},o));
+const mGround=M(0x6e5230), mRock=M(0x9a7148), mRock2=M(0x7d5a36), mWall=M(0xc29464), mWallDark=M(0xa77b4f),
+      mStone=M(0xd6a874), mMarble=M(0xf1e8d8,{roughness:.6}), mRed=M(0xb5543a), mGold=M(0xe0b03a,{metalness:.5,roughness:.4}),
+      mGreen=M(0x5d7a3a), mGreen2=M(0x4a6630), mWater=new T.MeshStandardMaterial({color:0x2f6f8f,roughness:.15,metalness:.6});
+const mDiya=new T.MeshBasicMaterial({color:0xffc35a});
+const add=(geo,mat,x,y,z,parent)=>{ const m=new T.Mesh(geo,mat); m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; (parent||scene).add(m); return m; };
+
+/* ground */
+const ground=new T.Mesh(new T.CircleGeometry(260,64),mGround); ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
+for(let i=0;i<70;i++){ const r=30+Math.random()*120, a=Math.random()*Math.PI*2; const s=1+Math.random()*2.2;
+  const t=add(new T.ConeGeometry(s*.7,s*1.6,6),Math.random()<.5?mGreen:mGreen2,Math.cos(a)*r,s*.8,Math.sin(a)*r); t.castShadow=false; }
+for(let i=0;i<14;i++){ const r=60+Math.random()*90, a=Math.random()*Math.PI*2; const h=3+Math.random()*7;
+  const hill=add(new T.ConeGeometry(10+Math.random()*12,h,7),mRock2,Math.cos(a)*r,h/2-.3,Math.sin(a)*r); hill.castShadow=false; }
+
+/* the mesa: Chittor's long fish-shaped hill */
+const A=22, B=6.2;
+const P=t=>[A*Math.cos(t), B*Math.sin(t)*(1-.22*Math.cos(t))+0.8*Math.sin(3*t)*.3];
+const shape=new T.Shape(); const NP=96;
+for(let i=0;i<=NP;i++){ const [x,y]=P(i/NP*Math.PI*2); i?shape.lineTo(x,y):shape.moveTo(x,y); }
+const mesaGeo=new T.ExtrudeGeometry(shape,{depth:3.0,bevelEnabled:true,bevelThickness:1.3,bevelSize:3.2,bevelSegments:2,curveSegments:48});
+mesaGeo.rotateX(-Math.PI/2);
+const mesa=add(mesaGeo,mRock,0,1.3,0);
+const topY=mesa.position.y+3.0+1.3; // top cap y
+
+warm.position.set(4,topY+6,0);
+/* fort wall with merlons and bastions (instanced) */
+const NW=110; const pts=[];
+for(let i=0;i<NW;i++){ const [x,y]=P(i/NW*Math.PI*2); pts.push(new T.Vector3(x*.985,topY,-y*.985)); }
+const wallI=new T.InstancedMesh(new T.BoxGeometry(1,1,1),mWall,NW);
+const merI=new T.InstancedMesh(new T.BoxGeometry(.3,.35,.42),mWallDark,NW*2);
+const diyaI=new T.InstancedMesh(new T.SphereGeometry(.13,6,4),mDiya,NW);
+const dummy=new T.Object3D();
+for(let i=0;i<NW;i++){ const a=pts[i], b=pts[(i+1)%NW]; const d=a.distanceTo(b); const mid=a.clone().add(b).multiplyScalar(.5);
+  const ang=-Math.atan2(b.z-a.z,b.x-a.x);
+  dummy.position.set(mid.x,topY+.5,mid.z); dummy.rotation.set(0,ang,0); dummy.scale.set(d+.05,1,.38); dummy.updateMatrix(); wallI.setMatrixAt(i,dummy.matrix);
+  for(let k=0;k<2;k++){ const f=k?.75:.25; dummy.position.set(a.x+(b.x-a.x)*f,topY+1.17,a.z+(b.z-a.z)*f); dummy.scale.set(1,1,1); dummy.updateMatrix(); merI.setMatrixAt(i*2+k,dummy.matrix); }
+  dummy.position.set(mid.x,topY+1.06,mid.z); dummy.updateMatrix(); diyaI.setMatrixAt(i,dummy.matrix);
+}
+[wallI,merI].forEach(m=>{ m.castShadow=true; m.receiveShadow=true; scene.add(m); });
+scene.add(diyaI);
+const bastG=new T.CylinderGeometry(.75,.9,1.6,10);
+for(let i=0;i<NW;i+=7){ const p=pts[i]; add(bastG,mWall,p.x,topY+.8,p.z); add(new T.CylinderGeometry(.8,.8,.2,10),mWallDark,p.x,topY+1.65,p.z); }
+
+/* helpers */
+function chhatri(x,z,s,base,parent){ base=base||topY; const g=new T.Group(); g.position.set(x,base,z);
+  const pw=.12*s, ph=.9*s, r=.5*s;
+  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b])=>add(new T.BoxGeometry(pw,ph,pw),mStone,a*r*.7,ph/2,b*r*.7,g));
+  add(new T.BoxGeometry(r*1.9,.1*s,r*1.9),mStone,0,ph+.05*s,0,g);
+  add(new T.SphereGeometry(r*.85,10,6,0,Math.PI*2,0,Math.PI/2),mStone,0,ph+.1*s,0,g);
+  add(new T.SphereGeometry(.07*s,6,4),mGold,0,ph+.1*s+r*.85+.05*s,0,g);
+  (parent||scene).add(g); return g; }
+function shikhara(x,z,s,mat){ const g=new T.Group(); g.position.set(x,topY,z);
+  add(new T.BoxGeometry(1.6*s,.8*s,1.6*s),mat||mStone,0,.4*s,0,g);
+  const prof=[[0,0],[.85,0],[.85,.5],[.78,1],[.62,1.6],[.42,2.1],[.2,2.45],[.05,2.6],[0,2.62]].map(p=>new T.Vector2(p[0]*s,p[1]*s));
+  add(new T.LatheGeometry(prof,8),mat||mStone,0,.8*s,0,g);
+  add(new T.SphereGeometry(.12*s,8,6),mGold,0,.8*s+2.7*s,0,g);
+  add(new T.BoxGeometry(1.2*s,.6*s,1.2*s),mat||mStone,-1.35*s,.3*s,0,g);
+  add(new T.ConeGeometry(.9*s,.6*s,4),mat||mStone,-1.35*s,.9*s,0,g).rotation.y=Math.PI/4;
+  scene.add(g); return g; }
+function tower(x,z,tiers,r,h,mat){ const g=new T.Group(); g.position.set(x,topY,z);
+  add(new T.BoxGeometry(r*4,.35,r*4),mWallDark,0,.175,0,g);
+  let y=.35;
+  for(let i=0;i<tiers;i++){ const rr=r*(1-i*.012);
+    add(new T.CylinderGeometry(rr,rr*1.02,h,8),mat,0,y+h/2,0,g);
+    add(new T.CylinderGeometry(rr*1.28,rr*1.28,.08,8),mWallDark,0,y+h-.04,0,g);
+    y+=h; }
+  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b])=>add(new T.BoxGeometry(.07,h*.8,.07),mat,a*r*.6,y+h*.4,b*r*.6,g));
+  add(new T.CylinderGeometry(r*1.05,r*1.05,.08,8),mWallDark,0,y+h*.8,0,g);
+  add(new T.SphereGeometry(r*.9,10,6,0,Math.PI*2,0,Math.PI/2),mat,0,y+h*.84,0,g);
+  add(new T.SphereGeometry(.08,6,4),mGold,0,y+h*.84+r*.95,0,g);
+  scene.add(g); return {g,top:y+h};
+}
+
+/* landmarks */
+const vijay=tower(5.5,1.2,9,.55,.66,mStone);           // Vijay Stambh
+const kirti=tower(-13.5,-1.4,7,.42,.5,M(0xe6d2b2));      // Kirti Stambh
+const meera=shikhara(1.2,-2.8,.9);                       // Meera temple
+shikhara(-7.5,2.6,.75); shikhara(15,2.2,.6,mMarble);
+// Rana Kumbha palace ruins
+const kumbha=new T.Group(); kumbha.position.set(-3.5,topY,2.4);
+[[0,0,3,1.6,1.8],[2.2,.2,1.4,2.2,1.4],[-2,-.3,1.6,1.2,1.4],[.6,-1.4,1.8,1,1]].forEach(([x,z,w,h,d])=>add(new T.BoxGeometry(w,h,d),mWallDark,x,h/2,z,kumbha));
+scene.add(kumbha); chhatri(-3.3,2.2,.9,topY+1.6); chhatri(-1.3,2.6,.7,topY+2.2);
+// Padmini Mahal: palace in a pool
+const pad=new T.Group(); pad.position.set(11.5,topY,-2.2);
+add(new T.BoxGeometry(6.2,.3,4.4),mWallDark,0,.15,0,pad);
+const water=add(new T.BoxGeometry(5.6,.2,3.8),mWater,0,.28,0,pad); water.castShadow=false;
+add(new T.BoxGeometry(2,1,1.4),mMarble,.6,.85,0,pad);
+add(new T.BoxGeometry(1.4,.12,1.4),mMarble,.6,1.4,0,pad);
+add(new T.SphereGeometry(.55,12,8,0,Math.PI*2,0,Math.PI/2),mMarble,.6,1.42,0,pad);
+add(new T.SphereGeometry(.08,6,4),mGold,.6,2.02,0,pad);
+add(new T.BoxGeometry(1.4,1.1,4.4),mMarble,-3.6,.55,0,pad);
+scene.add(pad); chhatri(7.9,-3.6,.6,topY+1.1); chhatri(7.9,-.8,.6,topY+1.1);
+// Gaumukh kund
+add(new T.BoxGeometry(2.4,.2,1.6),mWater,-1.2,topY+.08,-3.6).castShadow=false;
+// scattered chhatris and trees on top
+[[-9,-2.8],[-16,1.2],[17.5,-.6],[8.5,3.3],[-19,0]].forEach(([x,z])=>chhatri(x,z,.8));
+for(let i=0;i<40;i++){ const t=Math.random()*Math.PI*2, f=.2+Math.random()*.7; const [x,y]=P(t); const s=.4+Math.random()*.5;
+  const px=x*f, pz=-y*f; if(Math.hypot(px-5.5,pz-1.2)<2||Math.hypot(px-11.5,pz+2.2)<4) continue;
+  add(new T.ConeGeometry(s,s*2,6),mGreen,px,topY+s,pz); }
+// ramp road to the gates on the west
+const road=new T.Mesh(new T.PlaneGeometry(26,1.1),M(0xb9905e)); road.rotation.x=-Math.PI/2; road.rotation.z=.32; road.position.set(-28,.05,7); road.receiveShadow=true; scene.add(road);
+for(let i=0;i<7;i++){ const x=-38+i*3.4, z=10.4-i*1.1; const g=new T.Group(); g.position.set(x,0,z);
+  add(new T.BoxGeometry(.5,1.6,.5),mWall,-.7,.8,0,g); add(new T.BoxGeometry(.5,1.6,.5),mWall,.7,.8,0,g); add(new T.BoxGeometry(1.9,.45,.6),mWallDark,0,1.75,0,g); scene.add(g); }
+
+/* fireworks */
+const fw=[];
+function firework(){
+  const n=140, pos=new Float32Array(n*3), col=new Float32Array(n*3), vel=[];
+  const cx=(Math.random()-.5)*30, cy=13+Math.random()*6, cz=(Math.random()-.5)*8;
+  const pal=[[1,.72,.11],[.84,.14,.43],[.94,.49,.1],[1,.95,.75],[.3,.8,.4]][Math.floor(Math.random()*5)];
+  for(let i=0;i<n;i++){ pos[i*3]=cx; pos[i*3+1]=cy; pos[i*3+2]=cz;
+    const u=Math.random()*2-1, th=Math.random()*Math.PI*2, s=.18+Math.random()*.08, r=Math.sqrt(1-u*u);
+    vel.push(new T.Vector3(r*Math.cos(th)*s,u*s,r*Math.sin(th)*s));
+    col[i*3]=pal[0]; col[i*3+1]=pal[1]; col[i*3+2]=pal[2]; }
+  const g=new T.BufferGeometry(); g.setAttribute('position',new T.BufferAttribute(pos,3)); g.setAttribute('color',new T.BufferAttribute(col,3));
+  const m=new T.PointsMaterial({size:.42,vertexColors:true,transparent:true,opacity:1,blending:T.AdditiveBlending,depthWrite:false,fog:false});
+  const p=new T.Points(g,m); scene.add(p); fw.push({p,vel,life:1});
+}
+function stepFireworks(){
+  for(let k=fw.length-1;k>=0;k--){ const f=fw[k]; const a=f.p.geometry.attributes.position;
+    for(let i=0;i<f.vel.length;i++){ const v=f.vel[i]; v.multiplyScalar(.965); v.y-=.004; a.array[i*3]+=v.x; a.array[i*3+1]+=v.y; a.array[i*3+2]+=v.z; }
+    a.needsUpdate=true; f.life-=.012; f.p.material.opacity=Math.max(0,f.life);
+    if(f.life<=0){ scene.remove(f.p); f.p.geometry.dispose(); f.p.material.dispose(); fw.splice(k,1); } }
+}
+
+/* moods */
+const MOODS={
+  dawn:{sky:[[0,'#7b8cc7'],[.35,'#f2b6a6'],[.47,'#ffd9a0'],[.5,'#fff0cf'],[1,'#8c6a3e']],fog:0xf0c9a2,sun:[0xffd6a8,1.5],dir:[60,22,40],hemi:[0xffe8cc,0x6b4a2a,.65],orb:0xfff1c4,stars:0,diya:false,warm:0,exp:1.0},
+  sunset:{sky:[[0,'#2a1450'],[.28,'#7a1e5c'],[.4,'#d6246e'],[.47,'#f07d1a'],[.5,'#ffc94d'],[1,'#5a3a22']],fog:0xb4603e,sun:[0xff9a4a,1.6],dir:[-70,14,-25],hemi:[0xffa4c8,0x3a2030,.55],orb:0xffc23a,stars:.25,diya:true,warm:.6,exp:1.05},
+  night:{sky:[[0,'#04030d'],[.38,'#120f33'],[.49,'#2b1f5c'],[.5,'#3a2a6a'],[1,'#0c0710']],fog:0x110d2a,sun:[0x9fb4ff,.32],dir:[40,50,-30],hemi:[0x3e4c8f,0x0b0612,.16],orb:0xf4f1e2,stars:1,diya:true,warm:1.3,exp:.9,fogNear:28,fogFar:150}
+};
+let mood='sunset';
+function setMood(k){ mood=k; const m=MOODS[k];
+  skyMat.map&&skyMat.map.dispose(); skyMat.map=skyTex(m.sky); skyMat.needsUpdate=true;
+  scene.fog=new T.Fog(m.fog,m.fogNear||95,m.fogFar||280);
+  sun.color.setHex(m.sun[0]); sun.intensity=m.sun[1]; sun.position.set(...m.dir);
+  hemi.color.setHex(m.hemi[0]); hemi.groundColor.setHex(m.hemi[1]); hemi.intensity=m.hemi[2];
+  orbMat.color.setHex(m.orb); const d=new T.Vector3(...m.dir).normalize(); orb.position.copy(d.clone().multiplyScalar(260)); glow.position.copy(orb.position);
+  glow.material.opacity=k==='night'?.25:.9; orb.scale.setScalar(k==='night'?.6:1);
+  stars.material.opacity=m.stars; diyaI.visible=m.diya; warm.intensity=m.warm; renderer.toneMappingExposure=m.exp;
+  host.querySelectorAll('.mood button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mood===k));
+  needs=true;
+}
+
+/* landmarks: labels + info */
+const LM=[
+  {k:'vijay',obj:()=>new T.Vector3(5.5,topY+vijay.top+.6,1.2),en:'Vijay Stambh',hi:'विजय स्तंभ',
+   ien:'The nine-storey Tower of Victory, raised by Maharana Kumbha in the 15th century after his victory over the Sultan of Malwa. Its walls are carved with gods from top to bottom.',
+   ihi:'महाराणा कुंभा द्वारा 15वीं सदी में मालवा के सुल्तान पर विजय की स्मृति में बनवाया गया नौ मंज़िला विजय स्तंभ। ऊपर से नीचे तक देवी-देवताओं की नक्काशी।'},
+  {k:'kirti',obj:()=>new T.Vector3(-13.5,topY+kirti.top+.5,-1.4),en:'Kirti Stambh',hi:'कीर्ति स्तंभ',
+   ien:'The older Tower of Fame, a 12th-century Jain tower dedicated to Adinath, carved with Jain tirthankaras.',
+   ihi:'12वीं सदी का जैन कीर्ति स्तंभ, आदिनाथ को समर्पित, तीर्थंकरों की नक्काशी के साथ।'},
+  {k:'padmini',obj:()=>new T.Vector3(11.5,topY+2.6,-2.2),en:'Padmini Mahal',hi:'पद्मिनी महल',
+   ien:'The water palace linked to Rani Padmini, whose courage made Chittor a legend. Our wedding venue carries her name.',
+   ihi:'रानी पद्मिनी से जुड़ा जल महल, जिनके साहस ने चित्तौड़ को अमर कर दिया। हमारा विवाह स्थल भी उन्हीं के नाम पर है।'},
+  {k:'meera',obj:()=>new T.Vector3(1.2,topY+3.3,-2.8),en:'Meera Mandir',hi:'मीरा मंदिर',
+   ien:'The temple where Meera Bai, the poet-saint princess of Mewar, sang her bhajans to Krishna.',
+   ihi:'जहाँ मेवाड़ की राजकुमारी, भक्त कवयित्री मीरा बाई ने कृष्ण के भजन गाए।'},
+  {k:'kumbha',obj:()=>new T.Vector3(-3.5,topY+3.4,2.4),en:'Kumbha Mahal',hi:'कुंभा महल',
+   ien:'Ruins of Rana Kumbha\'s palace, the oldest in the fort and the birthplace of Maharana Udai Singh, founder of Udaipur.',
+   ihi:'राणा कुंभा के महल के अवशेष, किले का सबसे पुराना महल और उदयपुर के संस्थापक महाराणा उदय सिंह का जन्मस्थान।'},
+  {k:'pols',obj:()=>new T.Vector3(-28,3.2,7),en:'Seven Pols',hi:'सात पोल',
+   ien:'The climb to the fort passes through seven great gates, from Padan Pol to Ram Pol.',
+   ihi:'किले तक की चढ़ाई सात विशाल द्वारों से होकर जाती है — पाडन पोल से राम पोल तक।'}
+];
+const labelLayer=host.querySelector('.labels'); const info=host.querySelector('.info');
+LM.forEach(l=>{ const b=document.createElement('button'); b.type='button'; b.className='lm'; b.dataset.k=l.k;
+  b.innerHTML='<i></i><span class="e">'+l.en+'</span><span class="h">'+l.hi+'</span>';
+  b.addEventListener('click',e=>{ e.stopPropagation(); showInfo(l); }); labelLayer.appendChild(b); l.el=b; });
+function showInfo(l){ info.hidden=false; info.querySelector('b').innerHTML='<span class="e">'+l.en+'</span><span class="h">'+l.hi+'</span>';
+  info.querySelector('p').innerHTML='<span class="e">'+l.ien+'</span><span class="h">'+l.ihi+'</span>';
+  LM.forEach(x=>x.el.classList.toggle('on',x===l)); focusK=l.k; }
+info.querySelector('button').addEventListener('click',()=>{ info.hidden=true; LM.forEach(x=>x.el.classList.remove('on')); focusK=null; });
+let focusK=null;
+
+/* camera orbit + drag */
+let theta=0.5, elev=0.2, radius=60, autoSpin=!reduce, dragging=false, lx=0, ly=0, needs=true, lastInteract=0;
+const cv=renderer.domElement;
+cv.addEventListener('pointerdown',e=>{ dragging=true; lx=e.clientX; ly=e.clientY; cv.setPointerCapture(e.pointerId); lastInteract=performance.now(); });
+cv.addEventListener('pointermove',e=>{ if(!dragging) return; const dx=e.clientX-lx, dy=e.clientY-ly; lx=e.clientX; ly=e.clientY;
+  theta-=dx*.006; if(e.pointerType!=='touch') elev=Math.min(.85,Math.max(.12,elev+dy*.004)); lastInteract=performance.now(); needs=true; });
+const end=()=>{ dragging=false; }; cv.addEventListener('pointerup',end); cv.addEventListener('pointercancel',end);
+host.querySelector('.zoom-in').addEventListener('click',()=>{ radius=Math.max(30,radius-8); needs=true; });
+host.querySelector('.zoom-out').addEventListener('click',()=>{ radius=Math.min(80,radius+8); needs=true; });
+host.querySelectorAll('.mood button').forEach(b=>b.addEventListener('click',()=>setMood(b.dataset.mood)));
+
+/* size */
+function size(){ const w=stage.clientWidth, h=stage.clientHeight; if(!w||!h) return; renderer.setSize(w,h,false); camera.aspect=w/h;
+  camera.fov=w<600?50:34; if(w<600){ radius=Math.max(radius,78); elev=Math.max(elev,.26); } camera.updateProjectionMatrix(); needs=true; }
+new ResizeObserver(size).observe(stage); size();
+
+/* loop */
+let visible=true, fwTimer=0, t0=performance.now();
+new IntersectionObserver(es=>{ visible=es[0].isIntersecting; },{threshold:.05}).observe(stage);
+const v=new T.Vector3();
+function frame(now){
+  requestAnimationFrame(frame);
+  if(!visible) return;
+  const dt=Math.min(50,now-t0); t0=now;
+  if(autoSpin && !dragging && now-lastInteract>2500){ theta+=dt*.00006; needs=true; }
+  if(mood==='night' && !reduce){ fwTimer-=dt; if(fwTimer<=0){ firework(); fwTimer=700+Math.random()*900; } }
+  if(fw.length){ stepFireworks(); needs=true; }
+  if(diyaI.visible){ mDiya.color.setHSL(.1,1,.6+Math.sin(now*.006)*.06); needs=true; }
+  if(!needs) return; needs=false;
+  camera.position.set(target.x+radius*Math.cos(elev)*Math.cos(theta), target.y+radius*Math.sin(elev), target.z+radius*Math.cos(elev)*Math.sin(theta));
+  camera.lookAt(target);
+  renderer.render(scene,camera);
+  const w=stage.clientWidth, h=stage.clientHeight;
+  LM.forEach(l=>{ v.copy(l.obj()).project(camera); const hide=v.z>1||Math.abs(v.x)>1.05||Math.abs(v.y)>1.05;
+    l.el.style.transform=`translate(${(v.x*.5+.5)*w}px,${(-v.y*.5+.5)*h}px) translate(-50%,-100%)`; l.el.style.opacity=hide?0:1; l.el.style.pointerEvents=hide?'none':'auto'; });
+}
+setMood('sunset');
+requestAnimationFrame(frame);
+host.classList.add('ready');
 })();
 </script>
 

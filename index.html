@@ -17,7 +17,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Tiro+Devanagari+Hindi:ital@0;1&family=Spectral:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Mukta:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Tiro+Devanagari+Hindi:ital@0;1&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Mukta:wght@400;600;700&display=swap">
 <style>
 /* Layout: a Rajput haveli you walk through. Jharokha hero with bangaldar roof and toran (Chittor at sunset under the Mewar sun) → royal farmaan scroll on parchment → red-and-gold utsav calendar → baraat route map → stays → travel → RSVP under the stars.
    One deliberate look: kesariya, rani pink, sindoori red, haldi yellow, leheriya and bandhej. Single theme by choice. */
@@ -34,7 +34,8 @@
   --patra:#fff4e0;       /* ivory */
   --patra-2:#fde3c0;
   --syahi:#3a0d12;
-  --syahi-soft:#6e3b2a;
+  --syahi-soft:#5a2a1c;
+  --kesar-ink:#a8470a;   /* saffron for text on ivory (AA) */
   --neel:#1f3a93;        /* blue pottery */
   --patti:#2e7d32;       /* leheriya green */
   --f-display:"Rozha One","Tiro Devanagari Hindi",Georgia,serif;
@@ -46,7 +47,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--patra);color:var(--syahi);font-family:var(--f-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:var(--patra);color:var(--syahi);font-family:var(--f-body);font-size:17px;font-weight:500;line-height:1.65;overflow-x:hidden;text-rendering:optimizeLegibility}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--raat)}
 img{max-width:100%;display:block}
 a{color:inherit}
@@ -400,6 +401,146 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
 .fort-stats span{font-family:var(--f-label);font-size:13px;color:var(--sona-pale);opacity:.85}
 @media (max-width:600px){.fort3d .stage{height:480px;min-height:0}.lm{font-size:11px}.lm span{padding:2px 8px}.lm[data-k=kumbha],.lm[data-k=pols]{display:none}}
 @media (max-width:720px){.fort-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.fort3d .stage{border-radius:50% 50% 14px 14px / 40px 40px 14px 14px}.fort3d .info{left:12px;right:12px;top:auto;bottom:70px;max-width:none}.fort3d .hint{display:none}.fort3d .mood{left:16px;transform:none}.fort3d .mood button{padding:7px 10px;font-size:12.5px}}
+
+/* ================= readability & mobile pass ================= */
+p{text-wrap:pretty}
+section,header{scroll-margin-top:72px}
+.label{font-size:13px;letter-spacing:.18em}
+.sec-head .sub{font-size:18px;line-height:1.6;color:var(--syahi-soft)}
+.dark .sec-head .sub,.fort-sec .sec-head .sub,.rsvp .sec-head .sub{color:var(--sona-pale);opacity:1}
+.rsvp .note{opacity:.9}
+.card p{font-size:16px;opacity:1}
+.cd span{font-size:12px}
+/* nested language spans must not inherit component styles */
+.pills span span,.sight b span,.look b span,.tcard h3 span{display:inline;padding:0;border:0;border-radius:0;background:none;color:inherit;font:inherit;letter-spacing:inherit;line-height:inherit;opacity:1}
+.sight span,.look span{color:var(--syahi-soft)}
+.stop .how,.look .when,.portrait .role{color:var(--kesar-ink)}
+.weather .temps b i{font-family:var(--f-label);font-style:normal;font-weight:700;font-size:.55em;vertical-align:.7em;margin-left:2px}
+/* hero legibility */
+.shloka{background:rgba(110,6,30,.55);backdrop-filter:blur(2px);padding:10px 18px 12px;border-radius:16px;border:1px solid rgba(224,176,58,.35);font-size:15.5px;color:var(--patra)}
+.shloka b{font-size:21px}
+.tap-hint{font-size:14px;color:var(--patra);opacity:1;letter-spacing:.02em;background:rgba(110,6,30,.45);padding:5px 14px;border-radius:999px}
+.arch-text .kicker{font-size:max(12px,2.4cqi);text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.datebar{font-size:max(13px,3cqi)}
+.place{font-size:max(15px,3.2cqi)}
+.names-hi{font-size:max(17px,4.4cqi)}
+.cd-label{font-size:13.5px;color:var(--patra)}
+/* procession caption sits above the band */
+.procession{padding-top:12px}
+.proc-tag{position:relative;right:auto;bottom:auto;top:auto;left:auto;transform:none;display:table;margin:0 auto 8px;font-size:12.5px;color:var(--mewar);background:var(--patra)}
+/* farmaan seal no longer collides with the rod */
+.seal{position:static;display:block;margin:26px auto -6px;width:96px;height:96px;transform:none}
+/* fort labels */
+.lm i{height:var(--stem,14px)}
+.fort3d .zoom button{width:42px;height:42px}
+/* route map: wide on desktop, tall on phones */
+.map-tall{display:none!important}
+/* buttons and pills: 44px touch targets */
+.pills span{padding:9px 16px;font-size:15px}
+.btn{min-height:46px}
+/* ---------- phones ---------- */
+@media (max-width:720px){
+  .nav .wrap{flex-wrap:wrap;height:auto;padding-block:8px 6px;row-gap:4px}
+  .nav-links{display:flex;order:3;width:calc(100% + 16px);margin:0 -8px;padding:2px 0 2px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 24px),transparent)}
+  .nav-links a{font-size:14.5px;padding:7px 12px;opacity:1}
+  .tgl button{height:40px;min-width:40px}
+  section,header{scroll-margin-top:112px}
+}
+@media (max-width:600px){
+  body{font-size:17px}
+  .wrap{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+  .farmaan-sec,.sched,.route-sec,.stays,.travel,.dress,.rsvp,.fort-sec{padding-block:60px}
+  .sec-head{margin-bottom:30px;gap:8px}
+  .sec-head h2{font-size:clamp(34px,10vw,42px)}
+  .sec-head .sub{font-size:17px}
+  .hero{padding-block:20px 40px}
+  .hero .wrap{gap:22px}
+  .shloka{font-size:14.5px;padding:10px 14px}
+  .shloka b{font-size:19px}
+  .countdown{gap:8px}
+  /* invitation scroll: one language at a time on phones */
+  .paper{margin:0;padding:40px 24px 44px}
+  .paper::before{inset:9px;outline-offset:3px}
+  .rod{margin:0 -4px}
+  .cols{margin-top:24px}
+  .cols .rule{display:none}
+  body:not(.lang-hi) .cols .hi-col{display:none}
+  body.lang-hi .cols .en-col{display:none}
+  .cols .en-col,.cols .hi-col{font-size:18px}
+  .cols .big{font-size:34px}
+  .farmaan-meta{flex-direction:column;align-items:center;gap:6px;font-size:14.5px;text-align:center}
+  .farmaan-top h2{font-size:36px}
+  /* couple */
+  .couple{padding-block:8px 56px}
+  .pair{grid-template-columns:1fr 1fr;gap:14px}
+  .knot{display:none}
+  .frame-p{padding:7px}
+  .portrait .who{font-size:32px}
+  .portrait .who-hi{font-size:17px}
+  /* procession */
+  .proc-track svg{height:96px}
+  /* fort */
+  .fort3d .stage{height:500px;min-height:0;border-radius:50% 50% 14px 14px / 34px 34px 14px 14px}
+  .fort3d .mood{left:12px;right:auto;bottom:12px;transform:none}
+  .fort3d .zoom{right:12px;bottom:12px;flex-direction:row}
+  .fort3d .info{left:10px;right:10px;top:auto;bottom:66px;max-width:none}
+  .fort-stats{gap:0}
+  .fort-stats b{font-size:30px}
+  .fort-stats span{font-size:14px;opacity:1}
+  /* schedule */
+  .days{gap:8px;margin-bottom:28px}
+  .day .dt{font-size:13px}
+  .filter{margin:-10px 0 24px}
+  .timeline{gap:12px}
+  .timeline::before{left:62px}
+  .ev{grid-template-columns:52px 20px minmax(0,1fr);gap:0 6px}
+  .ev .tm{font-size:14.5px;padding-top:15px}
+  .ev .tm small{font-size:12px}
+  .card{padding:14px 15px}
+  .card h3{font-size:22px;line-height:1.15}
+  .card h3 .alt{display:block;margin:2px 0 0;font-size:16px}
+  .ev.star h3{font-size:25px}
+  .card p{font-size:16px;line-height:1.55;margin-top:6px}
+  .meta{gap:7px}
+  .chip{font-size:13px;padding:4px 10px}
+  .cal{font-size:13.5px;padding:6px 0}
+  .ev.meal h3{font-size:15.5px}
+  .daynote{font-size:16px}
+  /* route */
+  .map-wide{display:none!important}
+  .map-tall{display:block!important}
+  .mapcard{padding:8px}
+  .stops{gap:10px;margin-top:18px}
+  .stop{padding:14px 16px}
+  .stop p{font-size:16px}
+  /* venues */
+  .haveli{padding:46px 20px 26px;border-radius:50% 50% 16px 16px / 56px 56px 16px 16px}
+  .haveli::before{border-radius:50% 50% 10px 10px / 50px 50px 10px 10px}
+  .facts li{font-size:16px}
+  .haveli .actions{flex-direction:column;align-items:stretch}
+  /* travel */
+  .tgrid{gap:12px}
+  .tcard{padding:18px}
+  .tcard p{font-size:16px}
+  .weather{padding:20px;gap:14px}
+  .weather p{font-size:16px}
+  .explore{margin-top:44px}
+  .explore h3{font-size:30px}
+  .sights{gap:10px}
+  .sight{padding:14px}
+  .sight b{font-size:19px}
+  .sight span{font-size:14.5px}
+  /* dress */
+  .looks{gap:12px}
+  .sw{height:64px}
+  .look b{font-size:22px}
+  /* rsvp */
+  .rsvp-box{padding:20px 16px;gap:18px;border-radius:16px}
+  .rsvp-actions{flex-direction:column;align-items:stretch}
+  .rsvp-actions .btn{width:100%}
+  .preview{font-size:14.5px}
+  footer p{font-size:16px}
+}
 /* petals canvas for sections */
 #petals{position:fixed;inset:0;pointer-events:none;z-index:70;width:100%;height:100%}
 .reveal{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -534,7 +675,7 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
       <div class="paper">
         <div class="farmaan-top">
           <div class="gan">॥ श्री गणेशाय नमः ॥</div>
-          <div class="label" style="color:var(--kesar)"><span class="e">Kumkum Patrika</span><span class="h">कुमकुम पत्रिका</span></div>
+          <div class="label" style="color:var(--kesar-ink)"><span class="e">Kumkum Patrika</span><span class="h">कुमकुम पत्रिका</span></div>
           <h2><span class="e">You are invited to the Riyasat</span><span class="h">आप सादर आमंत्रित हैं</span></h2>
         </div>
         <div class="cols">
@@ -648,12 +789,12 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
 <section class="route-sec" id="raasta">
   <div class="wrap">
     <div class="sec-head">
-      <div class="label" style="color:var(--kesar)"><span class="e">26 January · 5:00 PM</span><span class="h">२६ जनवरी · शाम ५:००</span></div>
+      <div class="label" style="color:var(--kesar-ink)"><span class="e">26 January · 5:00 PM</span><span class="h">२६ जनवरी · शाम ५:००</span></div>
       <h2 style="color:var(--mewar)"><span class="e">The baraat's road</span><span class="h">बारात का रास्ता</span></h2>
       <p class="sub"><span class="e">By bus to Sainik School, then on foot with the band baaja all the way to the Padmini garden gate. Wear dancing shoes.</span><span class="h">बस से सैनिक स्कूल तक, फिर बैंड-बाजे के साथ नाचते-गाते पद्मिनी गार्डन गेट तक।</span></p>
     </div>
     <div class="mapcard reveal">
-      <svg viewBox="0 0 700 360" role="img" aria-label="Schematic route: Hotel Solista by bus to Sainik School, then a band baaja procession to Hotel Padmini garden gate">
+      <svg class="map-wide" viewBox="0 0 700 360" role="img" aria-label="Schematic route: Hotel Solista by bus to Sainik School, then a band baaja procession to Hotel Padmini garden gate">
         <defs>
           <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#e0b03a" opacity=".35"/></pattern>
           <linearGradient id="riv" x1="0" x2="1"><stop offset="0" stop-color="#5b86b8" stop-opacity=".2"/><stop offset=".5" stop-color="#5b86b8" stop-opacity=".55"/><stop offset="1" stop-color="#5b86b8" stop-opacity=".2"/></linearGradient>
@@ -698,6 +839,28 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
         <text x="470" y="186" font-family="Mukta,sans-serif" font-size="13" fill="#c45d18" transform="rotate(26 470 186)">band baaja on foot ♪</text>
         <text x="690" y="352" text-anchor="end" font-family="Mukta,sans-serif" font-size="11" fill="#6e3b2a" opacity=".7">Not to scale</text>
       </svg>
+      <svg class="map-tall" viewBox="0 0 340 440" role="img" aria-label="Route: Hotel Solista by bus to Sainik School, then on foot with the band to Hotel Padmini garden gate">
+        <rect width="340" height="440" fill="url(#dots)"/>
+        <path d="M200 440 C 240 400, 290 420, 340 372" fill="none" stroke="#5b86b8" stroke-opacity=".45" stroke-width="12" stroke-linecap="round"/>
+        <text x="330" y="430" text-anchor="end" font-family="Spectral,serif" font-style="italic" font-size="14" fill="#2c5a8c">Berach river</text>
+        <path id="leg1m" d="M60 62 C 60 150, 270 120, 270 214" fill="none" stroke="#1f3a93" stroke-width="4" stroke-dasharray="1 10" stroke-linecap="round"/>
+        <path id="leg2m" d="M270 214 C 270 300, 70 290, 70 372" fill="none" stroke="#f07d1a" stroke-width="5" stroke-linecap="round"/>
+        <text x="160" y="118" font-family="Mukta,sans-serif" font-weight="600" font-size="14" fill="#1f3a93">by bus</text>
+        <text x="150" y="322" font-family="Mukta,sans-serif" font-weight="600" font-size="14" fill="#a8470a">band baaja on foot ♪</text>
+        <circle cx="60" cy="62" r="13" fill="#1f3a93"/><circle cx="60" cy="62" r="5" fill="#fff4e0"/>
+        <text x="84" y="58" font-family="Rozha One,serif" font-size="22" fill="#1f3a93">Hotel Solista</text>
+        <text x="84" y="78" font-family="Mukta,sans-serif" font-weight="600" font-size="12.5" letter-spacing="1" fill="#5a2a1c">START · 5:00 PM</text>
+        <circle cx="270" cy="214" r="11" fill="#fff4e0" stroke="#f07d1a" stroke-width="4"/>
+        <text x="248" y="210" text-anchor="end" font-family="Rozha One,serif" font-size="22" fill="#3a0d12">Sainik School</text>
+        <text x="248" y="230" text-anchor="end" font-family="Mukta,sans-serif" font-weight="600" font-size="12.5" letter-spacing="1" fill="#5a2a1c">BUS STOPS · BAND STARTS</text>
+        <circle cx="70" cy="372" r="15" fill="#b3121f"/><path d="M63 374 l7-9 7 9 -7 6z" fill="#ffb81c"/>
+        <text x="96" y="368" font-family="Rozha One,serif" font-size="22" fill="#b3121f">Hotel Padmini</text>
+        <text x="96" y="388" font-family="Mukta,sans-serif" font-weight="600" font-size="12.5" letter-spacing="1" fill="#5a2a1c">GARDEN GATE · PHERAS 5:30</text>
+        <g class="bus-m"><g transform="translate(-16,-11)"><rect width="32" height="18" rx="4" fill="#1f3a93"/><rect x="3" y="3" width="7" height="6" rx="1" fill="#cfe0f5"/><rect x="12" y="3" width="7" height="6" rx="1" fill="#cfe0f5"/><rect x="21" y="3" width="8" height="6" rx="1" fill="#cfe0f5"/><circle cx="8" cy="19" r="3" fill="#3a0d12"/><circle cx="24" cy="19" r="3" fill="#3a0d12"/></g>
+          <animateMotion dur="9s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.45;1" calcMode="linear"><mpath href="#leg1m"/></animateMotion></g>
+        <g class="band-m"><circle r="7" fill="#ffb81c" stroke="#b3121f" stroke-width="2"/><path d="M-3 -2 v6 M3 -3 v6" stroke="#b3121f" stroke-width="1.6"/>
+          <animateMotion dur="9s" repeatCount="indefinite" keyPoints="0;0;1" keyTimes="0;.5;1" calcMode="linear"><mpath href="#leg2m"/></animateMotion></g>
+      </svg>
     </div>
     <div class="stops">
       <div class="stop"><div class="how"><span class="e">Start · 5:00 PM</span><span class="h">प्रस्थान · शाम ५:००</span></div><div class="n">Hotel Solista</div><p><span class="e">Gather at reception in your safa. The bus leaves on time.</span><span class="h">साफ़ा पहनकर रिसेप्शन पर एकत्र हों। बस समय पर निकलेगी।</span></p></div>
@@ -710,7 +873,7 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
 <section class="stays" id="thikana">
   <div class="wrap">
     <div class="sec-head">
-      <div class="label" style="color:var(--kesar)"><span class="e">Where it all happens</span><span class="h">उत्सव स्थल</span></div>
+      <div class="label" style="color:var(--kesar-ink)"><span class="e">Where it all happens</span><span class="h">उत्सव स्थल</span></div>
       <h2 style="color:var(--mewar)"><span class="e">Two havelis, one celebration</span><span class="h">दो ठिकाने, एक उत्सव</span></h2>
     </div>
     <div class="havelis">
@@ -750,7 +913,7 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
 <section class="travel" id="safar">
   <div class="wrap">
     <div class="sec-head">
-      <div class="label" style="color:var(--kesar)"><span class="e">Getting to Chittorgarh</span><span class="h">चित्तौड़गढ़ कैसे पहुँचें</span></div>
+      <div class="label" style="color:var(--kesar-ink)"><span class="e">Getting to Chittorgarh</span><span class="h">चित्तौड़गढ़ कैसे पहुँचें</span></div>
       <h2 style="color:var(--mewar)"><span class="e">The road to the fort city</span><span class="h">किलों के शहर का सफ़र</span></h2>
     </div>
     <div class="tgrid">
@@ -772,8 +935,8 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
     </div>
     <div class="weather reveal">
       <div class="temps">
-        <div><b>25°</b><span class="e">Day</span><span class="h">दिन</span></div>
-        <div><b class="low">10°</b><span class="e">Night</span><span class="h">रात</span></div>
+        <div><b>25<i>°</i></b><span class="e">Day</span><span class="h">दिन</span></div>
+        <div><b class="low">10<i>°</i></b><span class="e">Night</span><span class="h">रात</span></div>
       </div>
       <p><span class="e"><b>January in Mewar is sunny by day and cold by night.</b> The Sangeet, reception and varmala are all in the open garden after dark, so pack a shawl, a warm jacket for the baraat walk, and comfortable shoes for dancing on grass.</span><span class="h"><b>जनवरी में मेवाड़ में दिन धूप भरे और रातें ठंडी होती हैं।</b> संगीत, रिसेप्शन और वरमाला खुले गार्डन में रात को होंगे, इसलिए शॉल, बारात के लिए गर्म जैकेट और घास पर नाचने लायक आरामदायक जूते ज़रूर लाएँ।</span></p>
     </div>
@@ -793,13 +956,13 @@ footer .tiny{font-size:13px;opacity:.6;font-family:var(--f-label)}
 <section class="dress" id="poshak">
   <div class="wrap">
     <div class="sec-head">
-      <div class="label" style="color:var(--kesar)"><span class="e">Poshak · suggested colours</span><span class="h">पोशाक · सुझाए रंग</span></div>
+      <div class="label" style="color:var(--kesar-ink)"><span class="e">Poshak · suggested colours</span><span class="h">पोशाक · सुझाए रंग</span></div>
       <h2 style="color:var(--mewar)"><span class="e">Dress for the occasion</span><span class="h">हर रस्म का अपना रंग</span></h2>
     </div>
     <div class="looks">
       <div class="look reveal"><div class="sw"><i style="background:#f2c230"></i><i style="background:#e8a317"></i><i style="background:#6f9a3a"></i><i style="background:#2e7d32"></i></div><div class="lb"><span class="when">25 Jan · 2 PM</span><b><span class="e">Haldi &amp; Mehendi</span><span class="h">हल्दी एवं मेहंदी</span></b><span><span class="e">Turmeric yellows and henna greens. Wear something you won't mind getting haldi on.</span><span class="h">हल्दी पीला और मेहंदी हरा। ऐसे कपड़े जिन पर हल्दी लग जाए तो चिंता न हो।</span></span></div></div>
       <div class="look reveal"><div class="sw"><i style="background:#5b1a6e"></i><i style="background:#b0175c"></i><i style="background:#1f6f78"></i><i style="background:#e0b03a"></i></div><div class="lb"><span class="when">25 Jan · 7 PM</span><b><span class="e">Sangeet Night</span><span class="h">संगीत संध्या</span></b><span><span class="e">Jewel tones, sequins, anything that catches the light on the dance floor.</span><span class="h">गहरे रत्न जैसे रंग और चमक — डांस फ़्लोर के लिए।</span></span></div></div>
-      <div class="look reveal"><div class="sw"><i style="background:#f07d1a"></i><i style="background:#d6336c"></i><i style="background:#ffb81c"></i><i style="background:#fff4e0"></i></div><div class="lb"><span class="when">26 Jan · 1 PM</span><b><span class="e">Baraat</span><span class="h">बारात</span></b><span><span class="e">Kesariya and rani pink. Safas for the gents, leheriya or bandhej for everyone.</span><span class="h">केसरिया और रानी गुलाबी। पुरुषों के लिए साफ़ा, सबके लिए लहरिया या बंधेज।</span></span></div></div>
+      <div class="look reveal"><div class="sw"><i style="background:#f07d1a"></i><i style="background:#d6336c"></i><i style="background:#ffb81c"></i><i style="background:repeating-linear-gradient(-45deg,#f07d1a 0 8px,#d6246e 8px 16px,#ffb81c 16px 24px,#2e7d32 24px 32px)"></i></div><div class="lb"><span class="when">26 Jan · 1 PM</span><b><span class="e">Baraat</span><span class="h">बारात</span></b><span><span class="e">Kesariya and rani pink. Safas for the gents, leheriya or bandhej for everyone.</span><span class="h">केसरिया और रानी गुलाबी। पुरुषों के लिए साफ़ा, सबके लिए लहरिया या बंधेज।</span></span></div></div>
       <div class="look reveal"><div class="sw"><i style="background:#b3121f"></i><i style="background:#7a0b2e"></i><i style="background:#e0b03a"></i><i style="background:#f6efe0"></i></div><div class="lb"><span class="when">26 Jan · 5:30 PM</span><b><span class="e">Pheras &amp; Reception</span><span class="h">फेरे एवं रिसेप्शन</span></b><span><span class="e">Royal Mewar: deep reds, ivory and gold. Traditional and grand.</span><span class="h">शाही मेवाड़ — गहरा लाल, हाथीदांत और सोना।</span></span></div></div>
     </div>
   </div>
@@ -1226,7 +1389,7 @@ if(!reduce && 'IntersectionObserver' in window){
   const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.remove('pre'); io.unobserve(en.target);} }),{rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('.reveal').forEach(el=>{ const r=el.getBoundingClientRect(); if(r.top>innerHeight){ el.classList.add('pre'); io.observe(el);} });
 }
-if(reduce){ document.querySelectorAll('animateMotion').forEach(a=>a.remove()); $('#bus').setAttribute('transform','translate(210,200)'); $('#band').setAttribute('transform','translate(470,200)'); }
+if(reduce){ document.querySelectorAll('animateMotion').forEach(a=>a.remove()); $('#bus').setAttribute('transform','translate(210,200)'); $('#band').setAttribute('transform','translate(470,200)'); document.querySelectorAll('.bus-m').forEach(g=>g.setAttribute('transform','translate(165,138)')); document.querySelectorAll('.band-m').forEach(g=>g.setAttribute('transform','translate(170,293)')); }
 })();
 </script>
 <script>
@@ -1258,7 +1421,7 @@ const orbMat=new T.MeshBasicMaterial({color:0xffd45a,fog:false});
 const orb=new T.Mesh(new T.SphereGeometry(9,24,16),orbMat); scene.add(orb);
 const glowC=document.createElement('canvas'); glowC.width=glowC.height=128; { const g=glowC.getContext('2d'); const r=g.createRadialGradient(64,64,0,64,64,64); r.addColorStop(0,'rgba(255,220,140,.9)'); r.addColorStop(1,'rgba(255,220,140,0)'); g.fillStyle=r; g.fillRect(0,0,128,128); }
 const glow=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(glowC),transparent:true,depthWrite:false,fog:false,blending:T.AdditiveBlending}));
-glow.scale.set(90,90,1); scene.add(glow);
+glow.scale.set(70,70,1); scene.add(glow);
 
 /* stars */
 const starGeo=new T.BufferGeometry(); const sp=[];
@@ -1452,6 +1615,7 @@ info.querySelector('button').addEventListener('click',()=>{ info.hidden=true; LM
 let focusK=null;
 
 /* camera orbit + drag */
+let sizedMobile=false;
 let theta=0.5, elev=0.2, radius=60, autoSpin=!reduce, dragging=false, lx=0, ly=0, needs=true, lastInteract=0;
 const cv=renderer.domElement;
 cv.addEventListener('pointerdown',e=>{ dragging=true; lx=e.clientX; ly=e.clientY; cv.setPointerCapture(e.pointerId); lastInteract=performance.now(); });
@@ -1464,7 +1628,7 @@ host.querySelectorAll('.mood button').forEach(b=>b.addEventListener('click',()=>
 
 /* size */
 function size(){ const w=stage.clientWidth, h=stage.clientHeight; if(!w||!h) return; renderer.setSize(w,h,false); camera.aspect=w/h;
-  camera.fov=w<600?50:34; if(w<600){ radius=Math.max(radius,78); elev=Math.max(elev,.26); } camera.updateProjectionMatrix(); needs=true; }
+  camera.fov=w<600?46:34; if(w<600 && !sizedMobile){ sizedMobile=true; radius=66; elev=.3; theta=.22; target.set(2,4.5,0); } camera.updateProjectionMatrix(); needs=true; }
 new ResizeObserver(size).observe(stage); size();
 
 /* loop */
@@ -1484,8 +1648,20 @@ function frame(now){
   camera.lookAt(target);
   renderer.render(scene,camera);
   const w=stage.clientWidth, h=stage.clientHeight;
-  LM.forEach(l=>{ v.copy(l.obj()).project(camera); const hide=v.z>1||Math.abs(v.x)>1.05||Math.abs(v.y)>1.05;
-    l.el.style.transform=`translate(${(v.x*.5+.5)*w}px,${(-v.y*.5+.5)*h}px) translate(-50%,-100%)`; l.el.style.opacity=hide?0:1; l.el.style.pointerEvents=hide?'none':'auto'; });
+  // project, then lift labels that would overlap (nearest first keeps the short stem)
+  const items=LM.map(l=>{ v.copy(l.obj()).project(camera); const bw=l.el.offsetWidth, bh=24;
+    return {l,x:(v.x*.5+.5)*w,y:(-v.y*.5+.5)*h,hide:v.z>1||Math.abs(v.x)>1.05||Math.abs(v.y)>1.05||!bw,bw,bh:Math.max(bh,20)}; }).sort((a,b)=>b.y-a.y);
+  const placed=[];
+  items.forEach(it=>{ const el=it.l.el;
+    if(it.hide){ el.style.opacity=0; el.style.pointerEvents='none'; return; }
+    let stem=14;
+    for(let k=0;k<8;k++){ const top=it.y-stem-it.bh, l0=it.x-it.bw/2-4, r0=it.x+it.bw/2+4;
+      const hit=placed.find(p=>l0<p.r && r0>p.l && top<p.b+3 && top+it.bh>p.t-3);
+      if(!hit) break; stem=Math.max(stem+2,it.y-hit.t+6); }
+    stem=Math.min(stem,150);
+    placed.push({l:it.x-it.bw/2-4,r:it.x+it.bw/2+4,t:it.y-stem-it.bh,b:it.y-stem});
+    el.style.setProperty('--stem',stem+'px');
+    el.style.transform=`translate(${it.x}px,${it.y}px) translate(-50%,-100%)`; el.style.opacity=1; el.style.pointerEvents='auto'; });
 }
 setMood('sunset');
 requestAnimationFrame(frame);

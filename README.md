@@ -1,4 +1,4 @@
-# Dushyant & Riya · Shubh Vivah
+# Riya & Dushyant · Shubh Vivah
 
 Wedding website for 25–26 January 2027, Hotel Padmini, Chittorgarh.
 

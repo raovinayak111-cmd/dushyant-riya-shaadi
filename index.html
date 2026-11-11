@@ -551,6 +551,69 @@ section,header{scroll-margin-top:72px}
 .procession.doli{border-top:3px solid var(--sona);border-bottom:0}
 .procession.doli .proc-track{animation-duration:64s}
 @media (max-width:600px){.proc-track svg{height:112px}.hero-baraat .proc-track svg{height:11.5cqi}}
+
+/* ================= design language v3: Mewar miniature ================= */
+/* rectangular frames with a hashiya (painted border); no round-topped arches anywhere */
+.hero .wrap{gap:26px}
+.hscroll{position:relative;width:min(1060px,100%)}
+.hscroll .rod{margin:0 -6px;z-index:2}
+.hscroll .sheet{position:relative;margin:0 12px;padding:clamp(18px,3vw,34px);background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.6),transparent 60%),linear-gradient(90deg,rgba(176,128,60,.22),transparent 7%,transparent 93%,rgba(176,128,60,.22)),#fff6e3;box-shadow:0 26px 60px rgba(40,0,10,.5);clip-path:inset(0 -80px -100px -80px);transition:clip-path 2.4s cubic-bezier(.45,.05,.2,1)}
+.hscroll .rod.bottom{transition:transform 2.4s cubic-bezier(.45,.05,.2,1)}
+.hscroll.rolled .sheet{clip-path:inset(0 -80px 100% -80px)}
+.hscroll.rolled .rod.bottom{transform:translateY(calc(-1*var(--sh,600px)))}
+.hscroll.notrans .sheet,.hscroll.notrans .rod.bottom{transition:none}
+.painting{position:relative;aspect-ratio:3/2;container-type:inline-size;overflow:hidden;cursor:pointer;background:#ffe3a6;box-shadow:0 0 0 2px var(--sona),0 0 0 11px var(--mewar),0 0 0 13px var(--sona),0 0 0 14px #7a4420;margin:14px}
+.painting .scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+@keyframes flap{50%{transform:skewY(7deg) scaleX(.92)}}
+@keyframes drift{50%{transform:translate(6px,-8px) rotate(4deg)}}
+@keyframes raysTurn{to{transform:rotate(360deg)}}
+.scene .fl{transform-box:fill-box;transform-origin:0 50%;animation:flap 2.6s ease-in-out infinite}
+.scene .kite{transform-box:fill-box;transform-origin:50% 50%;animation:drift 5s ease-in-out infinite}
+.scene .kite:nth-of-type(2n){animation-duration:6.5s;animation-delay:-2s}
+.scene .rays{transform-box:fill-box;transform-origin:50% 50%;animation:raysTurn 140s linear infinite}
+.p-text{position:absolute;left:0;right:0;top:4.5%;display:grid;justify-items:center;text-align:center;gap:.5cqi;padding:0 5%;pointer-events:none}
+.p-kicker{font-family:var(--f-label);font-weight:700;font-size:clamp(11.5px,1.5cqi,16px);letter-spacing:.34em;text-transform:uppercase;color:var(--kesar-ink)}
+.p-names{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(40px,8.8cqi,98px);line-height:1;color:var(--mewar);background:linear-gradient(180deg,#d01b24 0%,#a50f1c 55%,#7a0b2e 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 0 rgba(255,244,214,.9));text-wrap:balance}
+.p-amp{font-size:.62em;-webkit-text-fill-color:var(--kesar);color:var(--kesar)}
+.p-hi{font-family:var(--f-hindi);font-size:clamp(17px,2.9cqi,32px);color:#7a0b2e;line-height:1.2}
+.p-date{display:flex;align-items:center;gap:1.4cqi;margin-top:.6cqi;font-family:var(--f-label);font-weight:700;font-size:clamp(13px,1.9cqi,21px);letter-spacing:.22em;text-transform:uppercase;color:var(--syahi)}
+.p-date i{width:clamp(18px,5cqi,60px);height:2px;background:var(--mewar)}
+.p-place{font-family:var(--f-body);font-style:italic;font-weight:500;font-size:clamp(15px,2.1cqi,23px);color:var(--syahi)}
+.hero-baraat{position:absolute;left:0;right:0;bottom:2.6%;height:clamp(58px,11cqi,118px);overflow:hidden;pointer-events:none}
+.hero-baraat .proc-track{animation-duration:80s}
+.hero-baraat .proc-track svg{height:clamp(58px,11cqi,118px)}
+.hscroll.rolled .hero-baraat .proc-track{animation-play-state:paused}
+@media (max-width:600px){
+  .hscroll .sheet{margin:0 8px;padding:12px}
+  .hscroll .rod{margin:0}
+  .hscroll{overflow:visible}
+  .painting{aspect-ratio:3/5.1;margin:11px;box-shadow:0 0 0 2px var(--sona),0 0 0 8px var(--mewar),0 0 0 10px var(--sona)}
+  .p-text{top:3.2%;gap:.9cqi}
+  .p-names{font-size:14.5cqi;line-height:.96}
+  .p-names span{display:block}
+  .p-names .p-amp{font-size:.5em;margin:.06em 0}
+  .p-hi{font-size:6cqi}
+  .p-date{font-size:4.1cqi;letter-spacing:.14em}
+  .p-place{font-size:5cqi}
+  .p-kicker{font-size:3.6cqi;letter-spacing:.26em}
+  .hero-baraat .proc-track svg{height:clamp(58px,11cqi,118px)}
+}
+@media (prefers-reduced-motion:reduce){.scene .fl,.scene .kite,.scene .rays{animation:none}.hscroll .sheet,.hscroll .rod.bottom{transition:none}}
+/* squared, bordered shapes across the site */
+.cd{border-radius:8px!important;border:1px solid var(--sona);box-shadow:inset 0 0 0 3px rgba(54,8,26,.55),inset 0 0 0 4px rgba(224,176,58,.5);background:linear-gradient(180deg,rgba(122,11,46,.9),rgba(58,8,20,.85))}
+.day{border-radius:10px!important}
+.day[aria-selected="true"]{box-shadow:inset 0 0 0 3px var(--genda),inset 0 0 0 4px rgba(122,11,46,.6),0 10px 30px rgba(227,118,42,.35)}
+.haveli{border-radius:12px!important;padding-top:38px;border:2px solid var(--sona);box-shadow:0 0 0 7px #fbf3e1,0 0 0 9px var(--mewar),0 18px 40px rgba(86,16,32,.14)}
+.haveli.sol{box-shadow:0 0 0 7px #fbf3e1,0 0 0 9px var(--neel),0 18px 40px rgba(86,16,32,.14)}
+.haveli::before{display:none}
+.havelis{gap:38px}
+.frame-p{width:min(294px,calc(100% - 26px));box-sizing:border-box;aspect-ratio:.86;padding:0!important;background:none;clip-path:none!important;-webkit-clip-path:none!important;box-shadow:0 0 0 3px var(--sona),0 0 0 11px var(--mewar),0 0 0 13px var(--sona),0 14px 30px rgba(86,16,32,.25);margin:13px}
+.frame-p .inner{clip-path:none!important;-webkit-clip-path:none!important;padding:0;background:none}
+.frame-p img{clip-path:none!important;-webkit-clip-path:none!important}
+.fort3d .stage,.fort3d .stage canvas{border-radius:4px!important}
+.fort3d .stage{border:0!important;box-shadow:0 0 0 2px var(--sona),0 0 0 11px var(--mewar),0 0 0 13px var(--sona),0 30px 70px rgba(0,0,0,.45);margin:13px}
+.shloka{border-radius:8px}
+@media (max-width:600px){.haveli{padding:30px 20px 26px}.frame-p{width:calc(100% - 22px);margin:11px;box-shadow:0 0 0 2px var(--sona),0 0 0 8px var(--mewar),0 0 0 10px var(--sona),0 10px 22px rgba(86,16,32,.25)}.fort3d .stage{margin:10px;box-shadow:0 0 0 2px var(--sona),0 0 0 8px var(--mewar),0 0 0 10px var(--sona)}.havelis{gap:30px}}
 /* petals canvas for sections */
 #petals{position:fixed;inset:0;pointer-events:none;z-index:70;width:100%;height:100%}
 .reveal{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -604,22 +667,22 @@ section,header{scroll-margin-top:72px}
       <b><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="vertical-align:-4px;margin:0 8px"><path d="M12 4v16M4 12h16M12 4h6M12 20H6M4 12V6M20 12v6"/><g fill="currentColor" stroke="none"><circle cx="8" cy="8" r="1.4"/><circle cx="16" cy="8" r="1.4"/><circle cx="8" cy="16" r="1.4"/><circle cx="16" cy="16" r="1.4"/></g></svg>॥ श्री गणेशाय नमः ॥<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="vertical-align:-4px;margin:0 8px"><path d="M12 4v16M4 12h16M12 4h6M12 20H6M4 12V6M20 12v6"/><g fill="currentColor" stroke="none"><circle cx="8" cy="8" r="1.4"/><circle cx="16" cy="8" r="1.4"/><circle cx="8" cy="16" r="1.4"/><circle cx="16" cy="16" r="1.4"/></g></svg></b>
       वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥
     </div>
-    <div class="archwrap" id="arch">
-      <canvas id="sky" aria-hidden="true"></canvas>
-      <div class="hero-baraat" aria-hidden="true"><div class="proc-track"><svg viewBox="0 0 1390 150" aria-hidden="true"><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="66" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="124" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="182" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="250" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="430" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="488" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="556" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#nishan" x="702" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#oont" x="768" y="10" width="150" height="140" class="" style="animation-delay:-0.18s"/><use href="#oont" x="912" y="10" width="150" height="140" class="" style="animation-delay:-0.36s"/><use href="#baja" x="1068" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#dholi" x="1126" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#haathi" x="1196" y="20" width="170" height="130" class="" style="animation-delay:-0.18s"/></svg><svg viewBox="0 0 1390 150" aria-hidden="true"><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="66" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="124" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="182" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="250" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="430" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="488" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="556" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#nishan" x="702" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#oont" x="768" y="10" width="150" height="140" class="" style="animation-delay:-0.18s"/><use href="#oont" x="912" y="10" width="150" height="140" class="" style="animation-delay:-0.36s"/><use href="#baja" x="1068" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#dholi" x="1126" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#haathi" x="1196" y="20" width="170" height="130" class="" style="animation-delay:-0.18s"/></svg><svg viewBox="0 0 1390 150" aria-hidden="true"><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="66" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="124" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="182" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="250" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="430" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="488" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="556" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#nishan" x="702" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#oont" x="768" y="10" width="150" height="140" class="" style="animation-delay:-0.18s"/><use href="#oont" x="912" y="10" width="150" height="140" class="" style="animation-delay:-0.36s"/><use href="#baja" x="1068" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#dholi" x="1126" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#haathi" x="1196" y="20" width="170" height="130" class="" style="animation-delay:-0.18s"/></svg><svg viewBox="0 0 1390 150" aria-hidden="true"><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="66" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="124" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="182" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="250" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="430" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="488" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="556" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#nishan" x="702" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#oont" x="768" y="10" width="150" height="140" class="" style="animation-delay:-0.18s"/><use href="#oont" x="912" y="10" width="150" height="140" class="" style="animation-delay:-0.36s"/><use href="#baja" x="1068" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#dholi" x="1126" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#haathi" x="1196" y="20" width="170" height="130" class="" style="animation-delay:-0.18s"/></svg></div></div>
-      <div class="doors" id="doors" aria-hidden="true"><div class="door l"></div><div class="door r"></div></div>
-      <svg class="frame" id="frame" aria-hidden="true"></svg>
-      <div class="arch-text">
-        <div class="kicker"><span class="e">Padharo Mhare Des</span><span class="h">पधारो म्हारे देस</span></div>
-        <div class="names">Riya</div>
-        <div class="amp">&amp;</div>
-        <div class="names">Dushyant</div>
-        <div class="names-hi">रिया ❁ दुष्यंत</div>
-        <div class="datebar"><i></i>25 · 26 · I · 2027<i></i></div>
-        <div class="place"><span class="e">Chittorgarh, Rajasthan</span><span class="h">चित्तौड़गढ़, राजस्थान</span></div>
-      </div>
+    <div class="hscroll" id="hscroll">
+      <div class="rod"></div>
+      <div class="sheet"><div class="painting" id="painting">
+        <svg class="scene" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMax slice" role="img" aria-label="A painting of Chittorgarh fort on its hill, with ramparts, bastions, a great gate and saffron flags"><defs><linearGradient id="skyP" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3d6"/><stop offset=".42" stop-color="#ffe3a6"/><stop offset=".66" stop-color="#ffc56e"/></linearGradient><radialGradient id="haloP"><stop offset="0" stop-color="#ffd166" stop-opacity=".75"/><stop offset=".7" stop-color="#ffd166" stop-opacity=".4"/><stop offset="1" stop-color="#ffd166" stop-opacity="0"/></radialGradient></defs><rect width="1200" height="800" fill="url(#skyP)"/><path class="rays" d="M774.8,207.1 L840.0,215.0 L774.8,222.9 Z M772.2,246.2 L877.9,278.4 L768.7,261.6 Z M760.9,283.8 L816.2,319.1 L754.1,297.9 Z M741.6,317.8 L822.8,392.7 L731.8,330.2 Z M715.2,346.8 L749.6,402.6 L702.8,356.6 Z M682.9,369.1 L723.7,471.8 L668.8,375.9 Z M646.6,383.7 L653.4,449.0 L631.2,387.2 Z M607.9,389.8 L600.0,500.0 L592.1,389.8 Z M568.8,387.2 L546.6,449.0 L553.4,383.7 Z M531.2,375.9 L476.3,471.8 L517.1,369.1 Z M497.2,356.6 L450.4,402.6 L484.8,346.8 Z M468.2,330.2 L377.2,392.7 L458.4,317.8 Z M445.9,297.9 L383.8,319.1 L439.1,283.8 Z M431.3,261.6 L322.1,278.4 L427.8,246.2 Z M425.2,222.9 L360.0,215.0 L425.2,207.1 Z M427.8,183.8 L322.1,151.6 L431.3,168.4 Z M439.1,146.2 L383.8,110.9 L445.9,132.1 Z M458.4,112.2 L377.2,37.3 L468.2,99.8 Z M484.8,83.2 L450.4,27.4 L497.2,73.4 Z M517.1,60.9 L476.3,-41.8 L531.2,54.1 Z M553.4,46.3 L546.6,-19.0 L568.8,42.8 Z M592.1,40.2 L600.0,-70.0 L607.9,40.2 Z M631.2,42.8 L653.4,-19.0 L646.6,46.3 Z M668.8,54.1 L723.7,-41.8 L682.9,60.9 Z M702.8,73.4 L749.6,27.4 L715.2,83.2 Z M731.8,99.8 L822.8,37.3 L741.6,112.2 Z M754.1,132.1 L816.2,110.9 L760.9,146.2 Z M768.7,168.4 L877.9,151.6 L772.2,183.8 Z " fill="#ffc94d" opacity=".4"/><circle cx="600" cy="215" r="200" fill="url(#haloP)"/><g fill="#fffaf0" opacity=".9"><ellipse cx="170" cy="120" rx="57.5" ry="18.75"/><circle cx="142.5" cy="108.75" r="18.75"/><circle cx="172.5" cy="100.0" r="23.75"/><circle cx="202.5" cy="110.0" r="16.25"/></g><g fill="#fffaf0" opacity=".9"><ellipse cx="1030" cy="150" rx="50.6" ry="16.5"/><circle cx="1005.8" cy="140.1" r="16.5"/><circle cx="1032.2" cy="132.4" r="20.900000000000002"/><circle cx="1058.6" cy="141.2" r="14.3"/></g><g fill="#fffaf0" opacity=".9"><ellipse cx="360" cy="62" rx="34.5" ry="11.25"/><circle cx="343.5" cy="55.25" r="11.25"/><circle cx="361.5" cy="50.0" r="14.25"/><circle cx="379.5" cy="56.0" r="9.75"/></g><g fill="#fffaf0" opacity=".9"><ellipse cx="880" cy="70" rx="32.199999999999996" ry="10.5"/><circle cx="864.6" cy="63.7" r="10.5"/><circle cx="881.4" cy="58.8" r="13.299999999999999"/><circle cx="898.2" cy="64.4" r="9.1"/></g><path d="M250,276 Q345.0,430.0 380,470" fill="none" stroke="#7a4420" stroke-opacity=".35" stroke-width="1"/><g class="kite"><g transform="translate(250,250) rotate(-20)"><path d="M0,-26 L21.32,0 L0,26 L-21.32,0 Z" fill="#d6246e" stroke="#7a4420" stroke-width="1"/><path d="M0,-26 L21.32,0 L0,0 Z M0,26 L-21.32,0 L0,0 Z" fill="#ffb81c"/><path d="M0,26 l-7.8,13.0 h15.6 Z" fill="#d6246e"/></g></g><path d="M965,252 Q932.5,420.0 840,470" fill="none" stroke="#7a4420" stroke-opacity=".35" stroke-width="1"/><g class="kite"><g transform="translate(965,230) rotate(18)"><path d="M0,-22 L18.04,0 L0,22 L-18.04,0 Z" fill="#2e7d32" stroke="#7a4420" stroke-width="1"/><path d="M0,-22 L18.04,0 L0,0 Z M0,22 L-18.04,0 L0,0 Z" fill="#f07d1a"/><path d="M0,22 l-6.6,11.0 h13.2 Z" fill="#2e7d32"/></g></g><path d="M1085,317 Q1037.5,460.0 930,480" fill="none" stroke="#7a4420" stroke-opacity=".35" stroke-width="1"/><g class="kite"><g transform="translate(1085,300) rotate(26)"><path d="M0,-17 L13.94,0 L0,17 L-13.94,0 Z" fill="#1f3a93" stroke="#7a4420" stroke-width="1"/><path d="M0,-17 L13.94,0 L0,0 Z M0,17 L-13.94,0 L0,0 Z" fill="#fff4e0"/><path d="M0,17 l-5.1,8.5 h10.2 Z" fill="#1f3a93"/></g></g><path d="M130,346 Q245.0,475.0 300,480" fill="none" stroke="#7a4420" stroke-opacity=".35" stroke-width="1"/><g class="kite"><g transform="translate(130,330) rotate(-28)"><path d="M0,-16 L13.12,0 L0,16 L-13.12,0 Z" fill="#f07d1a" stroke="#7a4420" stroke-width="1"/><path d="M0,-16 L13.12,0 L0,0 Z M0,16 L-13.12,0 L0,0 Z" fill="#fff4e0"/><path d="M0,16 l-4.8,8.0 h9.6 Z" fill="#f07d1a"/></g></g><path d="M0,520 Q90,452 190,490 Q300,440 420,486 Q520,458 640,484 Q760,446 880,488 Q1010,450 1110,486 Q1160,470 1200,480 V620 H0 Z" fill="#d6c27a"/><path d="M0,548 Q140,498 280,530 Q420,500 600,528 Q800,496 960,530 Q1090,506 1200,524 V640 H0 Z" fill="#b9ad5e"/><path d="M-80,690 L40,577.2 L60,576.0 L100,573.7 L140,571.6 L180,569.7 L220,567.9 L260,566.3 L300,564.9 L340,563.7 L380,562.7 L420,561.8 L460,561.1 L500,560.5 L540,560.2 L580,560.0 L620,560.0 L660,560.2 L700,560.5 L740,561.1 L780,561.8 L820,562.7 L860,563.7 L900,564.9 L940,566.3 L980,567.9 L1020,569.7 L1060,571.6 L1100,573.7 L1140,576.0 L1160,577.2 L1280,690 Z" fill="#b47642" stroke="#7a4420" stroke-width="1.2"/><path d="M-20,640 Q300,598 600,612 Q900,598 1220,640 M10,610 Q300,574 600,588 Q900,574 1190,610" fill="none" stroke="#8a5428" stroke-width="2" opacity=".55"/><ellipse cx="396" cy="588" rx="11" ry="6" fill="#6f8f3a"/><ellipse cx="973" cy="588" rx="10" ry="6" fill="#5d7a30"/><ellipse cx="269" cy="586" rx="9" ry="5" fill="#6f8f3a"/><ellipse cx="125" cy="620" rx="12" ry="7" fill="#6f8f3a"/><ellipse cx="1119" cy="638" rx="10" ry="6" fill="#6f8f3a"/><ellipse cx="1152" cy="592" rx="12" ry="7" fill="#86a548"/><ellipse cx="506" cy="624" rx="10" ry="6" fill="#5d7a30"/><ellipse cx="967" cy="595" rx="10" ry="6" fill="#5d7a30"/><ellipse cx="238" cy="588" rx="11" ry="7" fill="#5d7a30"/><ellipse cx="89" cy="603" rx="11" ry="6" fill="#86a548"/><ellipse cx="922" cy="620" rx="12" ry="7" fill="#86a548"/><ellipse cx="368" cy="649" rx="11" ry="7" fill="#6f8f3a"/><ellipse cx="115" cy="610" rx="9" ry="6" fill="#86a548"/><ellipse cx="866" cy="602" rx="13" ry="8" fill="#6f8f3a"/><ellipse cx="417" cy="662" rx="9" ry="5" fill="#5d7a30"/><ellipse cx="110" cy="631" rx="12" ry="7" fill="#86a548"/><ellipse cx="415" cy="607" rx="9" ry="6" fill="#86a548"/><ellipse cx="100" cy="593" rx="8" ry="5" fill="#5d7a30"/><ellipse cx="790" cy="580" rx="11" ry="7" fill="#5d7a30"/><ellipse cx="690" cy="638" rx="9" ry="5" fill="#5d7a30"/><ellipse cx="468" cy="637" rx="6" ry="4" fill="#86a548"/><ellipse cx="432" cy="631" rx="9" ry="6" fill="#6f8f3a"/><ellipse cx="911" cy="589" rx="8" ry="5" fill="#86a548"/><ellipse cx="1084" cy="626" rx="7" ry="4" fill="#86a548"/><ellipse cx="970" cy="656" rx="8" ry="5" fill="#86a548"/><ellipse cx="1164" cy="643" rx="9" ry="5" fill="#6f8f3a"/><ellipse cx="195" cy="596" rx="8" ry="5" fill="#6f8f3a"/><ellipse cx="34" cy="654" rx="7" ry="4" fill="#86a548"/><ellipse cx="25" cy="622" rx="9" ry="5" fill="#5d7a30"/><ellipse cx="390" cy="586" rx="12" ry="7" fill="#5d7a30"/><ellipse cx="780" cy="643" rx="9" ry="6" fill="#5d7a30"/><ellipse cx="946" cy="614" rx="9" ry="5" fill="#6f8f3a"/><ellipse cx="241" cy="667" rx="9" ry="5" fill="#6f8f3a"/><ellipse cx="414" cy="579" rx="6" ry="4" fill="#6f8f3a"/><ellipse cx="732" cy="580" rx="7" ry="4" fill="#86a548"/><ellipse cx="192" cy="603" rx="8" ry="5" fill="#86a548"/><ellipse cx="187" cy="646" rx="11" ry="7" fill="#86a548"/><ellipse cx="981" cy="594" rx="6" ry="4" fill="#5d7a30"/><ellipse cx="130" cy="508" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="142" cy="500" rx="13" ry="10" fill="#7da544"/><ellipse cx="205" cy="505" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="217" cy="497" rx="13" ry="10" fill="#7da544"/><ellipse cx="255" cy="503" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="267" cy="495" rx="13" ry="10" fill="#7da544"/><ellipse cx="345" cy="500" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="357" cy="492" rx="13" ry="10" fill="#7da544"/><ellipse cx="440" cy="497" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="452" cy="489" rx="13" ry="10" fill="#7da544"/><ellipse cx="760" cy="497" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="772" cy="489" rx="13" ry="10" fill="#7da544"/><ellipse cx="845" cy="499" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="857" cy="491" rx="13" ry="10" fill="#7da544"/><ellipse cx="935" cy="502" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="947" cy="494" rx="13" ry="10" fill="#7da544"/><ellipse cx="1010" cy="505" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="1022" cy="497" rx="13" ry="10" fill="#7da544"/><ellipse cx="1075" cy="508" rx="24" ry="17" fill="#5f8a36"/><ellipse cx="1087" cy="500" rx="13" ry="10" fill="#7da544"/><rect x="150" y="462" width="82" height="58" fill="#f3cf9b" stroke="#7a4420" stroke-width="1.1"/><path d="M150.0,462.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M160.0,462.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M170.0,462.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M180.0,462.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M190.0,462.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M200.0,462.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M210.0,462.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M220.0,462.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z " fill="#f8dcae" stroke="#7a4420" stroke-width=".8"/><path d="M159.2,487 V478.0 Q159.2,474 163.2,473 Q167.2,474 167.2,478.0 V487 Z" fill="#8e4a1e"/><path d="M177.8,487 V478.0 Q177.8,474 181.8,473 Q185.8,474 185.8,478.0 V487 Z" fill="#8e4a1e"/><path d="M196.2,487 V478.0 Q196.2,474 200.2,473 Q204.2,474 204.2,478.0 V487 Z" fill="#8e4a1e"/><path d="M214.8,487 V478.0 Q214.8,474 218.8,473 Q222.8,474 222.8,478.0 V487 Z" fill="#8e4a1e"/><rect x="268" y="470" width="62" height="50" fill="#f3cf9b" stroke="#7a4420" stroke-width="1.1"/><path d="M268.0,470.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M278.0,470.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M288.0,470.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M298.0,470.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M308.0,470.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M318.0,470.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z " fill="#f8dcae" stroke="#7a4420" stroke-width=".8"/><path d="M277.0,495 V486.0 Q277.0,482 281.0,481 Q285.0,482 285.0,486.0 V495 Z" fill="#8e4a1e"/><path d="M295.0,495 V486.0 Q295.0,482 299.0,481 Q303.0,482 303.0,486.0 V495 Z" fill="#8e4a1e"/><path d="M313.0,495 V486.0 Q313.0,482 317.0,481 Q321.0,482 321.0,486.0 V495 Z" fill="#8e4a1e"/><rect x="940" y="468" width="70" height="52" fill="#f3cf9b" stroke="#7a4420" stroke-width="1.1"/><path d="M940.0,468.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M950.0,468.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M960.0,468.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M970.0,468.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M980.0,468.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M990.0,468.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M1000.0,468.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z " fill="#f8dcae" stroke="#7a4420" stroke-width=".8"/><path d="M947.8,493 V484.0 Q947.8,480 951.8,479 Q955.8,480 955.8,484.0 V493 Z" fill="#8e4a1e"/><path d="M963.2,493 V484.0 Q963.2,480 967.2,479 Q971.2,480 971.2,484.0 V493 Z" fill="#8e4a1e"/><path d="M978.8,493 V484.0 Q978.8,480 982.8,479 Q986.8,480 986.8,484.0 V493 Z" fill="#8e4a1e"/><path d="M994.2,493 V484.0 Q994.2,480 998.2,479 Q1002.2,480 1002.2,484.0 V493 Z" fill="#8e4a1e"/><rect x="1020" y="476" width="60" height="44" fill="#f3cf9b" stroke="#7a4420" stroke-width="1.1"/><path d="M1020.0,476.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M1030.0,476.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M1040.0,476.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M1050.0,476.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M1060.0,476.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z M1070.0,476.0 v-6 l3.6,-3.3 l3.6,3.3 v6 Z " fill="#f8dcae" stroke="#7a4420" stroke-width=".8"/><path d="M1028.7,501 V492.0 Q1028.7,488 1032.7,487 Q1036.7,488 1036.7,492.0 V501 Z" fill="#8e4a1e"/><path d="M1046.0,501 V492.0 Q1046.0,488 1050.0,487 Q1054.0,488 1054.0,492.0 V501 Z" fill="#8e4a1e"/><path d="M1063.3,501 V492.0 Q1063.3,488 1067.3,487 Q1071.3,488 1071.3,492.0 V501 Z" fill="#8e4a1e"/><rect x="359.2" y="489.9" width="73.60000000000001" height="23.9" fill="#f0c48a" stroke="#7a4420" stroke-width="1.2"/><path d="M373.0,491.8 Q376.68,445.8 390.94,426.4 L401.06,426.4 Q415.32,445.8 419.0,491.8 Z" fill="#f5cf97" stroke="#7a4420" stroke-width="1.2"/><path d="M375.9,480.7 H416.1" stroke="#b97a45" stroke-width="1"/><path d="M378.7,469.7 H413.3" stroke="#b97a45" stroke-width="1"/><path d="M381.6,458.6 H410.4" stroke="#b97a45" stroke-width="1"/><path d="M384.4,447.6 H407.6" stroke="#b97a45" stroke-width="1"/><path d="M387.3,436.6 H404.7" stroke="#b97a45" stroke-width="1"/><ellipse cx="396" cy="424.6" rx="9.200000000000001" ry="3.2" fill="#e0b03a" stroke="#7a4420" stroke-width=".8"/><path d="M396,422.76 V398.84" stroke="#7a4420" stroke-width="2.5" stroke-linecap="round"/><path class="fl" d="M396,398.84 L414.7,402.7 L409.4,407.0 L414.7,411.3 L396,414.6 Z" fill="#f07d1a" stroke="#c45d18" stroke-width="1"/><circle cx="396" cy="396.84" r="2.4" fill="#e0b03a"/><rect x="853.6" y="494.7" width="60.800000000000004" height="18.7" fill="#f0c48a" stroke="#7a4420" stroke-width="1.2"/><path d="M865.0,496.2 Q868.04,460.2 879.82,445.0 L888.18,445.0 Q899.96,460.2 903.0,496.2 Z" fill="#f5cf97" stroke="#7a4420" stroke-width="1.2"/><path d="M867.4,487.5 H900.6" stroke="#b97a45" stroke-width="1"/><path d="M869.7,478.9 H898.3" stroke="#b97a45" stroke-width="1"/><path d="M872.1,470.2 H895.9" stroke="#b97a45" stroke-width="1"/><path d="M874.4,461.6 H893.6" stroke="#b97a45" stroke-width="1"/><path d="M876.8,453.0 H891.2" stroke="#b97a45" stroke-width="1"/><ellipse cx="884" cy="443.6" rx="7.6000000000000005" ry="2.5" fill="#e0b03a" stroke="#7a4420" stroke-width=".8"/><path d="M884,442.15999999999997 V423.43999999999994" stroke="#7a4420" stroke-width="2.5" stroke-linecap="round"/><path class="fl" d="M884,423.43999999999994 L898.6,426.4 L894.5,429.8 L898.6,433.2 L884,435.8 Z" fill="#f07d1a" stroke="#c45d18" stroke-width="1"/><circle cx="884" cy="421.43999999999994" r="2.4" fill="#e0b03a"/><path d="M778.0,512 L783.0,412 H817.0 L822.0,512 Z" fill="#f5cf97" stroke="#7a4420" stroke-width="1.3"/><path d="M805,412 H817.0 L822.0,512 H807 Z" fill="#b97a45" opacity=".4"/><rect x="776.0" y="498.9" width="48" height="4" fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="797" y="503.9" width="6" height="5" fill="#8e4a1e"/><rect x="776.0" y="487.8" width="48" height="4" fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="797" y="492.8" width="6" height="5" fill="#8e4a1e"/><rect x="776.0" y="476.7" width="48" height="4" fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="797" y="481.7" width="6" height="5" fill="#8e4a1e"/><rect x="776.0" y="465.6" width="48" height="4" fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="797" y="470.6" width="6" height="5" fill="#8e4a1e"/><rect x="776.0" y="454.4" width="48" height="4" fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="797" y="459.4" width="6" height="5" fill="#8e4a1e"/><rect x="776.0" y="443.3" width="48" height="4" fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="797" y="448.3" width="6" height="5" fill="#8e4a1e"/><rect x="776.0" y="432.2" width="48" height="4" fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="797" y="437.2" width="6" height="5" fill="#8e4a1e"/><rect x="776.0" y="421.1" width="48" height="4" fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="797" y="426.1" width="6" height="5" fill="#8e4a1e"/><rect x="774.0" y="408" width="52" height="5" fill="#edb878" stroke="#7a4420" stroke-width="1"/><rect x="789" y="396" width="22" height="12" fill="#f5cf97" stroke="#7a4420" stroke-width="1"/><path d="M784,396 L800,385 L816,396 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="1"/><rect x="482" y="436" width="236" height="90" fill="#f3cf9b" stroke="#7a4420" stroke-width="1.3"/><path d="M482.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M493.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M504.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M515.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M526.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M537.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M548.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M559.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M570.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M581.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M592.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M603.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M614.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M625.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M636.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M647.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M658.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M669.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M680.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M691.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z M702.0,436.0 v-7 l4.0,-3.9 l4.0,3.9 v7 Z " fill="#f8dcae" stroke="#7a4420" stroke-width=".8"/><path d="M495.5,467 V455.5 Q495.5,450 501.0,449 Q506.5,450 506.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M517.5,467 V455.5 Q517.5,450 523.0,449 Q528.5,450 528.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M539.5,467 V455.5 Q539.5,450 545.0,449 Q550.5,450 550.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M561.5,467 V455.5 Q561.5,450 567.0,449 Q572.5,450 572.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M583.5,467 V455.5 Q583.5,450 589.0,449 Q594.5,450 594.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M605.5,467 V455.5 Q605.5,450 611.0,449 Q616.5,450 616.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M627.5,467 V455.5 Q627.5,450 633.0,449 Q638.5,450 638.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M649.5,467 V455.5 Q649.5,450 655.0,449 Q660.5,450 660.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M671.5,467 V455.5 Q671.5,450 677.0,449 Q682.5,450 682.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M693.5,467 V455.5 Q693.5,450 699.0,449 Q704.5,450 704.5,455.5 V467 Z" fill="#8e4a1e"/><path d="M495.5,493 V481.5 Q495.5,476 501.0,475 Q506.5,476 506.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M517.5,493 V481.5 Q517.5,476 523.0,475 Q528.5,476 528.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M539.5,493 V481.5 Q539.5,476 545.0,475 Q550.5,476 550.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M561.5,493 V481.5 Q561.5,476 567.0,475 Q572.5,476 572.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M583.5,493 V481.5 Q583.5,476 589.0,475 Q594.5,476 594.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M605.5,493 V481.5 Q605.5,476 611.0,475 Q616.5,476 616.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M627.5,493 V481.5 Q627.5,476 633.0,475 Q638.5,476 638.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M649.5,493 V481.5 Q649.5,476 655.0,475 Q660.5,476 660.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M671.5,493 V481.5 Q671.5,476 677.0,475 Q682.5,476 682.5,481.5 V493 Z" fill="#8e4a1e"/><path d="M693.5,493 V481.5 Q693.5,476 699.0,475 Q704.5,476 704.5,481.5 V493 Z" fill="#8e4a1e"/><rect x="566" y="416" width="68" height="22" fill="#f8dcae" stroke="#7a4420" stroke-width="1.1"/><path d="M574,438 V422 M588,438 V422 M600,438 V422 M612,438 V422 M626,438 V422" stroke="#7a4420" stroke-width="1.3"/><path d="M559,418 Q600.0,400 641,418 L641,424 Q600.0,409 559,424 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="1.3"/><rect x="486" y="420" width="38" height="18" fill="#f8dcae" stroke="#7a4420" stroke-width="1.1"/><path d="M495,438 V424 M505,438 V424 M515,438 V424" stroke="#7a4420" stroke-width="1.2"/><path d="M479,421 Q505.0,407 531,421 L531,426 Q505.0,415 479,426 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="1.3"/><rect x="676" y="420" width="38" height="18" fill="#f8dcae" stroke="#7a4420" stroke-width="1.1"/><path d="M685,438 V424 M695,438 V424 M705,438 V424" stroke="#7a4420" stroke-width="1.2"/><path d="M669,421 Q695.0,407 721,421 L721,426 Q695.0,415 669,426 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="1.3"/><path d="M60,516.0 L60,516.0 L80,514.8 L100,513.7 L120,512.6 L140,511.6 L160,510.6 L180,509.7 L200,508.8 L220,507.9 L240,507.1 L260,506.3 L280,505.6 L300,504.9 L320,504.3 L340,503.7 L360,503.2 L380,502.7 L400,502.2 L420,501.8 L440,501.4 L460,501.1 L480,500.8 L500,500.5 L520,500.4 L540,500.2 L560,500.1 L580,500.0 L600,500.0 L620,500.0 L640,500.1 L660,500.2 L680,500.4 L700,500.5 L720,500.8 L740,501.1 L760,501.4 L780,501.8 L800,502.2 L820,502.7 L840,503.2 L860,503.7 L880,504.3 L900,504.9 L920,505.6 L940,506.3 L960,507.1 L980,507.9 L1000,508.8 L1020,509.7 L1040,510.6 L1060,511.6 L1080,512.6 L1100,513.7 L1120,514.8 L1140,516.0 L1140,578.0 L1120,576.8 L1100,575.7 L1080,574.6 L1060,573.6 L1040,572.6 L1020,571.7 L1000,570.8 L980,569.9 L960,569.1 L940,568.3 L920,567.6 L900,566.9 L880,566.3 L860,565.7 L840,565.2 L820,564.7 L800,564.2 L780,563.8 L760,563.4 L740,563.1 L720,562.8 L700,562.5 L680,562.4 L660,562.2 L640,562.1 L620,562.0 L600,562.0 L580,562.0 L560,562.1 L540,562.2 L520,562.4 L500,562.5 L480,562.8 L460,563.1 L440,563.4 L420,563.8 L400,564.2 L380,564.7 L360,565.2 L340,565.7 L320,566.3 L300,566.9 L280,567.6 L260,568.3 L240,569.1 L220,569.9 L200,570.8 L180,571.7 L160,572.6 L140,573.6 L120,574.6 L100,575.7 L80,576.8 L60,578.0 Z" fill="#d99a5b" stroke="#7a4420" stroke-width="1.4"/><path d="M60,519.0 L80,517.8 L100,516.7 L120,515.6 L140,514.6 L160,513.6 L180,512.7 L200,511.8 L220,510.9 L240,510.1 L260,509.3 L280,508.6 L300,507.9 L320,507.3 L340,506.7 L360,506.2 L380,505.7 L400,505.2 L420,504.8 L440,504.4 L460,504.1 L480,503.8 L500,503.5 L520,503.4 L540,503.2 L560,503.1 L580,503.0 L600,503.0 L620,503.0 L640,503.1 L660,503.2 L680,503.4 L700,503.5 L720,503.8 L740,504.1 L760,504.4 L780,504.8 L800,505.2 L820,505.7 L840,506.2 L860,506.7 L880,507.3 L900,507.9 L920,508.6 L940,509.3 L960,510.1 L980,510.9 L1000,511.8 L1020,512.7 L1040,513.6 L1060,514.6 L1080,515.6 L1100,516.7 L1120,517.8 L1140,519.0" fill="none" stroke="#f3c88c" stroke-width="5" opacity=".8"/><path d="M60,538.0 L80,536.8 L100,535.7 L120,534.6 L140,533.6 L160,532.6 L180,531.7 L200,530.8 L220,529.9 L240,529.1 L260,528.3 L280,527.6 L300,526.9 L320,526.3 L340,525.7 L360,525.2 L380,524.7 L400,524.2 L420,523.8 L440,523.4 L460,523.1 L480,522.8 L500,522.5 L520,522.4 L540,522.2 L560,522.1 L580,522.0 L600,522.0 L620,522.0 L640,522.1 L660,522.2 L680,522.4 L700,522.5 L720,522.8 L740,523.1 L760,523.4 L780,523.8 L800,524.2 L820,524.7 L840,525.2 L860,525.7 L880,526.3 L900,526.9 L920,527.6 L940,528.3 L960,529.1 L980,529.9 L1000,530.8 L1020,531.7 L1040,532.6 L1060,533.6 L1080,534.6 L1100,535.7 L1120,536.8 L1140,538.0" fill="none" stroke="#a8683a" stroke-width="1.1" opacity=".65"/><path d="M60,558.0 L80,556.8 L100,555.7 L120,554.6 L140,553.6 L160,552.6 L180,551.7 L200,550.8 L220,549.9 L240,549.1 L260,548.3 L280,547.6 L300,546.9 L320,546.3 L340,545.7 L360,545.2 L380,544.7 L400,544.2 L420,543.8 L440,543.4 L460,543.1 L480,542.8 L500,542.5 L520,542.4 L540,542.2 L560,542.1 L580,542.0 L600,542.0 L620,542.0 L640,542.1 L660,542.2 L680,542.4 L700,542.5 L720,542.8 L740,543.1 L760,543.4 L780,543.8 L800,544.2 L820,544.7 L840,545.2 L860,545.7 L880,546.3 L900,546.9 L920,547.6 L940,548.3 L960,549.1 L980,549.9 L1000,550.8 L1020,551.7 L1040,552.6 L1060,553.6 L1080,554.6 L1100,555.7 L1120,556.8 L1140,558.0" fill="none" stroke="#a8683a" stroke-width="1.1" opacity=".65"/><path d="M62.0,515.9 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M75.5,515.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M89.0,514.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M102.5,513.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M116.0,512.9 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M129.5,512.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M143.0,511.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M156.5,510.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M170.0,510.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M183.5,509.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M197.0,508.9 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M210.5,508.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M224.0,507.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M237.5,507.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M251.0,506.7 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M264.5,506.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M278.0,505.7 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M291.5,505.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M305.0,504.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M318.5,504.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M332.0,503.9 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M345.5,503.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M359.0,503.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M372.5,502.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M386.0,502.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M399.5,502.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M413.0,501.9 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M426.5,501.7 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M440.0,501.4 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M453.5,501.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M467.0,501.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M480.5,500.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M494.0,500.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M507.5,500.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M521.0,500.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M534.5,500.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M548.0,500.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M561.5,500.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M575.0,500.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M588.5,500.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M602.0,500.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M615.5,500.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M629.0,500.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M642.5,500.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M656.0,500.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M669.5,500.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M683.0,500.4 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M696.5,500.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M710.0,500.7 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M723.5,500.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M737.0,501.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M750.5,501.2 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M764.0,501.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M777.5,501.7 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M791.0,502.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M804.5,502.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M818.0,502.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M831.5,502.9 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M845.0,503.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M858.5,503.7 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M872.0,504.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M885.5,504.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M899.0,504.9 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M912.5,505.4 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M926.0,505.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M939.5,506.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M953.0,506.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M966.5,507.4 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M980.0,507.9 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M993.5,508.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1007.0,509.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1020.5,509.7 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1034.0,510.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1047.5,511.0 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1061.0,511.7 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1074.5,512.4 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1088.0,513.1 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1101.5,513.8 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1115.0,514.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1128.5,515.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z " fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="84" y="523.6" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="130" y="521.1" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="176" y="518.9" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="222" y="516.8" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="268" y="515.0" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="314" y="513.5" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="360" y="512.2" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="406" y="511.1" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="452" y="510.2" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="498" y="509.6" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="728" y="509.9" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="774" y="510.7" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="820" y="511.7" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="866" y="512.9" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="912" y="514.3" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="958" y="516.0" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="1004" y="518.0" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="1050" y="520.1" width="3" height="10" rx="1.5" fill="#7a4420"/><rect x="1096" y="522.5" width="3" height="10" rx="1.5" fill="#7a4420"/><path d="M74,493.5 L134,493.5 L141,589.5 L67,589.5 Z" fill="#e2a566" stroke="#7a4420" stroke-width="1.4"/><path d="M114,493.5 L134,493.5 L141,589.5 L117,589.5 Z" fill="#a8683a" opacity=".5"/><path d="M74,493.5 L86,493.5 L82,589.5 L67,589.5 Z" fill="#fbd9a4" opacity=".55"/><rect x="70" y="484.5" width="68" height="10" fill="#edb878" stroke="#7a4420" stroke-width="1.2"/><path d="M70.0,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M83.6,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M97.2,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M110.8,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M124.4,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z " fill="#edb878" stroke="#7a4420" stroke-width=".8"/><path d="M72.5,519.5 H135.5 M70.5,545.5 H137.5" stroke="#a8683a" stroke-width="1.2" opacity=".7"/><rect x="102" y="503.5" width="4" height="12" rx="2" fill="#7a4420"/><rect x="102" y="527.5" width="4" height="12" rx="2" fill="#7a4420"/><path d="M104,484.4988203017832 V438.4988203017832" stroke="#7a4420" stroke-width="2.5" stroke-linecap="round"/><path class="fl" d="M104,438.4988203017832 L139.9,445.9 L129.8,454.1 L139.9,462.4 L104,468.9 Z" fill="#f07d1a" stroke="#c45d18" stroke-width="1"/><circle cx="104" cy="436.4988203017832" r="2.4" fill="#e0b03a"/><path d="M250,485.6 L310,485.6 L317,581.6 L243,581.6 Z" fill="#e2a566" stroke="#7a4420" stroke-width="1.4"/><path d="M290,485.6 L310,485.6 L317,581.6 L293,581.6 Z" fill="#a8683a" opacity=".5"/><path d="M250,485.6 L262,485.6 L258,581.6 L243,581.6 Z" fill="#fbd9a4" opacity=".55"/><rect x="246" y="476.6" width="68" height="10" fill="#edb878" stroke="#7a4420" stroke-width="1.2"/><path d="M246.0,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M259.6,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M273.2,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M286.8,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M300.4,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z " fill="#edb878" stroke="#7a4420" stroke-width=".8"/><path d="M248.5,511.6 H311.5 M246.5,537.6 H313.5" stroke="#a8683a" stroke-width="1.2" opacity=".7"/><rect x="278" y="495.6" width="4" height="12" rx="2" fill="#7a4420"/><rect x="278" y="519.6" width="4" height="12" rx="2" fill="#7a4420"/><path d="M416,481.3 L476,481.3 L483,577.3 L409,577.3 Z" fill="#e2a566" stroke="#7a4420" stroke-width="1.4"/><path d="M456,481.3 L476,481.3 L483,577.3 L459,577.3 Z" fill="#a8683a" opacity=".5"/><path d="M416,481.3 L428,481.3 L424,577.3 L409,577.3 Z" fill="#fbd9a4" opacity=".55"/><rect x="412" y="472.3" width="68" height="10" fill="#edb878" stroke="#7a4420" stroke-width="1.2"/><path d="M412.0,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M425.6,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M439.2,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M452.8,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M466.4,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z " fill="#edb878" stroke="#7a4420" stroke-width=".8"/><path d="M414.5,507.3 H477.5 M412.5,533.3 H479.5" stroke="#a8683a" stroke-width="1.2" opacity=".7"/><rect x="444" y="491.3" width="4" height="12" rx="2" fill="#7a4420"/><rect x="444" y="515.3" width="4" height="12" rx="2" fill="#7a4420"/><path d="M724,481.3 L784,481.3 L791,577.3 L717,577.3 Z" fill="#e2a566" stroke="#7a4420" stroke-width="1.4"/><path d="M764,481.3 L784,481.3 L791,577.3 L767,577.3 Z" fill="#a8683a" opacity=".5"/><path d="M724,481.3 L736,481.3 L732,577.3 L717,577.3 Z" fill="#fbd9a4" opacity=".55"/><rect x="720" y="472.3" width="68" height="10" fill="#edb878" stroke="#7a4420" stroke-width="1.2"/><path d="M720.0,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M733.6,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M747.2,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M760.8,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M774.4,472.3 v-9 l4.9,-5.0 l4.9,5.0 v9 Z " fill="#edb878" stroke="#7a4420" stroke-width=".8"/><path d="M722.5,507.3 H785.5 M720.5,533.3 H787.5" stroke="#a8683a" stroke-width="1.2" opacity=".7"/><rect x="752" y="491.3" width="4" height="12" rx="2" fill="#7a4420"/><rect x="752" y="515.3" width="4" height="12" rx="2" fill="#7a4420"/><path d="M890,485.6 L950,485.6 L957,581.6 L883,581.6 Z" fill="#e2a566" stroke="#7a4420" stroke-width="1.4"/><path d="M930,485.6 L950,485.6 L957,581.6 L933,581.6 Z" fill="#a8683a" opacity=".5"/><path d="M890,485.6 L902,485.6 L898,581.6 L883,581.6 Z" fill="#fbd9a4" opacity=".55"/><rect x="886" y="476.6" width="68" height="10" fill="#edb878" stroke="#7a4420" stroke-width="1.2"/><path d="M886.0,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M899.6,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M913.2,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M926.8,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M940.4,476.6 v-9 l4.9,-5.0 l4.9,5.0 v9 Z " fill="#edb878" stroke="#7a4420" stroke-width=".8"/><path d="M888.5,511.6 H951.5 M886.5,537.6 H953.5" stroke="#a8683a" stroke-width="1.2" opacity=".7"/><rect x="918" y="495.6" width="4" height="12" rx="2" fill="#7a4420"/><rect x="918" y="519.6" width="4" height="12" rx="2" fill="#7a4420"/><path d="M1066,493.5 L1126,493.5 L1133,589.5 L1059,589.5 Z" fill="#e2a566" stroke="#7a4420" stroke-width="1.4"/><path d="M1106,493.5 L1126,493.5 L1133,589.5 L1109,589.5 Z" fill="#a8683a" opacity=".5"/><path d="M1066,493.5 L1078,493.5 L1074,589.5 L1059,589.5 Z" fill="#fbd9a4" opacity=".55"/><rect x="1062" y="484.5" width="68" height="10" fill="#edb878" stroke="#7a4420" stroke-width="1.2"/><path d="M1062.0,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1075.6,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1089.2,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1102.8,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z M1116.4,484.5 v-9 l4.9,-5.0 l4.9,5.0 v9 Z " fill="#edb878" stroke="#7a4420" stroke-width=".8"/><path d="M1064.5,519.5 H1127.5 M1062.5,545.5 H1129.5" stroke="#a8683a" stroke-width="1.2" opacity=".7"/><rect x="1094" y="503.5" width="4" height="12" rx="2" fill="#7a4420"/><rect x="1094" y="527.5" width="4" height="12" rx="2" fill="#7a4420"/><path d="M1096,484.4988203017832 V438.4988203017832" stroke="#7a4420" stroke-width="2.5" stroke-linecap="round"/><path class="fl" d="M1096,438.4988203017832 L1131.9,445.9 L1121.8,454.1 L1131.9,462.4 L1096,468.9 Z" fill="#f07d1a" stroke="#c45d18" stroke-width="1"/><circle cx="1096" cy="436.4988203017832" r="2.4" fill="#e0b03a"/><path d="M506,440 H536 L539,592 H503 Z" fill="#e2a566" stroke="#7a4420" stroke-width="1.4"/><path d="M525,440 H536 L539,592 H527 Z" fill="#a8683a" opacity=".5"/><rect x="502" y="432" width="38" height="9" fill="#edb878" stroke="#7a4420" stroke-width="1.1"/><path d="M509,432 V418 M533,432 V418" stroke="#7a4420" stroke-width="2.2"/><rect x="503" y="414" width="36" height="5" fill="#f8dcae" stroke="#7a4420" stroke-width="1"/><path d="M501,414 L521,400 L541,414 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="1.1"/><path d="M507,470 H535 M506,510 H536 M505,550 H537" stroke="#a8683a" stroke-width="1.1" opacity=".7"/><rect x="519" y="452" width="4" height="12" rx="2" fill="#7a4420"/><rect x="519" y="486" width="4" height="12" rx="2" fill="#7a4420"/><path d="M521,400 V370" stroke="#7a4420" stroke-width="2.5" stroke-linecap="round"/><path class="fl" d="M521,370 L544.4,374.8 L537.8,380.2 L544.4,385.6 L521,389.8 Z" fill="#f07d1a" stroke="#c45d18" stroke-width="1"/><circle cx="521" cy="368" r="2.4" fill="#e0b03a"/><path d="M664,440 H694 L697,592 H661 Z" fill="#e2a566" stroke="#7a4420" stroke-width="1.4"/><path d="M683,440 H694 L697,592 H685 Z" fill="#a8683a" opacity=".5"/><rect x="660" y="432" width="38" height="9" fill="#edb878" stroke="#7a4420" stroke-width="1.1"/><path d="M667,432 V418 M691,432 V418" stroke="#7a4420" stroke-width="2.2"/><rect x="661" y="414" width="36" height="5" fill="#f8dcae" stroke="#7a4420" stroke-width="1"/><path d="M659,414 L679,400 L699,414 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="1.1"/><path d="M665,470 H693 M664,510 H694 M663,550 H695" stroke="#a8683a" stroke-width="1.1" opacity=".7"/><rect x="677" y="452" width="4" height="12" rx="2" fill="#7a4420"/><rect x="677" y="486" width="4" height="12" rx="2" fill="#7a4420"/><path d="M679,400 V370" stroke="#7a4420" stroke-width="2.5" stroke-linecap="round"/><path class="fl" d="M679,370 L702.4,374.8 L695.8,380.2 L702.4,385.6 L679,389.8 Z" fill="#f07d1a" stroke="#c45d18" stroke-width="1"/><circle cx="679" cy="368" r="2.4" fill="#e0b03a"/><rect x="536" y="458" width="128" height="134" fill="#e8b071" stroke="#7a4420" stroke-width="1.5"/><path d="M536.0,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M548.8,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M561.6,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M574.4,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M587.2,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M600.0,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M612.8,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M625.6,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M638.4,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z M651.2,458.0 v-9 l4.6,-5.0 l4.6,5.0 v9 Z " fill="#edb878" stroke="#7a4420" stroke-width=".8"/><rect x="576" y="474" width="48" height="20" fill="#f8dcae" stroke="#7a4420" stroke-width="1.1"/><path d="M586,494 V479 M600,494 V479 M614,494 V479" stroke="#7a4420" stroke-width="1.2"/><path d="M569,476 Q600.0,462 631,476 L631,481 Q600.0,470 569,481 Z" fill="#b3121f" stroke="#e0b03a" stroke-width="1.3"/><path d="M566,592 V528 Q566,506 600,500 Q634,506 634,528 V592 Z" fill="#f8dcae" stroke="#7a4420" stroke-width="1.3"/><path d="M573,592 V530 Q573,513 600,508 Q627,513 627,530 V592 Z" fill="#5a3018"/><path d="M600,508 V592" stroke="#2e1608" stroke-width="2"/><g fill="#e0b03a"><circle cx="581" cy="540" r="1.5"/><circle cx="590" cy="540" r="1.5"/><circle cx="610" cy="540" r="1.5"/><circle cx="619" cy="540" r="1.5"/><circle cx="581" cy="554" r="1.5"/><circle cx="590" cy="554" r="1.5"/><circle cx="610" cy="554" r="1.5"/><circle cx="619" cy="554" r="1.5"/><circle cx="581" cy="568" r="1.5"/><circle cx="590" cy="568" r="1.5"/><circle cx="610" cy="568" r="1.5"/><circle cx="619" cy="568" r="1.5"/><circle cx="581" cy="582" r="1.5"/><circle cx="590" cy="582" r="1.5"/><circle cx="610" cy="582" r="1.5"/><circle cx="619" cy="582" r="1.5"/></g><circle cx="564.4" cy="497.9" r="4" fill="#f07d1a" stroke="#c45d18" stroke-width=".7"/><circle cx="573.3" cy="501.0" r="4" fill="#ffb81c" stroke="#c45d18" stroke-width=".7"/><circle cx="582.2" cy="503.2" r="4" fill="#f07d1a" stroke="#c45d18" stroke-width=".7"/><circle cx="591.1" cy="504.6" r="4" fill="#ffb81c" stroke="#c45d18" stroke-width=".7"/><circle cx="600.0" cy="505.0" r="4" fill="#f07d1a" stroke="#c45d18" stroke-width=".7"/><circle cx="608.9" cy="504.6" r="4" fill="#ffb81c" stroke="#c45d18" stroke-width=".7"/><circle cx="617.8" cy="503.2" r="4" fill="#f07d1a" stroke="#c45d18" stroke-width=".7"/><circle cx="626.7" cy="501.0" r="4" fill="#ffb81c" stroke="#c45d18" stroke-width=".7"/><circle cx="635.6" cy="497.9" r="4" fill="#f07d1a" stroke="#c45d18" stroke-width=".7"/><path d="M573,592 H627 L720,676 H480 Z" fill="#ecc78f" stroke="#b98a52" stroke-width="1.2"/><rect x="-10" y="668" width="1220" height="140" fill="#eecf9c"/><path d="M-10,668 H1210" stroke="#b98a52" stroke-width="1.5"/><rect x="-10" y="700" width="1220" height="86" fill="#e4b77b"/><path d="M-10,700 H1210 M-10,786 H1210" stroke="#b98a52" stroke-width="1.2" opacity=".8"/><path d="M70,676 v-39.099999999999994" stroke="#6b3f1c" stroke-width="5.75" stroke-linecap="round"/><ellipse cx="70" cy="623.1" rx="34.5" ry="25.299999999999997" fill="#5f8a36"/><ellipse cx="56.2" cy="613.9" rx="19.549999999999997" ry="13.799999999999999" fill="#7da544"/><ellipse cx="86.1" cy="630.0" rx="16.099999999999998" ry="10.35" fill="#4d742c"/><path d="M170,672 v-27.200000000000003" stroke="#6b3f1c" stroke-width="4.0" stroke-linecap="round"/><ellipse cx="170" cy="635.2" rx="24.0" ry="17.6" fill="#5f8a36"/><ellipse cx="160.4" cy="628.8" rx="13.600000000000001" ry="9.600000000000001" fill="#7da544"/><ellipse cx="181.2" cy="640.0" rx="11.200000000000001" ry="7.2" fill="#4d742c"/><path d="M1040,672 v-28.9" stroke="#6b3f1c" stroke-width="4.25" stroke-linecap="round"/><ellipse cx="1040" cy="632.9" rx="25.5" ry="18.7" fill="#5f8a36"/><ellipse cx="1029.8" cy="626.1" rx="14.45" ry="10.2" fill="#7da544"/><ellipse cx="1051.9" cy="638.0" rx="11.9" ry="7.6499999999999995" fill="#4d742c"/><path d="M1140,676 v-39.099999999999994" stroke="#6b3f1c" stroke-width="5.75" stroke-linecap="round"/><ellipse cx="1140" cy="623.1" rx="34.5" ry="25.299999999999997" fill="#5f8a36"/><ellipse cx="1126.2" cy="613.9" rx="19.549999999999997" ry="13.799999999999999" fill="#7da544"/><ellipse cx="1156.1" cy="630.0" rx="16.099999999999998" ry="10.35" fill="#4d742c"/><path d="M330,670 v-20.4" stroke="#6b3f1c" stroke-width="3.0" stroke-linecap="round"/><ellipse cx="330" cy="642.4" rx="18.0" ry="13.2" fill="#5f8a36"/><ellipse cx="322.8" cy="637.6" rx="10.2" ry="7.199999999999999" fill="#7da544"/><ellipse cx="338.4" cy="646.0" rx="8.4" ry="5.3999999999999995" fill="#4d742c"/><path d="M880,670 v-20.4" stroke="#6b3f1c" stroke-width="3.0" stroke-linecap="round"/><ellipse cx="880" cy="642.4" rx="18.0" ry="13.2" fill="#5f8a36"/><ellipse cx="872.8" cy="637.6" rx="10.2" ry="7.199999999999999" fill="#7da544"/><ellipse cx="888.4" cy="646.0" rx="8.4" ry="5.3999999999999995" fill="#4d742c"/></svg>
+        <div class="p-text">
+          <div class="p-kicker"><span class="e">Padharo Mhare Des</span><span class="h">पधारो म्हारे देस</span></div>
+          <h1 class="p-names"><span>Riya</span> <span class="p-amp">&amp;</span> <span>Dushyant</span></h1>
+          <div class="p-hi">रिया ❁ दुष्यंत</div>
+          <div class="p-date"><i></i>25 · 26 January 2027<i></i></div>
+          <div class="p-place"><span class="e">Hotel Padmini, Chittorgarh</span><span class="h">होटल पद्मिनी, चित्तौड़गढ़</span></div>
+        </div>
+        <div class="hero-baraat" aria-hidden="true"><div class="proc-track"><svg viewBox="0 0 1390 150" aria-hidden="true"><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="66" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="124" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="182" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="250" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="430" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="488" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="556" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#nishan" x="702" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#oont" x="768" y="10" width="150" height="140" class="" style="animation-delay:-0.18s"/><use href="#oont" x="912" y="10" width="150" height="140" class="" style="animation-delay:-0.36s"/><use href="#baja" x="1068" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#dholi" x="1126" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#haathi" x="1196" y="20" width="170" height="130" class="" style="animation-delay:-0.18s"/></svg><svg viewBox="0 0 1390 150" aria-hidden="true"><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="66" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="124" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="182" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="250" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="430" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="488" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="556" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#nishan" x="702" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#oont" x="768" y="10" width="150" height="140" class="" style="animation-delay:-0.18s"/><use href="#oont" x="912" y="10" width="150" height="140" class="" style="animation-delay:-0.36s"/><use href="#baja" x="1068" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#dholi" x="1126" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#haathi" x="1196" y="20" width="170" height="130" class="" style="animation-delay:-0.18s"/></svg><svg viewBox="0 0 1390 150" aria-hidden="true"><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="66" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="124" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="182" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="250" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="430" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="488" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="556" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#nishan" x="702" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#oont" x="768" y="10" width="150" height="140" class="" style="animation-delay:-0.18s"/><use href="#oont" x="912" y="10" width="150" height="140" class="" style="animation-delay:-0.36s"/><use href="#baja" x="1068" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#dholi" x="1126" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#haathi" x="1196" y="20" width="170" height="130" class="" style="animation-delay:-0.18s"/></svg><svg viewBox="0 0 1390 150" aria-hidden="true"><use href="#nishan" x="0" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#baja" x="66" y="30" width="60" height="120" class="b" style="animation-delay:-0.18s"/><use href="#dholi" x="124" y="30" width="60" height="120" class="b" style="animation-delay:-0.36s"/><use href="#dholi" x="182" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#haathi" x="250" y="20" width="170" height="130" class="" style="animation-delay:-0.0s"/><use href="#nartaki" x="430" y="30" width="60" height="120" class="s" style="animation-delay:-0.18s"/><use href="#nartaki" x="488" y="30" width="60" height="120" class="s" style="animation-delay:-0.36s"/><use href="#ghodi" x="556" y="10" width="140" height="140" class="b" style="animation-delay:-0.54s"/><use href="#nishan" x="702" y="10" width="60" height="140" class="s" style="animation-delay:-0.0s"/><use href="#oont" x="768" y="10" width="150" height="140" class="" style="animation-delay:-0.18s"/><use href="#oont" x="912" y="10" width="150" height="140" class="" style="animation-delay:-0.36s"/><use href="#baja" x="1068" y="30" width="60" height="120" class="b" style="animation-delay:-0.54s"/><use href="#dholi" x="1126" y="30" width="60" height="120" class="b" style="animation-delay:-0.0s"/><use href="#haathi" x="1196" y="20" width="170" height="130" class="" style="animation-delay:-0.18s"/></svg></div></div>
+      </div></div>
+      <div class="rod bottom"></div>
     </div>
-    <div class="tap-hint"><span class="e">Tap the sky for a shower of marigolds</span><span class="h">गेंदे के फूलों की बारिश के लिए आसमान को छुएँ</span></div>
+    <div class="tap-hint"><span class="e">Tap the painting for a shower of marigolds</span><span class="h">गेंदे के फूलों की बारिश के लिए चित्र को छुएँ</span></div>
     <div>
       <div class="cd-label" id="cdLabel"><span class="e">Pheras begin in</span><span class="h">फेरों में बाकी</span></div>
       <div class="countdown" id="cd" role="timer" aria-live="off">
@@ -1077,171 +1140,16 @@ applyLang();
 $('#lng').addEventListener('click', ()=>{ lang = lang==='hi'?'en':'hi'; store.set('dr-lang',lang); applyLang(); renderSchedule(); renderEvents(); updatePreview(); });
 const L = (en,hi)=> lang==='hi'?hi:en;
 
-/* ---------- arch geometry ---------- */
-const arch = $('#arch'), sky = $('#sky'), frame = $('#frame'), doors = $('#doors');
-function archPath(w,h,inset){
-  // cusped Rajput arch: straight jambs, then lobed ogee to a pointed apex
-  const i=inset||0, L=i, R=w-i, top=i+h*0.015, spring=h*0.40+i*0.4, base=h-i*0.2;
-  const cx=w/2, pts=[];
-  const N=7;
-  for(let k=0;k<=N;k++){
-    const t=k/N;
-    // ogee: rises steeply then flattens then rises to point
-    const x=L+(cx-L)*t;
-    const y=spring-(spring-top)*(t<.75? Math.sin(t/.75*Math.PI/2)*0.72 : 0.72+0.28*((t-.75)/.25)**1.6);
-    pts.push([x,y]);
-  }
-  let d=`M${L},${base} L${L},${spring}`;
-  for(let k=1;k<pts.length;k++){
-    const [x0,y0]=pts[k-1],[x1,y1]=pts[k];
-    const r=Math.hypot(x1-x0,y1-y0)*0.62;
-    d+=` A${r.toFixed(1)},${r.toFixed(1)} 0 0 1 ${x1.toFixed(1)},${y1.toFixed(1)}`;
-  }
-  for(let k=pts.length-2;k>=0;k--){
-    const [x0,y0]=pts[k+1],[x1,y1]=pts[k];
-    const xm0=w-x0, xm1=w-x1;
-    const r=Math.hypot(x1-x0,y1-y0)*0.62;
-    d+=` A${r.toFixed(1)},${r.toFixed(1)} 0 0 1 ${xm1.toFixed(1)},${y1.toFixed(1)}`;
-  }
-  d+=` L${R},${base} Z`;
-  return d;
-}
-
-/* Rajput jharokha: carved pillars, bangaldar roof, the Mewar sun rising behind it, kesariya nishan, toran, sill on brackets. No domes. */
-function jharokha(W,H){
-  const g='#e0b03a', red='#8e0c1d', X=f=>(W*f).toFixed(1), Y=f=>(H*f).toFixed(1), n=v=>v.toFixed(1);
-  let o='';
-  // kesariya nishan (swallow-tail pennants) on poles
-  [[.12,1],[.88,-1]].forEach(([x,d])=>{ const px=W*x, top=H*.082, bot=H*.224, fl=W*.135*d, fh=H*.052, y0=top+2;
-    o+=`<path d="M${n(px)},${n(bot)} V${n(top)}" stroke="${g}" stroke-width="3" stroke-linecap="round"/><circle cx="${n(px)}" cy="${n(top-3)}" r="3.5" fill="${g}"/>`;
-    o+=`<path d="M${n(px)},${n(y0)} L${n(px+fl)},${n(y0+fh*.18)} L${n(px+fl*.78)},${n(y0+fh*.5)} L${n(px+fl)},${n(y0+fh*.82)} L${n(px)},${n(y0+fh)} Z" fill="#f07d1a" stroke="${g}" stroke-width="1.5"/>`;
-    o+=`<circle cx="${n(px+fl*.36)}" cy="${n(y0+fh*.5)}" r="${n(fh*.17)}" fill="#ffd84a"/>`; });
-  // the sun of Mewar (Suryavanshi), rising behind the roof
-  const sx=W*.5, sy=H*.118, sr=W*.052, u=sr/10;
-  for(let k=0;k<20;k++){ const a=k/20*6.2832, r2=sr*(k%2?1.3:1.5), w=.11;
-    o+=`<path d="M${n(sx+Math.cos(a-w)*sr*.97)},${n(sy+Math.sin(a-w)*sr*.97)} L${n(sx+Math.cos(a)*r2)},${n(sy+Math.sin(a)*r2)} L${n(sx+Math.cos(a+w)*sr*.97)},${n(sy+Math.sin(a+w)*sr*.97)} Z" fill="${k%2?'#f07d1a':g}"/>`; }
-  o+=`<circle cx="${n(sx)}" cy="${n(sy)}" r="${n(sr)}" fill="#ffc531" stroke="#b3121f" stroke-width="2"/>`;
-  o+=`<g fill="none" stroke="#7a0b1c" stroke-width="${n(Math.max(1.2,u*.75))}" stroke-linecap="round"><path d="M${n(sx-4.8*u)},${n(sy-2.4*u)} q${n(1.7*u)},${n(-1.5*u)} ${n(3.4*u)},0"/><path d="M${n(sx+1.4*u)},${n(sy-2.4*u)} q${n(1.7*u)},${n(-1.5*u)} ${n(3.4*u)},0"/><path d="M${n(sx)},${n(sy+2.2*u)} c${n(-2*u)},${n(-1.6*u)} ${n(-4.6*u)},${n(1.8*u)} ${n(-6.2*u)},${n(-.8*u)}"/><path d="M${n(sx)},${n(sy+2.2*u)} c${n(2*u)},${n(-1.6*u)} ${n(4.6*u)},${n(1.8*u)} ${n(6.2*u)},${n(-.8*u)}"/></g>`;
-  o+=`<circle cx="${n(sx-3.1*u)}" cy="${n(sy-1.2*u)}" r="${n(u*.75)}" fill="#7a0b1c"/><circle cx="${n(sx+3.1*u)}" cy="${n(sy-1.2*u)}" r="${n(u*.75)}" fill="#7a0b1c"/><path d="M${n(sx)},${n(sy-7*u)} l${n(u)},${n(2.8*u)} h${n(-2*u)} Z" fill="#b3121f"/>`;
-  // bangaldar roof
-  o+=`<path d="M${X(.03)},${Y(.255)} Q${X(.5)},${Y(.05)} ${X(.97)},${Y(.255)} Q${X(.5)},${Y(.125)} ${X(.03)},${Y(.255)} Z" fill="${red}" stroke="${g}" stroke-width="3"/>`;
-  o+=`<path d="M${X(.08)},${Y(.244)} Q${X(.5)},${Y(.085)} ${X(.92)},${Y(.244)}" fill="none" stroke="${g}" stroke-width="1.5" opacity=".8"/>`;
-  for(let k=1;k<12;k++){ const t=k/12, x=.03+.94*t, yt=(1-t)*(1-t)*.255+2*t*(1-t)*.05+t*t*.255, yb=(1-t)*(1-t)*.255+2*t*(1-t)*.125+t*t*.255; o+=`<path d="M${X(x)},${Y(yt+.004)} L${X(x)},${Y(yb-.003)}" stroke="${g}" stroke-width="1.2" opacity=".7"/>`; }
-  o+=`<path d="M${X(.02)},${Y(.255)} L${X(.98)},${Y(.255)} L${X(.95)},${Y(.272)} L${X(.05)},${Y(.272)} Z" fill="${g}"/>`;
-  [[.055,.1],[.9,.945]].forEach(([a,b])=>{
-    o+=`<rect x="${X(a)}" y="${Y(.272)}" width="${X(b-a)}" height="${Y(.628)}" fill="${red}" stroke="${g}" stroke-width="2"/>`;
-    o+=`<rect x="${X(a-.012)}" y="${Y(.272)}" width="${X(b-a+.024)}" height="${Y(.016)}" fill="${g}"/><rect x="${X(a-.012)}" y="${Y(.884)}" width="${X(b-a+.024)}" height="${Y(.016)}" fill="${g}"/>`;
-    for(let k=0;k<7;k++){ o+=`<path d="M${X((a+b)/2)},${Y(.31+k*.083)} l${X(.012)},${Y(.012)} l${X(-.012)},${Y(.012)} l${X(-.012)},${Y(-.012)} Z" fill="${g}"/>`; } });
-  o+=`<rect x="${X(.1)}" y="${Y(.272)}" width="${X(.8)}" height="${Y(.628)}" fill="none" stroke="${g}" stroke-width="3"/>`;
-  const N=19, q=t=>(1-t)*(1-t)*.284+2*t*(1-t)*.31+t*t*.284;
-  o+=`<path d="M${X(.1)},${Y(.284)} Q${X(.5)},${Y(.336)} ${X(.9)},${Y(.284)}" fill="none" stroke="#7a3b0c" stroke-width="1.5"/>`;
-  for(let k=0;k<N;k++){ const t=(k+.5)/N, x=.1+.8*t, y=q(t);
-    if(k%2===0) o+=`<path d="M${X(x-.012)},${Y(y)} Q${X(x)},${Y(y+.05)} ${X(x+.012)},${Y(y)} Z" fill="#2e7d32" stroke="#1b5e20" stroke-width="1"/>`;
-    else o+=`<circle cx="${X(x)}" cy="${Y(y+.012)}" r="${X(.016)}" fill="${k%4===1?'#ffb81c':'#f07d1a'}" stroke="#c45d18" stroke-width="1"/>`; }
-  o+=`<rect x="${X(.03)}" y="${Y(.9)}" width="${X(.94)}" height="${Y(.022)}" fill="${g}"/>`;
-  for(let j=0;j<5;j++){ const cx=.15+j*.175; o+=`<path d="M${X(cx-.035)},${Y(.922)} H${X(cx+.035)} L${X(cx+.018)},${Y(.958)} Q${X(cx)},${Y(.985)} ${X(cx-.018)},${Y(.958)} Z" fill="${red}" stroke="${g}" stroke-width="2"/>`; }
-  [.075,.925].forEach(x=>{ o+=`<path d="M${X(x-.03)},${Y(.9)} Q${X(x)},${Y(.92)} ${X(x+.03)},${Y(.9)} Z" fill="${g}"/><path d="M${X(x)},${Y(.898)} C${X(x-.012)},${Y(.88)} ${X(x)},${Y(.865)} ${X(x)},${Y(.86)} C${X(x)},${Y(.865)} ${X(x+.012)},${Y(.88)} ${X(x)},${Y(.898)} Z" fill="#ffcf66"/>`; });
-  return o;
-}
-/* ---------- sky canvas: sunset over Chittor, kites in the air ---------- */
-const ctx = sky.getContext('2d');
-let W=0,H=0,dpr=1, skyline=null, stars=[], kites=[], petalsA=[], running=true;
-function buildSkyline(){
-  skyline=document.createElement('canvas'); skyline.width=W*dpr; skyline.height=H*dpr;
-  const c=skyline.getContext('2d'); c.scale(dpr,dpr);
-  const fortCol='#3d0a20';
-  // sindoori dusk, no indigo
-  const g=c.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#3a0718'); g.addColorStop(.3,'#5e0a22'); g.addColorStop(.5,'#971230'); g.addColorStop(.64,'#d2364a'); g.addColorStop(.74,'#f07d1a'); g.addColorStop(.83,'#ffc94d');
-  c.fillStyle=g; c.fillRect(0,0,W,H);
-  const ground=H*.86, ridge=H*.785;
-  // the setting sun, half behind the fort
-  const mx=W*.29,my=H*.77,mr=W*.08;
-  const mg=c.createRadialGradient(mx,my,mr*.6,mx,my,mr*4.5); mg.addColorStop(0,'rgba(255,224,120,.7)'); mg.addColorStop(1,'rgba(255,214,90,0)');
-  c.fillStyle=mg; c.beginPath(); c.arc(mx,my,mr*4.5,0,7); c.fill();
-  const sg=c.createLinearGradient(0,my-mr,0,my+mr); sg.addColorStop(0,'#fff6c8'); sg.addColorStop(1,'#ffb81c');
-  c.fillStyle=sg; c.beginPath(); c.arc(mx,my,mr,0,7); c.fill();
-  // Aravalli hills
-  c.fillStyle='rgba(122,11,46,.5)';
-  c.beginPath(); c.moveTo(0,H);
-  for(let x=0;x<=W;x+=W/40){ c.lineTo(x,H*.80-Math.sin(x/W*7)*H*.018-Math.sin(x/W*17)*H*.008); }
-  c.lineTo(W,H); c.fill();
-  // fort wall with kangura (merlons)
-  c.fillStyle=fortCol;
-  const merlon=Math.max(3,W*.012);
-  c.beginPath(); c.moveTo(-5,H); c.lineTo(-5,ridge);
-  for(let x=0;x<W;x+=merlon*2){ c.lineTo(x,ridge-merlon); c.lineTo(x+merlon,ridge-merlon); c.lineTo(x+merlon,ridge); c.lineTo(x+merlon*2,ridge); }
-  c.lineTo(W+5,ridge); c.lineTo(W+5,H); c.closePath(); c.fill();
-  // square burj
-  [.08,.5,.94].forEach(p=>{ const bx=W*p, bw=W*.06, top=ridge-H*.028; c.fillRect(bx-bw/2,top,bw,H*.04); for(let k=0;k<3;k++) c.fillRect(bx-bw/2+k*bw*.4,top-merlon,bw*.2,merlon); });
-  const vb=ridge-merlon+1;
-  function flag(x,y,h){ c.fillStyle=fortCol; c.fillRect(x-.9,y-h,1.8,h); c.fillStyle='#ff8a1f'; c.beginPath(); c.moveTo(x+.9,y-h); c.lineTo(x+.9+h*.8,y-h*.76); c.lineTo(x+.9,y-h*.52); c.fill(); c.fillStyle=fortCol; }
-  // stambh: tiered square tower with a flat pavilion and a flag
-  function stambh(x,w,h,tiers){ c.fillStyle=fortCol;
-    c.beginPath(); c.moveTo(x-w*.62,vb); c.lineTo(x-w*.5,vb-h); c.lineTo(x+w*.5,vb-h); c.lineTo(x+w*.62,vb); c.fill();
-    for(let k=1;k<=tiers;k++){ const y=vb-h*k/(tiers+.4); c.fillRect(x-w*.8,y,w*1.6,Math.max(1.5,H*.004)); }
-    c.fillRect(x-w*.85,vb-h-H*.003,w*1.7,H*.006);
-    c.fillRect(x-w*.4,vb-h-H*.02,w*.8,H*.018);
-    c.fillRect(x-w*.68,vb-h-H*.026,w*1.36,H*.007);
-    flag(x,vb-h-H*.026,H*.032); }
-  // nagara shikhara: tall and pointed, amalaka, dhwaja
-  function shikhara(x,w,h){ c.fillStyle=fortCol; c.fillRect(x-w*.95,vb-h*.2,w*1.9,h*.2+2);
-    c.beginPath(); c.moveTo(x-w/2,vb-h*.18); c.quadraticCurveTo(x-w*.4,vb-h*.7,x-w*.1,vb-h*.93); c.lineTo(x+w*.1,vb-h*.93); c.quadraticCurveTo(x+w*.4,vb-h*.7,x+w/2,vb-h*.18); c.fill();
-    c.fillRect(x-w*.2,vb-h*.965,w*.4,h*.04); c.fillRect(x-w*.07,vb-h*1.02,w*.14,h*.06); flag(x,vb-h*1.02,h*.3); }
-  stambh(W*.8,W*.034,H*.125,9); stambh(W*.17,W*.024,H*.075,6);
-  shikhara(W*.37,W*.042,H*.07); shikhara(W*.63,W*.036,H*.058);
-  // deepmala: a row of diyas along the wall
-  for(let x=merlon*1.5;x<W;x+=merlon*4){ c.fillStyle='rgba(255,206,110,.95)'; c.beginPath(); c.arc(x,ridge-merlon-1.5,Math.max(1,W*.0028),0,7); c.fill(); }
-  // lit windows
-  c.fillStyle='rgba(255,196,110,.8)';
-  for(let k=0;k<46;k++){ const x=W*(.04+Math.random()*.92), y=ridge+H*(.012+Math.random()*.04); c.fillRect(x,y,Math.max(1.2,W*.004),Math.max(1.6,W*.005)); }
-  // the road the baraat walks on
-  const rg=c.createLinearGradient(0,ground-H*.02,0,H*.9); rg.addColorStop(0,'rgba(61,10,32,0)'); rg.addColorStop(.5,'#5a1a1a'); rg.addColorStop(1,'#a8612e');
-  c.fillStyle=rg; c.fillRect(0,ground-H*.02,W,H*.9-ground+H*.02);
-}
-const kiteCols=['#ffb81c','#f07d1a','#ff5c93','#3fa34d','#fff4e0'];
-function newKite(i){ const left=i%2===0; return {x:W*(left?.15+Math.random()*.07:.78+Math.random()*.07), y:H*(.345+Math.random()*.07), s:(.75+Math.random()*.5)*W/560*15, ph:Math.random()*6.28, c:kiteCols[i%5], c2:kiteCols[(i+2)%5], left}; }
-function drawKite(k,t){
-  const x=k.x+Math.sin(t*.0007+k.ph)*W*.018, y=k.y+Math.cos(t*.0009+k.ph)*H*.012, s=k.s, r=Math.sin(t*.0011+k.ph)*.16+(k.left?-.28:.28);
-  ctx.strokeStyle='rgba(255,244,224,.4)'; ctx.lineWidth=.8; ctx.beginPath(); ctx.moveTo(x,y+s*.9); ctx.quadraticCurveTo(x+(W/2-x)*.2,H*.66,x+(W/2-x)*.55,H*.79); ctx.stroke();
-  ctx.save(); ctx.translate(x,y); ctx.rotate(r);
-  ctx.fillStyle=k.c; ctx.beginPath(); ctx.moveTo(0,-s); ctx.lineTo(s*.82,0); ctx.lineTo(0,s); ctx.lineTo(-s*.82,0); ctx.closePath(); ctx.fill();
-  ctx.fillStyle=k.c2; ctx.beginPath(); ctx.moveTo(0,-s); ctx.lineTo(s*.82,0); ctx.lineTo(0,0); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(0,s); ctx.lineTo(-s*.82,0); ctx.lineTo(0,0); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle='rgba(58,13,18,.55)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(0,-s); ctx.lineTo(0,s); ctx.moveTo(-s*.82,0); ctx.quadraticCurveTo(0,-s*.55,s*.82,0); ctx.stroke();
-  ctx.fillStyle=k.c; ctx.beginPath(); ctx.moveTo(0,s); ctx.lineTo(-s*.26,s*1.42); ctx.lineTo(s*.26,s*1.42); ctx.closePath(); ctx.fill();
-  ctx.restore();
-}
-function initSky(){
-  const r=arch.getBoundingClientRect(); W=r.width; H=r.height; dpr=Math.min(2,window.devicePixelRatio||1);
-  sky.width=W*dpr; sky.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-  frame.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  frame.innerHTML=jharokha(W,H);
-  buildSkyline();
-  stars=Array.from({length:Math.round(W*H/5200)},()=>({x:Math.random()*W,y:H*.36+Math.random()*H*.12,r:Math.random()*1.1+.2,p:Math.random()*6.28,s:.5+Math.random()*1.5}));
-  kites=Array.from({length:4},(_,i)=>newKite(i));
-}
+/* ---------- hero: the scroll unrolls, then the baraat sets off ---------- */
+const dpr=Math.min(2,window.devicePixelRatio||1);
 const petalCols=['#ffb81c','#f07d1a','#ffcf4a','#c8341f','#f7d774'];
 function burst(x,y,n,arr,spread){ for(let k=0;k<n;k++){ arr.push({x,y,vx:(Math.random()-.5)*(spread||4),vy:-Math.random()*3-1,r:3+Math.random()*4,a:Math.random()*6.28,va:(Math.random()-.5)*.2,c:petalCols[k%5],life:1}); } }
 function drawPetals(c,arr,h){ for(let k=arr.length-1;k>=0;k--){ const p=arr[k]; p.vy+=.06; p.vy=Math.min(p.vy,2.2); p.vx*=.99; p.x+=p.vx+Math.sin(p.a)*.4; p.y+=p.vy; p.a+=p.va; if(p.y>h+20){arr.splice(k,1);continue;} c.save(); c.translate(p.x,p.y); c.rotate(p.a); c.fillStyle=p.c; c.beginPath(); c.ellipse(0,0,p.r,p.r*.55,0,0,7); c.fill(); c.restore(); } }
-let last=0;
-function frameLoop(t){
-  if(!running){ requestAnimationFrame(frameLoop); return; }
-  ctx.clearRect(0,0,W,H);
-  ctx.drawImage(skyline,0,0,W,H);
-  for(const s of stars){ const a=.35+.65*Math.abs(Math.sin(t*.001*s.s+s.p)); ctx.fillStyle=`rgba(255,240,210,${a})`; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7); ctx.fill(); }
-  for(const k of kites) drawKite(k,t);
-  if(Math.random()<.02) burst(Math.random()*W,-10,1,petalsA,1);
-  drawPetals(ctx,petalsA,H);
-  requestAnimationFrame(frameLoop);
-}
-function drawStatic(){ ctx.clearRect(0,0,W,H); ctx.drawImage(skyline,0,0,W,H); for(const s of stars){ctx.fillStyle='rgba(255,240,210,.8)';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill();} kites.forEach(k=>drawKite(k,0)); }
-initSky();
-if(reduce){ drawStatic(); doors.classList.add('opened'); } else { requestAnimationFrame(frameLoop); }
-let rt; addEventListener('resize',()=>{clearTimeout(rt); rt=setTimeout(()=>{ initSky(); if(reduce) drawStatic(); },150)});
-if('IntersectionObserver' in window){ new IntersectionObserver(es=>{ running=es[0].isIntersecting; }).observe(arch); }
-setTimeout(()=>doors.classList.add('opened'), 700);
-arch.addEventListener('click',e=>{ const r=arch.getBoundingClientRect(); burst(e.clientX-r.left,e.clientY-r.top,36,petalsA,7); bell(); if(reduce) {} });
+const hs=$('#hscroll'), sheet=hs.querySelector('.sheet');
+function measureScroll(){ hs.style.setProperty('--sh',sheet.offsetHeight+'px'); }
+measureScroll(); addEventListener('resize',measureScroll);
+if(!reduce){ hs.classList.add('notrans','rolled'); void hs.offsetWidth; hs.classList.remove('notrans'); setTimeout(()=>hs.classList.remove('rolled'),450); }
+$('#painting').addEventListener('click',e=>{ if(reduce) return; burst(e.clientX,e.clientY,36,pArr,7); if(!pRun){ pRun=true; requestAnimationFrame(pLoop); } bell(); });
 
 /* full-page petals canvas (for RSVP celebration) */
 const pc=$('#petals'), pctx=pc.getContext('2d'); let pArr=[], pRun=false;
@@ -1483,109 +1391,145 @@ scene.add(sun); scene.add(sun.target);
 const warm=new T.PointLight(0xffa040,0,28,2);  scene.add(warm);
 
 /* materials */
-const M=(c,o={})=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.9,metalness:0,flatShading:true},o));
-const mGround=M(0x6e5230), mRock=M(0x9a7148), mRock2=M(0x7d5a36), mWall=M(0xc29464), mWallDark=M(0xa77b4f),
-      mStone=M(0xd6a874), mMarble=M(0xf1e8d8,{roughness:.6}), mRed=M(0xb5543a), mGold=M(0xe0b03a,{metalness:.5,roughness:.4}),
-      mGreen=M(0x5d7a3a), mGreen2=M(0x4a6630), mWater=new T.MeshStandardMaterial({color:0x2f6f8f,roughness:.15,metalness:.6});
-const mDiya=new T.MeshBasicMaterial({color:0xffc35a});
+const M=(c,o={})=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.92,metalness:0,flatShading:true},o));
+const mGround=M(0x7a5a34), mRock=M(0xffffff,{vertexColors:true}), mRock2=M(0x86603a), mWall=M(0xd6a36c), mWallDark=M(0xb48351),
+      mStone=M(0xe6b880), mMarble=M(0xf4ead8,{roughness:.6}), mRoof=M(0xb8432c), mGold=M(0xe0b03a,{metalness:.5,roughness:.4}),
+      mGreen=M(0x5d7a3a), mGreen2=M(0x4a6630), mWood=M(0x5a3018), mRoad=M(0xc9a06a),
+      mWater=new T.MeshStandardMaterial({color:0x2f6f8f,roughness:.15,metalness:.6});
+const mDiya=new T.MeshBasicMaterial({color:0xffc35a}), mWin=new T.MeshBasicMaterial({color:0xffcf7a}), mFlag=new T.MeshBasicMaterial({color:0xff8a1f,side:T.DoubleSide});
 const add=(geo,mat,x,y,z,parent)=>{ const m=new T.Mesh(geo,mat); m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; (parent||scene).add(m); return m; };
+const winG=new T.Group(); scene.add(winG);
+const win=(x,y,z,w,h,d)=>{ const m=new T.Mesh(new T.BoxGeometry(w,h,d),mWin); m.position.set(x,y,z); winG.add(m); };
+const flagShape=new T.Shape(); flagShape.moveTo(0,0); flagShape.lineTo(1,-.26); flagShape.lineTo(.72,-.36); flagShape.lineTo(1,-.5); flagShape.lineTo(0,-.72);
+const flagGeo=new T.ShapeGeometry(flagShape); const flags=[];
+function flag(x,y,z,s,parent){ const g=new T.Group(); g.position.set(x,y,z);
+  add(new T.CylinderGeometry(.03*s,.03*s,1.5*s,5),mWood,0,.75*s,0,g).castShadow=false;
+  const m=new T.Mesh(flagGeo,mFlag); m.scale.setScalar(.95*s); m.position.set(0,1.5*s,0); g.add(m); flags.push(m); (parent||scene).add(g); return g; }
 
 /* ground */
 const ground=new T.Mesh(new T.CircleGeometry(260,64),mGround); ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
-for(let i=0;i<70;i++){ const r=30+Math.random()*120, a=Math.random()*Math.PI*2; const s=1+Math.random()*2.2;
+for(let i=0;i<90;i++){ const r=32+Math.random()*120, a=Math.random()*Math.PI*2; const s=1+Math.random()*2.2;
   const t=add(new T.ConeGeometry(s*.7,s*1.6,6),Math.random()<.5?mGreen:mGreen2,Math.cos(a)*r,s*.8,Math.sin(a)*r); t.castShadow=false; }
-for(let i=0;i<14;i++){ const r=60+Math.random()*90, a=Math.random()*Math.PI*2; const h=3+Math.random()*7;
+for(let i=0;i<14;i++){ const r=70+Math.random()*90, a=Math.random()*Math.PI*2; const h=3+Math.random()*7;
   const hill=add(new T.ConeGeometry(10+Math.random()*12,h,7),mRock2,Math.cos(a)*r,h/2-.3,Math.sin(a)*r); hill.castShadow=false; }
 
-/* the mesa: Chittor's long fish-shaped hill */
+/* the hill: Chittor's long fish-shaped plateau, with rough coloured slopes and a talus skirt */
 const A=22, B=6.2;
 const P=t=>[A*Math.cos(t), B*Math.sin(t)*(1-.22*Math.cos(t))+0.8*Math.sin(3*t)*.3];
-const shape=new T.Shape(); const NP=96;
-for(let i=0;i<=NP;i++){ const [x,y]=P(i/NP*Math.PI*2); i?shape.lineTo(x,y):shape.moveTo(x,y); }
-const mesaGeo=new T.ExtrudeGeometry(shape,{depth:3.0,bevelEnabled:true,bevelThickness:1.3,bevelSize:3.2,bevelSegments:2,curveSegments:48});
+const NP=96;
+function outline(k){ const sh=new T.Shape(); for(let i=0;i<=NP;i++){ const [x,y]=P(i/NP*Math.PI*2); i?sh.lineTo(x*k,y*k):sh.moveTo(x*k,y*k); } return sh; }
+const mesaGeo=new T.ExtrudeGeometry(outline(1),{depth:3.4,bevelEnabled:true,bevelThickness:1.3,bevelSize:3.2,bevelSegments:3,curveSegments:48});
 mesaGeo.rotateX(-Math.PI/2);
+{ const pos=mesaGeo.attributes.position, col=new Float32Array(pos.count*3), c=new T.Color(), lo=new T.Color(0x6b4526), mid=new T.Color(0xa9743f), hi=new T.Color(0xcfa064), cap=new T.Color(0xb7a05a);
+  let ymin=1e9,ymax=-1e9; for(let i=0;i<pos.count;i++){ const y=pos.getY(i); ymin=Math.min(ymin,y); ymax=Math.max(ymax,y); }
+  for(let i=0;i<pos.count;i++){ const x=pos.getX(i), y=pos.getY(i), z=pos.getZ(i), t=(y-ymin)/(ymax-ymin);
+    const n=Math.sin(x*1.7+z*2.3+y*1.9)*Math.cos(z*1.3-x*.7+y*.8);
+    if(t<.97){ const k=1+n*.035*(1-t*.6); pos.setX(i,x*k); pos.setZ(i,z*k); pos.setY(i,y+n*.12); }
+    if(t>=.97) c.copy(cap); else if(t<.5) c.copy(lo).lerp(mid,t*2); else c.copy(mid).lerp(hi,(t-.5)*2);
+    c.offsetHSL(0,0,n*.035); col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b; }
+  mesaGeo.setAttribute('color',new T.BufferAttribute(col,3)); mesaGeo.computeVertexNormals(); }
 const mesa=add(mesaGeo,mRock,0,1.3,0);
-const topY=mesa.position.y+3.0+1.3; // top cap y
-
+const topY=mesa.position.y+3.4+1.3;
+const skirtGeo=new T.ExtrudeGeometry(outline(1.1),{depth:.9,bevelEnabled:true,bevelThickness:1.6,bevelSize:6,bevelSegments:2,curveSegments:40}); skirtGeo.rotateX(-Math.PI/2);
+add(skirtGeo,M(0x7f6a3c),0,.2,0).castShadow=false;
 warm.position.set(4,topY+6,0);
-/* fort wall with merlons and bastions (instanced) */
-const NW=110; const pts=[];
+
+/* rampart with kangura and round burj */
+const NW=120, wallH=1.25; const pts=[];
 for(let i=0;i<NW;i++){ const [x,y]=P(i/NW*Math.PI*2); pts.push(new T.Vector3(x*.985,topY,-y*.985)); }
 const wallI=new T.InstancedMesh(new T.BoxGeometry(1,1,1),mWall,NW);
-const merI=new T.InstancedMesh(new T.BoxGeometry(.3,.35,.42),mWallDark,NW*2);
+const merI=new T.InstancedMesh(new T.BoxGeometry(.26,.34,.5),mWallDark,NW*3);
 const diyaI=new T.InstancedMesh(new T.SphereGeometry(.13,6,4),mDiya,NW);
 const dummy=new T.Object3D();
 for(let i=0;i<NW;i++){ const a=pts[i], b=pts[(i+1)%NW]; const d=a.distanceTo(b); const mid=a.clone().add(b).multiplyScalar(.5);
   const ang=-Math.atan2(b.z-a.z,b.x-a.x);
-  dummy.position.set(mid.x,topY+.5,mid.z); dummy.rotation.set(0,ang,0); dummy.scale.set(d+.05,1,.38); dummy.updateMatrix(); wallI.setMatrixAt(i,dummy.matrix);
-  for(let k=0;k<2;k++){ const f=k?.75:.25; dummy.position.set(a.x+(b.x-a.x)*f,topY+1.17,a.z+(b.z-a.z)*f); dummy.scale.set(1,1,1); dummy.updateMatrix(); merI.setMatrixAt(i*2+k,dummy.matrix); }
-  dummy.position.set(mid.x,topY+1.06,mid.z); dummy.updateMatrix(); diyaI.setMatrixAt(i,dummy.matrix);
+  dummy.position.set(mid.x,topY+wallH/2,mid.z); dummy.rotation.set(0,ang,0); dummy.scale.set(d+.06,wallH,.46); dummy.updateMatrix(); wallI.setMatrixAt(i,dummy.matrix);
+  for(let k=0;k<3;k++){ const f=(k+.5)/3; dummy.position.set(a.x+(b.x-a.x)*f,topY+wallH+.17,a.z+(b.z-a.z)*f); dummy.scale.set(1,1,1); dummy.updateMatrix(); merI.setMatrixAt(i*3+k,dummy.matrix); }
+  dummy.position.set(mid.x,topY+wallH+.42,mid.z); dummy.rotation.set(0,0,0); dummy.updateMatrix(); diyaI.setMatrixAt(i,dummy.matrix);
 }
 [wallI,merI].forEach(m=>{ m.castShadow=true; m.receiveShadow=true; scene.add(m); });
 scene.add(diyaI);
-const bastG=new T.CylinderGeometry(.75,.9,1.6,10);
-for(let i=0;i<NW;i+=7){ const p=pts[i]; add(bastG,mWall,p.x,topY+.8,p.z); add(new T.CylinderGeometry(.8,.8,.2,10),mWallDark,p.x,topY+1.65,p.z); }
+const burjN=Math.floor(NW/6), burjMer=new T.InstancedMesh(new T.BoxGeometry(.24,.32,.24),mWallDark,burjN*8); let bm=0;
+for(let i=0;i<NW;i+=6){ const p=pts[i];
+  add(new T.CylinderGeometry(.95,1.15,wallH+1.1,12),mWall,p.x,topY+(wallH+1.1)/2-.4,p.z);
+  add(new T.CylinderGeometry(1.08,1.02,.22,12),mWallDark,p.x,topY+wallH+.26,p.z);
+  for(let k=0;k<8;k++){ const a=k/8*Math.PI*2; dummy.position.set(p.x+Math.cos(a)*.98,topY+wallH+.53,p.z+Math.sin(a)*.98); dummy.rotation.set(0,-a,0); dummy.scale.set(1,1,1); dummy.updateMatrix(); if(bm<burjN*8) burjMer.setMatrixAt(bm++,dummy.matrix); }
+  if((i/6)%4===0) flag(p.x,topY+wallH+.3,p.z,1.1);
+}
+burjMer.count=bm; burjMer.castShadow=true; scene.add(burjMer);
 
-/* helpers */
-function chhatri(x,z,s,base,parent){ base=base||topY; const g=new T.Group(); g.position.set(x,base,z);
+/* building blocks: flat or pyramid roofs only */
+function pyramid(w,h,mat){ const g=new T.ConeGeometry(w*.72,h,4); g.rotateY(Math.PI/4); return new T.Mesh(g,mat||mRoof); }
+function chhatri(x,z,s,base,parent){ base=base===undefined?topY:base; const g=new T.Group(); g.position.set(x,base,z);
   const pw=.12*s, ph=.9*s, r=.5*s;
   [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b])=>add(new T.BoxGeometry(pw,ph,pw),mStone,a*r*.7,ph/2,b*r*.7,g));
-  add(new T.BoxGeometry(r*1.9,.1*s,r*1.9),mStone,0,ph+.05*s,0,g);
-  add(new T.SphereGeometry(r*.85,10,6,0,Math.PI*2,0,Math.PI/2),mStone,0,ph+.1*s,0,g);
-  add(new T.SphereGeometry(.07*s,6,4),mGold,0,ph+.1*s+r*.85+.05*s,0,g);
+  add(new T.BoxGeometry(r*2,.1*s,r*2),mStone,0,ph+.05*s,0,g);
+  const p=pyramid(r*2,.55*s); p.position.set(0,ph+.1*s+.27*s,0); p.castShadow=true; g.add(p);
+  add(new T.SphereGeometry(.06*s,6,4),mGold,0,ph+.1*s+.6*s,0,g);
   (parent||scene).add(g); return g; }
 function shikhara(x,z,s,mat){ const g=new T.Group(); g.position.set(x,topY,z);
-  add(new T.BoxGeometry(1.6*s,.8*s,1.6*s),mat||mStone,0,.4*s,0,g);
-  const prof=[[0,0],[.85,0],[.85,.5],[.78,1],[.62,1.6],[.42,2.1],[.2,2.45],[.05,2.6],[0,2.62]].map(p=>new T.Vector2(p[0]*s,p[1]*s));
+  add(new T.BoxGeometry(1.7*s,.8*s,1.7*s),mat||mStone,0,.4*s,0,g);
+  const prof=[[0,0],[.85,0],[.84,.5],[.76,1.1],[.6,1.8],[.4,2.4],[.22,2.85],[.1,3.05],[0,3.08]].map(p=>new T.Vector2(p[0]*s,p[1]*s));
   add(new T.LatheGeometry(prof,8),mat||mStone,0,.8*s,0,g);
-  add(new T.SphereGeometry(.12*s,8,6),mGold,0,.8*s+2.7*s,0,g);
-  add(new T.BoxGeometry(1.2*s,.6*s,1.2*s),mat||mStone,-1.35*s,.3*s,0,g);
-  add(new T.ConeGeometry(.9*s,.6*s,4),mat||mStone,-1.35*s,.9*s,0,g).rotation.y=Math.PI/4;
+  add(new T.CylinderGeometry(.2*s,.2*s,.1*s,8),mGold,0,.8*s+3.1*s,0,g);
+  add(new T.BoxGeometry(1.3*s,.7*s,1.3*s),mat||mStone,-1.45*s,.35*s,0,g);
+  const p=pyramid(1.5*s,.6*s,mat||mStone); p.position.set(-1.45*s,1.0*s,0); p.castShadow=true; g.add(p);
+  flag(0,.8*s+3.15*s,0,.8*s,g);
   scene.add(g); return g; }
-function tower(x,z,tiers,r,h,mat){ const g=new T.Group(); g.position.set(x,topY,z);
-  add(new T.BoxGeometry(r*4,.35,r*4),mWallDark,0,.175,0,g);
-  let y=.35;
-  for(let i=0;i<tiers;i++){ const rr=r*(1-i*.012);
-    add(new T.CylinderGeometry(rr,rr*1.02,h,8),mat,0,y+h/2,0,g);
-    add(new T.CylinderGeometry(rr*1.28,rr*1.28,.08,8),mWallDark,0,y+h-.04,0,g);
+/* stambh: a square, many-storeyed tower with a balcony at every floor */
+function tower(x,z,tiers,w,h,mat){ const g=new T.Group(); g.position.set(x,topY,z);
+  add(new T.BoxGeometry(w*3,.4,w*3),mWallDark,0,.2,0,g);
+  let y=.4;
+  for(let i=0;i<tiers;i++){ const ww=w*(1-i*.018);
+    add(new T.BoxGeometry(ww,h,ww),mat,0,y+h/2,0,g);
+    add(new T.BoxGeometry(ww*1.38,.09,ww*1.38),mWallDark,0,y+h-.045,0,g);
+    [[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>win(x+a*ww*.51,topY+y+h*.45,z+b*ww*.51,a?.04:ww*.26,h*.42,b?.04:ww*.26));
     y+=h; }
-  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b])=>add(new T.BoxGeometry(.07,h*.8,.07),mat,a*r*.6,y+h*.4,b*r*.6,g));
-  add(new T.CylinderGeometry(r*1.05,r*1.05,.08,8),mWallDark,0,y+h*.8,0,g);
-  add(new T.SphereGeometry(r*.9,10,6,0,Math.PI*2,0,Math.PI/2),mat,0,y+h*.84,0,g);
-  add(new T.SphereGeometry(.08,6,4),mGold,0,y+h*.84+r*.95,0,g);
-  scene.add(g); return {g,top:y+h};
+  add(new T.BoxGeometry(w*.62,h*.8,w*.62),mat,0,y+h*.4,0,g);
+  add(new T.BoxGeometry(w*1.05,.08,w*1.05),mWallDark,0,y+h*.84,0,g);
+  const p=pyramid(w*1.0,h*.6); p.position.set(0,y+h*.84+h*.3,0); p.castShadow=true; g.add(p);
+  add(new T.SphereGeometry(.08,6,4),mGold,0,y+h*1.5,0,g);
+  scene.add(g); return {g,top:y+h*1.5};
 }
+function palace(x,z,blocks,rot){ const g=new T.Group(); g.position.set(x,topY,z); g.rotation.y=rot||0;
+  blocks.forEach(([bx,bz,w,h,d,roof])=>{ add(new T.BoxGeometry(w,h,d),mStone,bx,h/2,bz,g);
+    add(new T.BoxGeometry(w+.16,.12,d+.16),mWallDark,bx,h+.06,bz,g);
+    if(roof){ chhatri(bx-w*.32,bz,.62,h+.12,g); chhatri(bx+w*.32,bz,.62,h+.12,g); }
+    const n=Math.max(2,Math.round(w/.55)); for(let r=0;r<Math.floor(h/.75);r++) for(let k=0;k<n;k++){
+      const wx=bx-w/2+w*(k+.5)/n, wy=.55+r*.72; [d/2+.02,-d/2-.02].forEach(dz=>{ const m=new T.Mesh(new T.BoxGeometry(.17,.3,.04),mWin); m.position.set(wx,wy,bz+dz); g.add(m); m.userData.win=1; }); } });
+  scene.add(g); return g; }
 
 /* landmarks */
-const vijay=tower(5.5,1.2,9,.55,.66,mStone);           // Vijay Stambh
-const kirti=tower(-13.5,-1.4,7,.42,.5,M(0xe6d2b2));      // Kirti Stambh
-const meera=shikhara(1.2,-2.8,.9);                       // Meera temple
-shikhara(-7.5,2.6,.75); shikhara(15,2.2,.6,mMarble);
-// Rana Kumbha palace ruins
-const kumbha=new T.Group(); kumbha.position.set(-3.5,topY,2.4);
-[[0,0,3,1.6,1.8],[2.2,.2,1.4,2.2,1.4],[-2,-.3,1.6,1.2,1.4],[.6,-1.4,1.8,1,1]].forEach(([x,z,w,h,d])=>add(new T.BoxGeometry(w,h,d),mWallDark,x,h/2,z,kumbha));
-scene.add(kumbha); chhatri(-3.3,2.2,.9,topY+1.6); chhatri(-1.3,2.6,.7,topY+2.2);
-// Padmini Mahal: palace in a pool
+const vijay=tower(5.5,1.2,9,1.25,.74,mStone);             // Vijay Stambh
+const kirti=tower(-13.5,-1.4,7,.9,.56,M(0xead7b6));        // Kirti Stambh
+shikhara(1.2,-2.8,.9);                                      // Meera temple
+shikhara(-7.5,2.6,.75); shikhara(15,2.2,.62,mMarble); shikhara(-10.5,-2.4,.55);
+const kumbha=palace(-3.5,2.4,[[0,0,3.4,2.0,1.8,1],[2.5,.2,1.6,2.8,1.5,0],[-2.3,-.3,1.8,1.4,1.4,0],[.6,-1.5,2.0,1.1,1.0,0]]);   // Kumbha Mahal
+palace(8.6,-.4,[[0,0,3.6,1.7,1.5,1],[0,-1.3,1.6,2.5,1.2,0]],.12);                                                             // Fateh Prakash
+// Padmini Mahal: a white pavilion in its pool
 const pad=new T.Group(); pad.position.set(11.5,topY,-2.2);
-add(new T.BoxGeometry(6.2,.3,4.4),mWallDark,0,.15,0,pad);
-const water=add(new T.BoxGeometry(5.6,.2,3.8),mWater,0,.28,0,pad); water.castShadow=false;
-add(new T.BoxGeometry(2,1,1.4),mMarble,.6,.85,0,pad);
-add(new T.BoxGeometry(1.4,.12,1.4),mMarble,.6,1.4,0,pad);
-add(new T.SphereGeometry(.55,12,8,0,Math.PI*2,0,Math.PI/2),mMarble,.6,1.42,0,pad);
-add(new T.SphereGeometry(.08,6,4),mGold,.6,2.02,0,pad);
-add(new T.BoxGeometry(1.4,1.1,4.4),mMarble,-3.6,.55,0,pad);
-scene.add(pad); chhatri(7.9,-3.6,.6,topY+1.1); chhatri(7.9,-.8,.6,topY+1.1);
-// Gaumukh kund
-add(new T.BoxGeometry(2.4,.2,1.6),mWater,-1.2,topY+.08,-3.6).castShadow=false;
-// scattered chhatris and trees on top
-[[-9,-2.8],[-16,1.2],[17.5,-.6],[8.5,3.3],[-19,0]].forEach(([x,z])=>chhatri(x,z,.8));
-for(let i=0;i<40;i++){ const t=Math.random()*Math.PI*2, f=.2+Math.random()*.7; const [x,y]=P(t); const s=.4+Math.random()*.5;
-  const px=x*f, pz=-y*f; if(Math.hypot(px-5.5,pz-1.2)<2||Math.hypot(px-11.5,pz+2.2)<4) continue;
-  add(new T.ConeGeometry(s,s*2,6),mGreen,px,topY+s,pz); }
-// ramp road to the gates on the west
-const road=new T.Mesh(new T.PlaneGeometry(26,1.1),M(0xb9905e)); road.rotation.x=-Math.PI/2; road.rotation.z=.32; road.position.set(-28,.05,7); road.receiveShadow=true; scene.add(road);
-for(let i=0;i<7;i++){ const x=-38+i*3.4, z=10.4-i*1.1; const g=new T.Group(); g.position.set(x,0,z);
-  add(new T.BoxGeometry(.5,1.6,.5),mWall,-.7,.8,0,g); add(new T.BoxGeometry(.5,1.6,.5),mWall,.7,.8,0,g); add(new T.BoxGeometry(1.9,.45,.6),mWallDark,0,1.75,0,g); scene.add(g); }
+add(new T.BoxGeometry(6.4,.3,4.6),mWallDark,0,.15,0,pad);
+const water=add(new T.BoxGeometry(5.8,.2,4.0),mWater,0,.28,0,pad); water.castShadow=false;
+add(new T.BoxGeometry(2.1,1.0,1.5),mMarble,.6,.85,0,pad);
+add(new T.BoxGeometry(2.4,.1,1.8),mMarble,.6,1.4,0,pad);
+add(new T.BoxGeometry(1.2,.7,1.0),mMarble,.6,1.8,0,pad);
+{ const p=pyramid(1.6,.6,mMarble); p.position.set(.6,2.45,0); p.castShadow=true; pad.add(p); }
+add(new T.SphereGeometry(.07,6,4),mGold,.6,2.8,0,pad);
+add(new T.BoxGeometry(1.4,1.2,4.6),mMarble,-3.7,.6,0,pad);
+scene.add(pad); chhatri(7.8,-3.9,.62,topY+1.2); chhatri(7.8,-.5,.62,topY+1.2);
+add(new T.BoxGeometry(2.6,.2,1.7),mWater,-1.2,topY+.08,-3.6).castShadow=false;                 // Gaumukh kund
+[[-9,-2.8],[-16.5,1.2],[17.5,-.6],[8.5,3.3],[-19,0],[13.5,1.4]].forEach(([x,z])=>chhatri(x,z,.85));
+for(let i=0;i<70;i++){ const t=Math.random()*Math.PI*2, f=.15+Math.random()*.75; const [x,y]=P(t); const s=.35+Math.random()*.5;
+  const px=x*f, pz=-y*f; if(Math.hypot(px-5.5,pz-1.2)<2||Math.hypot(px-11.5,pz+2.2)<4.2||Math.hypot(px+3.5,pz-2.4)<3.4||Math.hypot(px-8.6,pz+.4)<2.6) continue;
+  add(new T.ConeGeometry(s,s*2,6),Math.random()<.5?mGreen:mGreen2,px,topY+s,pz); }
+// the climb: a zig-zag road through the seven pols
+const rampPts=[[-40,0,11],[-33,.9,8.6],[-27,1.9,9.8],[-22.5,3.0,7.4],[-19.5,4.2,5.6],[-18.2,topY-1.3,3.4],[-19.2,topY-.2,1.6]];
+for(let i=0;i<rampPts.length-1;i++){ const a=new T.Vector3(...rampPts[i]), b=new T.Vector3(...rampPts[i+1]); const d=a.distanceTo(b), mid=a.clone().add(b).multiplyScalar(.5);
+  const seg=new T.Mesh(new T.BoxGeometry(d+.4,.3,1.5),mRoad); seg.position.copy(mid); seg.lookAt(b); seg.rotateY(Math.PI/2); seg.receiveShadow=true; scene.add(seg); }
+rampPts.forEach(([x,y,z],i)=>{ const g=new T.Group(); g.position.set(x,y,z); g.rotation.y=i%2?.5:-.3;
+  add(new T.BoxGeometry(.6,2.0,.9),mWall,-.95,1.0,0,g); add(new T.BoxGeometry(.6,2.0,.9),mWall,.95,1.0,0,g); add(new T.BoxGeometry(2.6,.6,1.0),mWallDark,0,2.2,0,g);
+  add(new T.BoxGeometry(1.3,1.7,.12),mWood,0,.85,0,g); flag(0,2.5,0,.8,g); scene.add(g); });
+flag(5.5,topY+vijay.top,1.2,.9);
 
 /* fireworks */
 const fw=[];
@@ -1622,7 +1566,7 @@ function setMood(k){ mood=k; const m=MOODS[k];
   hemi.color.setHex(m.hemi[0]); hemi.groundColor.setHex(m.hemi[1]); hemi.intensity=m.hemi[2];
   orbMat.color.setHex(m.orb); const d=new T.Vector3(...m.dir).normalize(); orb.position.copy(d.clone().multiplyScalar(260)); glow.position.copy(orb.position);
   glow.material.opacity=k==='night'?.25:.9; orb.scale.setScalar(k==='night'?.6:1);
-  stars.material.opacity=m.stars; diyaI.visible=m.diya; warm.intensity=m.warm; renderer.toneMappingExposure=m.exp;
+  stars.material.opacity=m.stars; diyaI.visible=m.diya; mWin.color.setHex(k==='dawn'?0x6b3a1c:0xffcf7a); warm.intensity=m.warm; renderer.toneMappingExposure=m.exp;
   host.querySelectorAll('.mood button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mood===k));
   needs=true;
 }
@@ -1644,7 +1588,7 @@ const LM=[
   {k:'kumbha',obj:()=>new T.Vector3(-3.5,topY+3.4,2.4),en:'Kumbha Mahal',hi:'कुंभा महल',
    ien:'Ruins of Rana Kumbha\'s palace, the oldest in the fort and the birthplace of Maharana Udai Singh, founder of Udaipur.',
    ihi:'राणा कुंभा के महल के अवशेष, किले का सबसे पुराना महल और उदयपुर के संस्थापक महाराणा उदय सिंह का जन्मस्थान।'},
-  {k:'pols',obj:()=>new T.Vector3(-28,3.2,7),en:'Seven Pols',hi:'सात पोल',
+  {k:'pols',obj:()=>new T.Vector3(-27,5.2,9.8),en:'Seven Pols',hi:'सात पोल',
    ien:'The climb to the fort passes through seven great gates, from Padan Pol to Ram Pol.',
    ihi:'किले तक की चढ़ाई सात विशाल द्वारों से होकर जाती है — पाडन पोल से राम पोल तक।'}
 ];
@@ -1660,7 +1604,7 @@ let focusK=null;
 
 /* camera orbit + drag */
 let sizedMobile=false;
-let theta=0.5, elev=0.2, radius=60, autoSpin=!reduce, dragging=false, lx=0, ly=0, needs=true, lastInteract=0;
+let theta=0.62, elev=0.2, radius=56, autoSpin=!reduce, dragging=false, lx=0, ly=0, needs=true, lastInteract=0;
 const cv=renderer.domElement;
 cv.addEventListener('pointerdown',e=>{ dragging=true; lx=e.clientX; ly=e.clientY; cv.setPointerCapture(e.pointerId); lastInteract=performance.now(); });
 cv.addEventListener('pointermove',e=>{ if(!dragging) return; const dx=e.clientX-lx, dy=e.clientY-ly; lx=e.clientX; ly=e.clientY;
@@ -1687,6 +1631,7 @@ function frame(now){
   if(mood==='night' && !reduce){ fwTimer-=dt; if(fwTimer<=0){ firework(); fwTimer=700+Math.random()*900; } }
   if(fw.length){ stepFireworks(); needs=true; }
   if(diyaI.visible){ mDiya.color.setHSL(.1,1,.6+Math.sin(now*.006)*.06); needs=true; }
+  if(!reduce){ for(let i=0;i<flags.length;i++) flags[i].rotation.y=Math.sin(now*.003+i)*.45; needs=true; }
   if(!needs) return; needs=false;
   camera.position.set(target.x+radius*Math.cos(elev)*Math.cos(theta), target.y+radius*Math.sin(elev), target.z+radius*Math.cos(elev)*Math.sin(theta));
   camera.lookAt(target);

@@ -1518,10 +1518,11 @@ const fbm=(x,z)=>vnoise(x,z)*.55+vnoise(x*2.1,z*2.1)*.3+vnoise(x*4.3,z*4.3)*.15;
 const M=(c,o={})=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.93,metalness:0,flatShading:true},o));
 const mWall=M(0xa8916c), mWallDark=M(0x8a785c), mStone=M(0xbca27a), mRuin=M(0x9a8b74), mMarble=M(0xe6ddcc,{roughness:.6}),
       mYellow=M(0xd8b56e), mRoof=M(0xa8553a), mGold=M(0xd8ad4a,{metalness:.4,roughness:.5}), mWood=M(0x5a3a22), mRoad=M(0xb79c74),
-      mStambh=M(0xb98d58), mKirti=M(0xcfc0a0), mStep=M(0x8f7f66), mDark=M(0x3a2a1c);
+      mStambh=M(0xb98d58), mKirti=M(0xcfc0a0), mStep=M(0x8f7f66);
+const mDark=M(0x3a2a1c), mStambhD=M(0x8e6a40), mMarbleD=M(0xc9bda6), mIron=M(0x2a2420,{metalness:.5,roughness:.5});
 const mWater=new T.MeshStandardMaterial({color:0x2c5d6e,roughness:.12,metalness:.55});
 const mLamp=new T.MeshBasicMaterial({color:0xffc35a}), mWin=new T.MeshBasicMaterial({color:0x4a2414}), mFlag=new T.MeshBasicMaterial({color:0xf2801f,side:T.DoubleSide});
-const glowMats=[mWall,mWallDark,mStone,mStambh,mKirti,mYellow,mMarble];
+const glowMats=[mWall,mWallDark,mStone,mStambh,mKirti,mYellow,mMarble,mStambhD,mMarbleD,mRuin];
 const add=(geo,mat,x,y,z,parent,shadow=true)=>{ const m=new T.Mesh(geo,mat); m.position.set(x,y,z); m.castShadow=shadow; m.receiveShadow=true; (parent||scene).add(m); return m; };
 const box=(w,h,d)=>new T.BoxGeometry(w,h,d);
 const flagShape=new T.Shape(); flagShape.moveTo(0,0); flagShape.lineTo(1,-.26); flagShape.lineTo(.72,-.36); flagShape.lineTo(1,-.5); flagShape.lineTo(0,-.72);
@@ -1538,7 +1539,7 @@ const dOf=(x,z)=>Math.sqrt((x/A)*(x/A)+(z/wOf(x))*(z/wOf(x)));
 const P=t=>[A*Math.cos(t), B*Math.sin(t)*(1-.22*Math.cos(t))];
 const riverX=z=>-60+5*Math.sin(z*.045)+2*Math.sin(z*.11);
 /* stepped water tanks cut into the plateau: [x,z,w,d] */
-const KUNDS={gaumukh:[3.6,-3.4,3.0,1.8],ratan:[6.2,3.4,3.6,1.9],bhimlat:[16.2,-.6,2.2,1.6],suraj:[-5.2,3.6,2.2,1.4],padmini:[9.6,-2.3,5.6,3.8]};
+const KUNDS={gaumukh:[3.6,-3.4,3.0,1.8],ratan:[6.2,3.4,3.6,1.9],bhimlat:[16.2,-.6,2.2,1.6],suraj:[-10.4,-3.0,2.2,1.4],padmini:[9.6,-2.3,5.6,3.8]};
 /* the fort road zig-zags up the gentler north-west slope */
 const roadXZ=[[-66,15.5],[-54,15.5],[-46,14],[-38,12.8],[-31,14.6],[-26.5,11],[-29.5,8.6],[-24,7.2],[-21.4,8.6],[-19.6,6.2],[-18.7,3.6]];
 function baseH(x,z){
@@ -1660,25 +1661,131 @@ function gate(x,y,z,rot,s){ const g=new T.Group(); g.position.set(x,y,z); g.rota
   add(box(1.4,1.9,.1),mWood,0,.95,.0,g); chhatri(-1.15,3.25,0,.55,g,mWall); chhatri(1.15,3.25,0,.55,g,mWall);
   flag(0,3.3,0,.6,g); scene.add(g); return g; }
 
+
+/* ---------- fine detail, batched: thousands of small stones in a few draw calls ---------- */
+const DET=new Map();
+function det(mat,x,y,z,sx,sy,sz,ry=0){ if(!DET.has(mat)) DET.set(mat,[]); DET.get(mat).push([x,y,z,sx,sy,sz,ry]); }
+function detLocal(mat,O,ry0,lx,ly,lz,sx,sy,sz,ry=0){ const c=Math.cos(ry0), s=Math.sin(ry0); det(mat,O[0]+lx*c+lz*s,O[1]+ly,O[2]-lx*s+lz*c,sx,sy,sz,ry0+ry); }
+function finalizeDet(){ const ub=box(1,1,1); DET.forEach((arr,mat)=>{ const im=new T.InstancedMesh(ub,mat,arr.length);
+  arr.forEach((e,i)=>{ dm.position.set(e[0],e[1],e[2]); dm.rotation.set(0,e[6],0); dm.scale.set(e[3],e[4],e[5]); dm.updateMatrix(); im.setMatrixAt(i,dm.matrix); });
+  im.castShadow=true; im.receiveShadow=true; scene.add(im); }); }
+
+/* a pol: gate block with a studded door, flanking bastions, wing walls along the slope */
+function polGate(x,y,z,rot,big){ const O=[x,y,z], s=big?1.15:1;
+  const L=(mat,lx,ly,lz,sx,sy,sz,r)=>detLocal(mat,O,rot,lx*s,ly*s,lz*s,sx*s,sy*s,sz*s,r);
+  /* gate block: two piers and a deep lintel */
+  L(mWall,-1.0,1.35,0,.75,2.7,1.8); L(mWall,1.0,1.35,0,.75,2.7,1.8); L(mWall,0,3.0,0,2.75,.9,1.8);
+  L(mWallDark,0,3.5,0,2.95,.12,2.0); L(mWallDark,0,2.48,.92,1.3,.12,.1); L(mWallDark,0,2.48,-.92,1.3,.12,.1);
+  for(let k=0;k<7;k++){ L(mWallDark,-1.32+k*.44,3.72,.88,.24,.32,.18); L(mWallDark,-1.32+k*.44,3.72,-.88,.24,.32,.18); }
+  /* jharokha balcony over the outer face */
+  L(mWall,0,3.0,1.05,.9,.55,.35); L(mWallDark,0,2.68,1.1,1.0,.08,.42); L(mWallDark,0,3.32,1.1,1.0,.08,.42);
+  /* doors with elephant spikes and iron studs */
+  L(mWood,-.32,1.0,.62,.62,2.0,.1); L(mWood,.32,1.0,.62,.62,2.0,.1);
+  for(let r=0;r<5;r++) for(let c=0;c<4;c++){ L(mIron,-.56+c*.37,.35+r*.38,.69,.06,.06,.05); }
+  for(let c=0;c<4;c++) L(mIron,-.5+c*.33,1.25,.75,.05,.05,.18);
+  /* flanking round bastions */
+  [-1.95,1.95].forEach(bx=>{ const cx=O[0]+bx*s*Math.cos(rot), cz=O[2]-bx*s*Math.sin(rot);
+    add(new T.CylinderGeometry(.68*s,.82*s,3.4*s,12),mWall,cx,y+1.7*s,cz);
+    add(new T.CylinderGeometry(.78*s,.74*s,.14*s,12),mWallDark,cx,y+3.45*s,cz,null,false);
+    for(let k=0;k<8;k++){ const a=k/8*Math.PI*2; det(mWallDark,cx+Math.cos(a)*.7*s,y+3.66*s,cz+Math.sin(a)*.7*s,.2*s,.3*s,.2*s,-a); }
+    for(let k=0;k<3;k++){ const a=rot+k*2.1; det(mWin,cx+Math.cos(a)*.81*s,y+(1.4+k*.5)*s,cz-Math.sin(a)*.81*s,.06,.24*s,.12*s,a); } });
+  /* chhatris on top */
+  chhatri(O[0]-.75*s*Math.cos(rot),y+3.56*s,O[2]+.75*s*Math.sin(rot),.55*s,null,mWall);
+  chhatri(O[0]+.75*s*Math.cos(rot),y+3.56*s,O[2]-.75*s*Math.sin(rot),.55*s,null,mWall);
+  /* wing walls running out along the slope */
+  [-1,1].forEach(sd=>{ for(let k=0;k<3;k++){ const lx=sd*(2.9+k*1.05); const gy=H(O[0]+lx*s*Math.cos(rot),O[2]-lx*s*Math.sin(rot));
+    const hh=y+2.2*s-gy; L(mWall,lx,(gy-y)/s+hh/2/s,0,1.08,hh/s+.3,.55); L(mWallDark,lx,(gy-y)/s+hh/s+.15,0,.3,.28,.6); } });
+  flag(O[0],y+3.8*s,O[2],.7*s); }
+
+/* the Vijay Stambh, storey by storey */
+function vijayStambh(x,z,N,w0,h,mat,matD){ const y0=topY;
+  [[5.4,.24],[4.6,.24],[3.8,.24]].forEach(([w,hh],i)=>det(mStep,x,y0+.12+i*.24,z,w,hh,w));
+  det(mat,x,y0+.88,z,3.0,.32,3.0);
+  for(let k=0;k<5;k++) det(mStep,x+2.0+k*.2,y0+.1+k*.17,z,.22,.2+k*.34,1.2);   /* the stair up */
+  let y=y0+1.04;
+  for(let i=0;i<N;i++){ const w=w0*(1-i*.022);
+    det(mat,x,y+h/2,z,w,h,w);
+    det(mat,x,y+h*.46,z,w*.5,h*.9,w*1.24); det(mat,x,y+h*.46,z,w*1.24,h*.9,w*.5);         /* projecting bays */
+    det(matD,x,y+.1,z,w*1.27,.06,w*1.27); det(matD,x,y+h*.55,z,w*1.02,.05,w*1.02);       /* carved bands */
+    det(matD,x,y+h-.03,z,w*1.56,.07,w*1.56);                                              /* balcony slab */
+    const e=w*.78; for(let k=0;k<6;k++){ const t=-e+k*(2*e/5);                            /* railing posts */
+      det(matD,x+t,y+h+.07,z+e,.04,.14,.04); det(matD,x+t,y+h+.07,z-e,.04,.14,.04); det(matD,x+e,y+h+.07,z+t,.04,.14,.04); det(matD,x-e,y+h+.07,z+t,.04,.14,.04); }
+    [[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{ det(mWin,x+a*w*.625,y+h*.45,z+b*w*.625,a?.04:w*.2,h*.42,b?.04:w*.2);
+      det(matD,x+a*w*.64,y+h*.72,z+b*w*.64,a?.05:w*.32,.05,b?.05:w*.32); });
+    [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([a,b])=>det(mDark,x+a*w*.51,y+h*.45,z+b*w*.36,.03,h*.3,.1));   /* sculpture niches */
+    y+=h; }
+  /* the top: an open pavilion with four pillars and a pyramid cap */
+  const tw=w0*.78; det(matD,x,y+.05,z,tw*1.5,.1,tw*1.5);
+  [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([a,b])=>det(mat,x+a*tw*.55,y+.55,z+b*tw*.55,.1,.9,.1));
+  det(matD,x,y+1.05,z,tw*1.5,.1,tw*1.5);
+  const cap=pyramid(tw*1.6,.7,mat); cap.position.set(x,y+1.45,z); cap.castShadow=true; scene.add(cap);
+  add(new T.SphereGeometry(.09,8,6),mGold,x,y+1.85,z,null,false); add(new T.CylinderGeometry(.015,.015,.5,4),mGold,x,y+2.1,z,null,false);
+  return {top:y+2.3-topY}; }
+
+/* the ruins of Rana Kumbha's palace */
+function kumbhaMahal(cx,cz){ const y=topY;
+  det(mStep,cx,y+.15,cz,7.6,.3,5.0); det(mRuin,cx,y+.38,cz,7.2,.16,4.6);
+  for(let k=0;k<6;k++) det(mStep,cx+3.9+k*.18,y+.05+k*.06,cz-1.2,.2,.1+k*.12,1.4);
+  const wall=(x0,z0,x1,z1,hmax,thick=.38,gaps=[])=>{ const len=Math.hypot(x1-x0,z1-z0), n=Math.round(len/.32), ang=-Math.atan2(z1-z0,x1-x0);
+    for(let i=0;i<n;i++){ const t=(i+.5)/n; if(gaps.some(([a,b])=>t>a&&t<b)) continue;
+      const jag=hmax*(.55+.45*Math.abs(Math.sin(i*1.7+x0)))*(rnd()<.12?.45:1);
+      det(mRuin,x0+(x1-x0)*t,y+.46+jag/2,z0+(z1-z0)*t,len/n+.01,jag,thick,ang);
+      if(i%3===1&&jag>1.1) det(mWin,x0+(x1-x0)*t,y+.46+jag*.55,z0+(z1-z0)*t,len/n*.6,.38,thick+.02,ang); } };
+  const X0=cx-3.4, X1=cx+3.4, Z0=cz-2.1, Z1=cz+2.1;
+  wall(X0,Z1,X1,Z1,2.6,.4,[[.42,.5]]); wall(X0,Z0,X1,Z0,1.6,.4,[[.1,.22],[.6,.66]]); wall(X0,Z0,X0,Z1,2.2); wall(X1,Z0,X1,Z1,1.9,.4,[[.35,.6]]);
+  wall(cx-.4,Z0,cx-.4,Z1,1.4,.3,[[.4,.6]]);
+  /* colonnade around the courtyard */
+  for(let i=0;i<7;i++){ const px=X0+.6+i*.42; det(mRuin,px,y+.46+.6,cz-.9,.14,1.2,.14); if(i<5) det(mRuin,px+.2,y+.46+1.24,cz-.9,.5,.1,.22); }
+  for(let i=0;i<4;i++){ const pz=cz-.9+i*.55; det(mRuin,X0+.6,y+.46+.6,pz,.14,1.2,.14); det(mRuin,cx-.9,y+.46+.6,pz,.14,1.2,.14); }
+  /* a surviving two-storey wing with jharokhas and a chhatri */
+  det(mStone,cx+2.2,y+.46+1.3,cz+1.2,2.2,2.6,1.4); det(mWallDark,cx+2.2,y+.46+2.66,cz+1.2,2.4,.12,1.6);
+  for(let k=0;k<4;k++){ det(mWin,cx+1.4+k*.52,y+1.25,cz+.49,.18,.34,.04); det(mWin,cx+1.4+k*.52,y+2.2,cz+.49,.18,.34,.04); }
+  det(mStone,cx+2.2,y+.46+1.9,cz+.38,.9,.5,.36); det(mWallDark,cx+2.2,y+.46+1.62,cz+.38,1.0,.07,.44);
+  chhatri(cx+2.9,y+.46+2.72,cz+1.2,.6,null,mStone);
+  /* fallen stones */
+  for(let i=0;i<46;i++){ const a=rnd()*Math.PI*2, r=1+rnd()*3.2; const s=.12+rnd()*.25; det(mRuin,cx+Math.cos(a)*r*1.1,y+.5+s/2,cz+Math.sin(a)*r*.6,s*1.4,s,s,rnd()*3); } }
+
+/* Padmini Mahal: palace on the bank, jal mahal in the pool */
+function padminiMahal(){ const [px,pz,pw,pd]=KUNDS.padmini, y=topY;
+  /* pavilion in the water */
+  const jx=px+.4, jz=pz-.2, wy=topY-.8;
+  det(mMarble,jx,wy+.1,jz,2.6,.3,2.2); for(let k=0;k<3;k++) det(mMarbleD,jx+1.35+k*.18,wy+.06+k*.06,jz,.2,.12+k*.12,1.2);
+  det(mMarble,jx,wy+.95,jz,2.1,1.4,1.7);
+  for(let i=0;i<6;i++){ det(mMarbleD,jx-.9+i*.36,wy+.85,jz+.88,.12,1.1,.08); det(mMarbleD,jx-.9+i*.36,wy+.85,jz-.88,.12,1.1,.08); }
+  for(let i=0;i<5;i++){ det(mWin,jx-.72+i*.36,wy+.8,jz+.86,.2,.8,.04); det(mWin,jx-.72+i*.36,wy+.8,jz-.86,.2,.8,.04); }
+  det(mMarbleD,jx,wy+1.7,jz,2.3,.1,1.9);
+  det(mMarble,jx,wy+2.2,jz,1.5,.9,1.2);
+  for(let i=0;i<3;i++){ det(mWin,jx-.45+i*.45,wy+2.2,jz+.61,.18,.38,.04); det(mWin,jx-.45+i*.45,wy+2.2,jz-.61,.18,.38,.04); }
+  det(mMarble,jx,wy+2.2,jz+.75,.7,.42,.3); det(mMarbleD,jx,wy+1.96,jz+.78,.8,.06,.38);
+  det(mMarbleD,jx,wy+2.7,jz,1.7,.1,1.4);
+  for(let k=0;k<6;k++){ det(mMarbleD,jx-.75+k*.3,wy+2.86,jz+.64,.14,.18,.14); det(mMarbleD,jx-.75+k*.3,wy+2.86,jz-.64,.14,.18,.14); }
+  [[-.7,-.5],[.7,-.5],[-.7,.5],[.7,.5]].forEach(([a,b])=>chhatri(jx+a,wy+2.76,jz+b,.42,null,mMarble));
+  chhatri(jx,wy+2.76,jz,.75,null,mMarble);
+  /* palace on the north bank */
+  const bx=px, bz=pz+pd/2+1.15;
+  det(mStep,bx,y+.12,bz,4.6,.24,2.0);
+  det(mMarble,bx,y+1.1,bz,4.2,1.8,1.6); det(mMarbleD,bx,y+2.05,bz,4.4,.12,1.8);
+  for(let i=0;i<9;i++) det(mMarbleD,bx-1.9+i*.475,y+.62,bz-.82,.12,.9,.08);
+  for(let i=0;i<8;i++){ det(mWin,bx-1.67+i*.475,y+.6,bz-.8,.24,.7,.04); det(mWin,bx-1.67+i*.475,y+1.5,bz-.81,.16,.36,.04); }
+  [-1.2,0,1.2].forEach(dx=>{ det(mMarble,bx+dx,y+1.5,bz-.98,.7,.5,.34); det(mMarbleD,bx+dx,y+1.22,bz-1.0,.8,.06,.42); det(mMarbleD,bx+dx,y+1.78,bz-1.0,.8,.06,.42); });
+  det(mMarble,bx+.8,y+2.55,bz+.1,2.2,.9,1.2); det(mMarbleD,bx+.8,y+3.04,bz+.1,2.4,.1,1.4);
+  for(let k=0;k<11;k++) det(mMarbleD,bx-2.0+k*.4,y+2.24,bz-.86,.16,.22,.16);
+  chhatri(bx-1.4,y+2.12,bz,.6,null,mMarble); chhatri(bx+1.7,y+3.1,bz+.1,.55,null,mMarble); chhatri(bx-.1,y+3.1,bz+.1,.55,null,mMarble);
+  for(let k=0;k<4;k++) det(mMarbleD,bx,y-.12-k*.2,bz-1.05-k*.18,3.0,.12,.2);   /* ghat steps into the pool */
+  [[px-pw/2-.3,pz-pd/2-.3],[px+pw/2+.3,pz-pd/2-.3]].forEach(([cx2,cz2])=>chhatri(cx2,y,cz2,.6,null,mMarble)); }
+
 /* ---------- the fort's monuments ---------- */
-const vijay=stambh(1.4,1.0,9,1.15,.78,mStambh);                 /* Vijay Stambh */
-const kirti=stambh(14.2,1.7,7,.78,.62,mKirti);                  /* Kirti Stambh */
+const vijay=vijayStambh(1.4,1.0,9,1.25,.8,mStambh,mStambhD);   /* Vijay Stambh */
+const kirti=vijayStambh(14.2,1.7,7,.8,.64,mKirti,mMarbleD);     /* Kirti Stambh */
 shikhara(-6.6,-2.0,.8,mStone);                                  /* Meera temple */
 shikhara(-4.2,-2.4,1.0,mStone);                                 /* Kumbha Shyam temple */
 shikhara(6.9,-.6,.75,mStone);                                   /* Kalika Mata temple */
 shikhara(12.0,2.6,.55,mMarble,false); shikhara(-1.6,3.2,.5,mStone,false);
-ruin(-11.2,1.2,.05,[[0,0,5.4,0,2.2],[0,-2.3,5.4,0,1.8],[-2.7,-1.15,2.3,Math.PI/2,2.0],[2.7,-1.15,2.3,Math.PI/2,1.6],[0,1.4,4,0,2.6],[-1.2,-1.1,2.2,Math.PI/2,1.2]]);  /* Kumbha Mahal */
-palace(-11.2,3.4,.05,[[0,0,3.6,2.4,1.2,1],[1.9,-.3,.9,3.0,.9,0]],mRuin);
-palace(-7.8,3.0,0,[[0,0,3.2,2.0,1.6,1],[-1.8,-.2,1.2,2.6,1.4,0]],mYellow);               /* Fateh Prakash */
+kumbhaMahal(-12.0,1.4);                                                                     /* Rana Kumbha Mahal */
+palace(-6.4,3.5,0,[[0,0,3.0,2.0,1.4,1],[-1.6,-.2,1.0,2.6,1.2,0]],mYellow);                /* Fateh Prakash */
 palace(6.2,4.9,0,[[0,0,3.2,1.3,.9,1]],mStone);                                             /* Ratan Singh palace */
-/* Padmini Mahal: a palace on the bank and a water pavilion in the pool */
-kund('padmini');
-{ const [px,pz,pw,pd]=KUNDS.padmini;
-  palace(px,pz+pd/2+.85,0,[[0,0,3.4,2.0,1.2,1]],mMarble);
-  const g=new T.Group(); g.position.set(px+.6,topY-.8,pz-.2);
-  add(box(1.6,.2,1.4),mMarble,0,.1,0,g); add(box(1.4,1.1,1.2),mMarble,0,.75,0,g); add(box(1.6,.1,1.4),mWallDark,0,1.35,0,g,false);
-  add(box(1.0,.7,.9),mMarble,0,1.75,0,g); chhatri(0,2.1,0,.75,g,mMarble);
-  windows(g,0,.2,0,1.4,1.1,1.2,1); scene.add(g); }
+/* Padmini Mahal */
+kund('padmini'); padminiMahal();
 ['gaumukh','ratan','bhimlat','suraj'].forEach(kund);
 /* gaumukh: the cow-mouth spring on the cliff wall */
 add(box(.5,.5,.4),mStone,3.6,topY-.4,-3.4-1.05,null,false);
@@ -1689,7 +1796,7 @@ function houses(n,place,k=1){ const im=new T.InstancedMesh(houseGeo,M(0xffffff),
   for(let i=0;i<n*6&&c<n;i++){ const p=place(); if(!p) continue; const [x,y,z]=p, w=(.55+rnd()*.7)*k, d=(.55+rnd()*.7)*k, h=(.45+rnd()*.75)*(k<1?.75:1);
     dm.position.set(x,y,z); dm.rotation.set(0,(rnd()-.5)*.6,0); dm.scale.set(w,h,d); dm.updateMatrix(); im.setMatrixAt(c,dm.matrix); im.setColorAt(c,HCOL[Math.floor(rnd()*HCOL.length)]); c++; }
   im.count=c; im.castShadow=true; im.receiveShadow=true; scene.add(im); return im; }
-const BUSY=[[1.4,1.0,2.4],[14.2,1.7,1.8],[-6.6,-2,1.8],[-4.2,-2.4,1.9],[6.9,-.6,1.5],[-11.2,1.6,3.6],[-7.8,3,2.4],[6.2,4.9,2.2],[12,2.6,1.2],[-1.6,3.2,1.2]];
+const BUSY=[[1.4,1.0,3.6],[14.2,1.7,2.6],[-6.6,-2,1.8],[-4.2,-2.4,1.9],[6.9,-.6,1.5],[-12,1.4,4.6],[-6.4,3.5,2.2],[6.2,4.9,2.2],[12,2.6,1.2],[-1.6,3.2,1.2],[9.6,.6,3.2]];
 const free=(x,z)=>{ if(dOf(x,z)>.86) return false; for(const [bx,bz,r] of BUSY) if(Math.hypot(x-bx,z-bz)<r) return false;
   for(const k in KUNDS){ const [kx,kz,kw,kd]=KUNDS[k]; if(Math.abs(x-kx)<kw/2+.8&&Math.abs(z-kz)<kd/2+.8) return false; } return true; };
 houses(PH?26:40,()=>{ const x=-14+rnd()*24, z=-4+rnd()*8.5; return free(x,z)?[x,topY,z]:null; },.55);
@@ -1700,7 +1807,7 @@ houses(PH?260:460,()=>{ const x=-58+rnd()*33, z=-26+rnd()*58; if(dOf(x,z)<2.1) r
 /* the seven pols on the road */
 const POLN=[['Padan Pol','पाडन पोल'],['Bhairon Pol','भैरव पोल'],['Hanuman Pol','हनुमान पोल'],['Ganesh Pol','गणेश पोल'],['Jodla Pol','जोड़ला पोल'],['Laxman Pol','लक्ष्मण पोल'],['Ram Pol','राम पोल']];
 const polIdx=[3,4,5,6,7,8,10];
-polIdx.forEach((ri,i)=>{ const p=road[ri], q=road[Math.max(0,ri-1)]; const rot=-Math.atan2(p.z-q.z,p.x-q.x)+Math.PI/2; gate(p.x,p.y-.05,p.z,rot,1); });
+polIdx.forEach((ri,i)=>{ const p=road[ri], q=road[Math.max(0,ri-1)]; const rot=-Math.atan2(p.z-q.z,p.x-q.x)+Math.PI/2; polGate(p.x,p.y-.05,p.z,rot,i===6); });
 /* road surface */
 for(let i=0;i<road.length-1;i++){ const a=road[i], b=road[i+1]; const L=a.distanceTo(b), seg=new T.Mesh(box(L+.5,.14,1.4),mRoad);
   seg.position.set((a.x+b.x)/2,(a.y+b.y)/2+.04,(a.z+b.z)/2); seg.lookAt(b.x,(a.y+b.y)/2+.04+(b.y-a.y)/2,b.z); seg.rotateY(Math.PI/2); seg.receiveShadow=true; scene.add(seg); }
@@ -1722,6 +1829,7 @@ for(let i=0;i<NT*5&&tc<NT;i++){ const x=(rnd()-.5)*200, z=(rnd()-.5)*160, d=dOf(
   dm.position.set(x,y,z); dm.rotation.set(0,rnd()*6,0); dm.scale.set(1,th,1); dm.updateMatrix(); trunkI.setMatrixAt(tc,dm.matrix);
   dm.position.set(x,y+th+s*.5,z); dm.scale.set(s*(1+rnd()*.3),s,s*(1+rnd()*.3)); dm.updateMatrix(); treeI.setMatrixAt(tc,dm.matrix); treeI.setColorAt(tc,TCOL[Math.floor(rnd()*TCOL.length)]); tc++; }
 treeI.count=tc; trunkI.count=tc; treeI.castShadow=true; treeI.receiveShadow=true; scene.add(treeI,trunkI);
+finalizeDet();
 
 /* ---------- a Rajput cavalcade climbs the road (history, not a wedding) ---------- */
 const mHorse=M(0x6b4a30), mHorse2=M(0x3b2a20), mSkin=M(0xa8724a), mCloth=M(0xe9dcc4), mSafa=M(0xc8611c), mSafa2=M(0xb8202a), mSteel=M(0x9aa0a6,{metalness:.6,roughness:.4}), mGrey=M(0x7f7a75), mShield=M(0x4a3020);
@@ -1757,6 +1865,44 @@ function placeTroop(now){ troop.forEach((b,i)=>{ const s=((tS-b.off)%(BL+tSpan)+
   if(s<0||s>BL){ b.g.visible=false; return; } b.g.visible=true; const yaw=pathAt(s,tmpV); b.g.position.copy(tmpV); b.g.position.y+=.1; b.g.rotation.y=yaw;
   if(!reduce) b.g.position.y+=Math.abs(Math.sin(now*.008+i))*.03; }); }
 
+
+/* ---------- fireworks over the fort at night ---------- */
+function glowTex(stops){ const c=document.createElement('canvas'); c.width=c.height=64; const g=c.getContext('2d'); const r=g.createRadialGradient(32,32,0,32,32,32); stops.forEach(s=>r.addColorStop(s[0],s[1])); g.fillStyle=r; g.fillRect(0,0,64,64); return new T.CanvasTexture(c); }
+const dotTex=glowTex([[0,'rgba(255,255,255,1)'],[.25,'rgba(255,255,255,.9)'],[1,'rgba(255,255,255,0)']]);
+const fw=[], rockets=[]; const flash=new T.PointLight(0xffd080,0,80,2); scene.add(flash);
+const PAL=[[1,.74,.12],[.95,.2,.5],[.98,.5,.1],[1,.95,.78],[.35,.85,.45],[.6,.45,1],[1,.3,.2]];
+function launch(){ const N=12, pos=new Float32Array(N*3), x=(rnd()-.5)*38, z=(rnd()-.5)*12+(rnd()<.5?-14:14);
+  const y0=H(x,z)+.3; for(let i=0;i<N;i++){ pos[i*3]=x; pos[i*3+1]=y0; pos[i*3+2]=z; }
+  const g=new T.BufferGeometry(); g.setAttribute('position',new T.BufferAttribute(pos,3));
+  const p=new T.Points(g,new T.PointsMaterial({size:.6,map:dotTex,color:0xffd9a0,transparent:true,blending:T.AdditiveBlending,depthWrite:false,fog:false}));
+  scene.add(p); rockets.push({p,x,z,y:y0,vy:.36+rnd()*.06,apex:topY+15+rnd()*9}); }
+function burst(x,y,z){ const kind=['sphere','ring','willow','double'][Math.floor(rnd()*4)];
+  const n=PH?110:180, pos=new Float32Array(n*3), col=new Float32Array(n*3), vel=[];
+  const p1=PAL[Math.floor(rnd()*PAL.length)], p2=PAL[Math.floor(rnd()*PAL.length)];
+  const ax=new T.Vector3(rnd()-.5,1,rnd()-.5).normalize(), u1=new T.Vector3(1,0,0).cross(ax).normalize(), u2=ax.clone().cross(u1);
+  for(let i=0;i<n;i++){ pos[i*3]=x; pos[i*3+1]=y; pos[i*3+2]=z; let v, c=p1;
+    if(kind==='ring'){ const a=i/n*Math.PI*2, s=.25; v=u1.clone().multiplyScalar(Math.cos(a)*s).addScaledVector(u2,Math.sin(a)*s).addScaledVector(ax,(rnd()-.5)*.03); }
+    else { const uu=rnd()*2-1, th=rnd()*Math.PI*2, r=Math.sqrt(1-uu*uu); let s=kind==='willow'?.14+rnd()*.04:.2+rnd()*.07;
+      if(kind==='double'&&i%2){ s*=.55; c=p2; } v=new T.Vector3(r*Math.cos(th)*s,uu*s,r*Math.sin(th)*s); }
+    if(kind==='willow') c=[1,.78,.35];
+    vel.push(v); col[i*3]=c[0]; col[i*3+1]=c[1]; col[i*3+2]=c[2]; }
+  const g=new T.BufferGeometry(); g.setAttribute('position',new T.BufferAttribute(pos,3)); g.setAttribute('color',new T.BufferAttribute(col,3));
+  const p=new T.Points(g,new T.PointsMaterial({size:PH?.8:.65,map:dotTex,vertexColors:true,transparent:true,blending:T.AdditiveBlending,depthWrite:false,fog:false}));
+  scene.add(p); fw.push({p,vel,life:1,decay:kind==='willow'?.0065:.0105,grav:kind==='willow'?.0055:.0038,tw:rnd()<.6});
+  flash.position.set(x,y,z); flash.color.setRGB(p1[0],p1[1],p1[2]); flash.intensity=(PH?3:4.5)*night; }
+function stepFireworks(k){
+  for(let r=rockets.length-1;r>=0;r--){ const Rk=rockets[r], a=Rk.p.geometry.attributes.position.array;
+    Rk.y+=Rk.vy*k; Rk.vy*=Math.pow(.99,k);
+    for(let i=a.length/3-1;i>0;i--){ a[i*3]=a[i*3-3]; a[i*3+1]=a[i*3-2]; a[i*3+2]=a[i*3-1]; }
+    a[0]=Rk.x+Math.sin(Rk.y*3)*.05; a[1]=Rk.y; a[2]=Rk.z; Rk.p.geometry.attributes.position.needsUpdate=true;
+    if(Rk.y>=Rk.apex){ burst(Rk.x,Rk.y,Rk.z); scene.remove(Rk.p); Rk.p.geometry.dispose(); Rk.p.material.dispose(); rockets.splice(r,1); } }
+  for(let q=fw.length-1;q>=0;q--){ const F=fw[q], a=F.p.geometry.attributes.position;
+    for(let i=0;i<F.vel.length;i++){ const v=F.vel[i]; v.multiplyScalar(Math.pow(.965,k)); v.y-=F.grav*k; a.array[i*3]+=v.x*k; a.array[i*3+1]+=v.y*k; a.array[i*3+2]+=v.z*k; }
+    a.needsUpdate=true; F.life-=F.decay*k;
+    F.p.material.opacity=Math.max(0,F.life)*(F.tw&&F.life<.5?(.45+.55*Math.random()):1);
+    if(F.life<=0){ scene.remove(F.p); F.p.geometry.dispose(); F.p.material.dispose(); fw.splice(q,1); } }
+  flash.intensity*=Math.pow(.88,k); }
+
 /* ---------- clouds and birds ---------- */
 const cloudC=document.createElement('canvas'); cloudC.width=256; cloudC.height=128;
 { const g=cloudC.getContext('2d'); [[70,80,46],[120,62,58],[176,78,44],[140,90,40],[96,92,36]].forEach(([x,y,r])=>{ const gr=g.createRadialGradient(x,y,0,x,y,r); gr.addColorStop(0,'rgba(255,255,255,.95)'); gr.addColorStop(1,'rgba(255,255,255,0)'); g.fillStyle=gr; g.fillRect(0,0,256,128); }); }
@@ -1783,7 +1929,7 @@ const KF=[
  {h:24,  sky:['#04030d','#120f33','#2b1f5c','#3a2a6a','#3a2a6a','#0c0710'],fog:'#110d2a',sun:['#9fb4ff',.34],hemi:['#4a5aa0','#140a1c',.28],exp:.96,stars:1,lit:1,fn:38,ff:190}];
 KF.forEach(k=>{ k.skyC=k.sky.map(C); k.fogC=C(k.fog); k.sunC=C(k.sun[0]); k.hs=C(k.hemi[0]); k.hg=C(k.hemi[1]); });
 const winOff=C('#3a2014'), winOn=C('#ffcf7a'), moonDir=new T.Vector3(40,50,-30).normalize(), dirV=new T.Vector3(), white=new T.Color(1,1,1), glowCol=C('#ff9a3c');
-let hour=16.8, litLvl=0, night=0;
+let hour=20.5, litLvl=1, night=1;
 function sunDir(h){ const u=clamp01((h-6)/12.4), az=.59+(-2.79-.59)*u, el=Math.max(.05,Math.sin(Math.PI*u))*.95; return new T.Vector3(Math.cos(el)*Math.cos(az),Math.sin(el),Math.cos(el)*Math.sin(az)); }
 const MOM=[[0,'Night over Chittor','चित्तौड़ की रात'],[5.3,'Dawn on the ramparts','प्राचीर पर भोर'],[7.5,'Morning','सुबह'],[11,'Midday','दोपहर'],[15,'Afternoon','दोपहर बाद'],[16.6,'Golden hour','सुनहरी शाम'],[18,'Sunset','सूर्यास्त'],[19,'Chittor by night','रात में चित्तौड़']];
 const clockEl=host.querySelector('.f-clock');
@@ -1817,13 +1963,13 @@ const LM=[
   {k:'kirti',obj:()=>new T.Vector3(14.2,topY+kirti.top+.5,1.7),en:'Kirti Stambh',hi:'कीर्ति स्तंभ',
    ien:'The Tower of Fame, about 22 metres high, raised in the 12th century by a Jain merchant and dedicated to Adinath, the first tirthankara. It is older than the Vijay Stambh.',
    ihi:'कीर्ति स्तंभ: लगभग 22 मीटर ऊँचा, 12वीं सदी में एक जैन व्यापारी द्वारा बनवाया गया और प्रथम तीर्थंकर आदिनाथ को समर्पित। यह विजय स्तंभ से भी पुराना है।'},
-  {k:'padmini',obj:()=>new T.Vector3(KUNDS.padmini[0],topY+2.6,KUNDS.padmini[1]),en:'Padmini Mahal',hi:'पद्मिनी महल',
+  {k:'padmini',obj:()=>new T.Vector3(KUNDS.padmini[0]+.4,topY+3.0,KUNDS.padmini[1]),en:'Padmini Mahal',hi:'पद्मिनी महल',
    ien:'A white palace beside a pool, with a pavilion standing in the water. Legend says Alauddin Khilji was shown Rani Padmini\'s reflection here before the siege of 1303.',
    ihi:'तालाब के किनारे सफ़ेद महल, और पानी के बीच एक मंडप। मान्यता है कि 1303 की घेराबंदी से पहले अलाउद्दीन खिलजी को यहीं रानी पद्मिनी का प्रतिबिंब दिखाया गया था।'},
   {k:'meera',obj:()=>new T.Vector3(-5.4,topY+4.6,-2.2),en:'Meera & Kumbha Shyam temples',hi:'मीरा एवं कुंभ श्याम मंदिर',
    ien:'Twin temples of the 15th century. Meera Bai, the poet-saint princess of Mewar, sang her bhajans to Krishna here.',
    ihi:'15वीं सदी के जुड़वाँ मंदिर। मेवाड़ की राजकुमारी, भक्त कवयित्री मीरा बाई ने यहीं कृष्ण के भजन गाए।'},
-  {k:'kumbha',obj:()=>new T.Vector3(-11.2,topY+3.2,1.4),en:'Rana Kumbha Mahal',hi:'राणा कुंभा महल',
+  {k:'kumbha',obj:()=>new T.Vector3(-12,topY+3.6,1.4),en:'Rana Kumbha Mahal',hi:'राणा कुंभा महल',
    ien:'The oldest palace in the fort, now in ruins. Here the nurse Panna Dhai gave up her own son to save the infant prince Udai Singh, who later founded Udaipur.',
    ihi:'किले का सबसे पुराना महल, अब खंडहर। यहीं पन्ना धाय ने अपने पुत्र का बलिदान देकर बालक राजकुमार उदय सिंह को बचाया, जिन्होंने आगे चलकर उदयपुर बसाया।'},
   {k:'gaumukh',obj:()=>new T.Vector3(KUNDS.gaumukh[0],topY+.8,KUNDS.gaumukh[1]),en:'Gaumukh Kund',hi:'गौमुख कुंड',
@@ -1839,51 +1985,54 @@ function caption(title,text,step){ cap.hidden=false; cap.querySelector('.f-step'
 LM.forEach(l=>{ const b=document.createElement('button'); b.type='button'; b.className='lm'; b.dataset.k=l.k;
   b.innerHTML='<i></i>'+L2(l.en,l.hi); b.addEventListener('click',e=>{ e.stopPropagation(); visit(l); }); labelLayer.appendChild(b); l.el=b; });
 
-/* ---------- camera, fly-to and the guided tour ---------- */
+/* ---------- camera: smooth arcing flights, a five-stop tour ---------- */
 const cam={theta:.62,elev:.22,radius:58,tx:-1,ty:4.5,tz:0};
 let DEF={...cam};
-let anim=null, hAnim=null, tour=null, autoSpin=!reduce, lastInteract=0, introDone=false;
-const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
-function camTo(to,dur,done){ const from={...cam}, dst=Object.assign({},cam,to);
+let anim=null, fly=null, hAnim=null, tour=null, autoSpin=!reduce, lastInteract=0, introDone=false;
+const curTg=new T.Vector3(cam.tx,cam.ty,cam.tz);
+const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2, easeS=u=>.5-.5*Math.cos(Math.PI*u);
+const sphPos=s=>new T.Vector3(s.tx+s.radius*Math.cos(s.elev)*Math.cos(s.theta), s.ty+s.radius*Math.sin(s.elev), s.tz+s.radius*Math.cos(s.elev)*Math.sin(s.theta));
+function syncCam(){ const d=camera.position.clone().sub(curTg); const r=d.length(); Object.assign(cam,{tx:curTg.x,ty:curTg.y,tz:curTg.z,radius:r,elev:Math.asin(clamp01(d.y/r)),theta:Math.atan2(d.z,d.x)}); }
+function camTo(to,dur,done){ fly=null; const from={...cam}, dst=Object.assign({},cam,to);
   while(dst.theta-from.theta>Math.PI) dst.theta-=Math.PI*2; while(dst.theta-from.theta<-Math.PI) dst.theta+=Math.PI*2;
   anim={from,to:dst,t0:performance.now(),dur:reduce?1:dur,done}; }
+/* fly along a raised curve so the camera never cuts through the hill or a building */
+function flyTo(to,done,minDur){ anim=null; const dst=Object.assign({},cam,to);
+  const p0=camera.position.clone(), p1=sphPos(dst), dist=p0.distanceTo(p1);
+  const c=p0.clone().lerp(p1,.5); c.y=Math.max(p0.y,p1.y)+Math.min(22,4+dist*.22);
+  const dur=reduce?1:Math.max(minDur||0,Math.min(5600,Math.max(2600,dist*75)));
+  fly={p0,p1,c,tg0:curTg.clone(),tg1:new T.Vector3(dst.tx,dst.ty,dst.tz),t0:performance.now(),dur,dst,done}; return dur; }
 function hourTo(h,dur){ hAnim={from:hour,to:h,t0:performance.now(),dur:reduce?1:dur}; }
 const rf=()=>stage.clientWidth<600?1.22:1;
 const lmK=k=>LM.find(l=>l.k===k);
-const VIEW={kumbha:[-2.25,.5,15,1],meera:[-1.3,.3,14,2],vijay:[-1.15,.16,16,4.4],gaumukh:[-1.5,1.0,12,-.6],padmini:[-1.3,.78,15,0],kirti:[-.6,.2,14,3],pols:[1.0,.34,20,1]};
-function viewOf(k){ const l=lmK(k), p=l.obj(), v=VIEW[k]; return {tx:p.x,ty:k==='pols'?p.y-2.6:topY+v[3],tz:p.z,theta:v[0],elev:v[1],radius:v[2]}; }
+const VIEW={kumbha:[-2.3,.42,13,1.2],meera:[-1.3,.3,14,2],vijay:[-1.2,.12,15,4.2],gaumukh:[-1.5,1.0,12,-.6],padmini:[-1.7,.92,13.5,.2],kirti:[-.6,.2,14,3],pols:[.9,.4,19,.8]};
+function viewOf(k){ const l=lmK(k), p=l.obj(), v=VIEW[k]; return {tx:p.x,ty:k==='pols'?p.y-2.8:topY+v[3],tz:p.z,theta:v[0],elev:v[1],radius:v[2]*rf()}; }
 function visit(l){ stopTour(); LM.forEach(x=>x.el.classList.toggle('on',x===l));
-  caption(L2(l.en,l.hi),L2(l.ien,l.ihi)); autoSpin=false;
-  const to=viewOf(l.k); to.radius*=rf(); camTo(to,2000); }
-cap.querySelector('.x').addEventListener('click',()=>{ cap.hidden=true; LM.forEach(x=>x.el.classList.remove('on')); if(tour) stopTour(); camTo(DEF,1600); autoSpin=!reduce; });
-const rp=road[6];
+  caption(L2(l.en,l.hi),L2(l.ien,l.ihi)); autoSpin=false; flyTo(viewOf(l.k)); }
+cap.querySelector('.x').addEventListener('click',()=>{ cap.hidden=true; LM.forEach(x=>x.el.classList.remove('on')); if(tour) stopTour(); flyTo(DEF); autoSpin=!reduce; });
 const TOUR=[
-  {to:{tx:0,ty:3,tz:0,radius:78,elev:.34,theta:.9},h:8.2,t:['Chittorgarh, the great fort of Mewar','चित्तौड़गढ़, मेवाड़ का महान दुर्ग'],x:['One of the largest forts in India: about 700 acres on a hill some 180 metres high, ringed by walls that run for roughly 13 kilometres. A UNESCO World Heritage Site since 2013.','भारत के सबसे बड़े किलों में से एक: लगभग 180 मीटर ऊँची पहाड़ी पर करीब 700 एकड़ में फैला, लगभग 13 किलोमीटर लंबी प्राचीर से घिरा। 2013 से यूनेस्को विश्व धरोहर।']},
-  {to:{tx:-54,ty:1.5,tz:12,radius:24,elev:.24,theta:1.25},h:8.6,t:['The Gambhiri and the old town','गंभीरी नदी और पुराना शहर'],x:['Below the fort, the Gambhiri river is crossed by a medieval bridge of ten stone arches, and the town of Chittorgarh spreads out at the foot of the hill.','किले के नीचे गंभीरी नदी पर दस पत्थर के मेहराबों वाला मध्यकालीन पुल है, और पहाड़ी की तलहटी में चित्तौड़गढ़ शहर बसा है।']},
-  {h:8.8,k:'pols'},
-  {h:9,k:'kumbha'},
-  {h:9.8,k:'meera'},
-  {h:15,k:'vijay'},
-  {h:15.6,k:'gaumukh'},
-  {h:16.6,k:'padmini'},
-  {h:17.6,k:'kirti'},
-  {to:{tx:-1,ty:4.5,tz:0,radius:60,elev:.24,theta:.62},h:20,t:['Chittor by night','रात में चित्तौड़'],x:['As night falls the ramparts are lit, and the fort glows above the plain, just as it has watched over Mewar for more than a thousand years.','रात होते ही प्राचीर रोशन हो उठती है और किला मैदान के ऊपर जगमगाता है, जैसे हज़ार वर्षों से भी अधिक समय से मेवाड़ की रखवाली करता आया है।']}];
+  {h:9.2,k:'pols',t:['Ram Pol and the seven gates','राम पोल और सात द्वार']},
+  {h:10.4,k:'kumbha'},
+  {h:15.4,k:'vijay'},
+  {h:16.9,k:'padmini'},
+  {h:20.6,fin:1,t:['Chittor by night','रात में चित्तौड़'],x:['As night falls the ramparts are lit, and the fort glows above the plain, just as it has watched over Mewar for more than a thousand years.','रात होते ही प्राचीर रोशन हो उठती है और किला मैदान के ऊपर जगमगाता है, जैसे हज़ार वर्षों से भी अधिक समय से मेवाड़ की रखवाली करता आया है।']}];
 const tourBtn=host.querySelector('.f-tour');
 function setTourBtn(on){ tourBtn.classList.toggle('on',on); tourBtn.innerHTML=on?'<span class="ico">■</span>'+L2('Stop the tour','सैर रोकें'):'<span class="ico">▶</span>'+L2('Take the Chittor fort tour','चित्तौड़ किले की सैर करें'); }
-function runStep(i){ if(!tour) return; tour.i=i; const s=TOUR[i]; if(!s){ stopTour(true); camTo(DEF,2000); return; }
-  const l=s.k&&lmK(s.k), r=rf(), to=Object.assign({},s.k?viewOf(s.k):s.to); to.radius*=r;
+function runStep(i){ if(!tour) return; tour.i=i; const s=TOUR[i]; if(!s){ stopTour(true); return; }
+  const l=s.k&&lmK(s.k);
   const title=s.t?L2(s.t[0],s.t[1]):L2(l.en,l.hi), text=s.x?L2(s.x[0],s.x[1]):L2(l.ien,l.ihi);
   caption(title,text,'<span class="e">Chittor fort tour</span><span class="h">किले की सैर</span> · '+(i+1)+' / '+TOUR.length);
-  const dur=i===0?3200:4400; camTo(to,dur); hourTo(s.h,dur);
-  tour.timer=setTimeout(()=>runStep(i+1),dur+(i===TOUR.length-1?6500:5200)); }
-function startTour(){ stopTour(); host.classList.add('touched'); tour={i:0}; autoSpin=false; labelLayer.classList.add('quiet'); setTourBtn(true); runStep(0); }
+  const dur=flyTo(s.k?viewOf(s.k):DEF,null,3200); hourTo(s.h,dur);
+  if(s.fin){ for(let q=0;q<6;q++) setTimeout(()=>{ if(tour) launch(); },dur-400+q*420); }
+  tour.timer=setTimeout(()=>runStep(i+1),dur+(s.fin?7000:6200)); }
+function startTour(){ stopTour(); host.classList.add('touched'); tour={i:0,dir:1}; autoSpin=false; labelLayer.classList.add('quiet'); setTourBtn(true); runStep(0); }
 function stopTour(finished){ if(!tour) return; clearTimeout(tour.timer); tour=null; labelLayer.classList.remove('quiet'); setTourBtn(false); autoSpin=!reduce; lastInteract=performance.now(); if(finished){ cap.hidden=true; } }
-tourBtn.addEventListener('click',()=>tour?(stopTour(),cap.hidden=true,camTo(DEF,1500)):startTour());
+tourBtn.addEventListener('click',()=>{ if(tour){ stopTour(); cap.hidden=true; flyTo(DEF); hourTo(20.5,2500); } else startTour(); });
 host.querySelectorAll('.f-time button').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); if(tour) stopTour(); hourTo(+b.dataset.h,1800); }));
 
 /* drag to turn, pinch or buttons to zoom; vertical swipes still scroll the page */
 const cv=renderer.domElement; const ptrs=new Map(); let pinch0=0, rad0=0;
-const interrupt=()=>{ lastInteract=performance.now(); anim=null; if(tour) stopTour(); host.classList.add('touched'); };
+const interrupt=()=>{ lastInteract=performance.now(); if(fly){ fly=null; syncCam(); } anim=null; if(tour) stopTour(); host.classList.add('touched'); };
 cv.addEventListener('pointerdown',e=>{ ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); cv.setPointerCapture(e.pointerId); interrupt();
   if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinch0=Math.hypot(a.x-b.x,a.y-b.y); rad0=cam.radius; } });
 cv.addEventListener('pointermove',e=>{ const p=ptrs.get(e.pointerId); if(!p) return; const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
@@ -1899,23 +2048,26 @@ host.querySelector('.zoom-out').addEventListener('click',()=>{ interrupt(); camT
 let sizedMobile=false;
 function size(){ const w=stage.clientWidth, h=stage.clientHeight; if(!w||!h) return; renderer.setSize(w,h,false); camera.aspect=w/h;
   camera.fov=w<600?48:34; camera.updateProjectionMatrix();
-  if(w<600&&!sizedMobile){ sizedMobile=true; DEF={theta:.34,elev:.3,radius:60,tx:-2,ty:4,tz:0}; if(!anim&&!tour) Object.assign(cam,DEF); } }
+  if(w<600&&!sizedMobile){ sizedMobile=true; DEF={theta:.34,elev:.3,radius:62,tx:-2,ty:5,tz:0}; if(!anim&&!fly&&!tour) Object.assign(cam,DEF); } }
 new ResizeObserver(size).observe(stage); size();
 function capHome(){ const ph=stage.clientWidth<600; if(ph&&cap.parentNode===stage) host.appendChild(cap); else if(!ph&&cap.parentNode!==stage) stage.appendChild(cap); }
 capHome(); addEventListener('resize',capHome);
 
 /* loop */
-let visible=false, t0=performance.now();
+let visible=false, t0=performance.now(), fwT=1500;
 new IntersectionObserver(es=>{ visible=es[0].isIntersecting;
-  if(visible&&!introDone){ introDone=true; if(!reduce){ Object.assign(cam,{theta:DEF.theta-1.2,elev:.62,radius:DEF.radius*1.9,tx:DEF.tx,ty:DEF.ty,tz:DEF.tz}); applyHour(15.4); camTo(DEF,3800); hourTo(16.8,3800); } } },{threshold:.2}).observe(stage);
+  if(visible&&!introDone){ introDone=true; if(!reduce){ Object.assign(cam,{theta:DEF.theta-1.2,elev:.62,radius:DEF.radius*1.9,tx:DEF.tx,ty:DEF.ty,tz:DEF.tz}); camera.position.copy(sphPos(cam)); curTg.set(cam.tx,cam.ty,cam.tz); camTo(DEF,4200); setTimeout(()=>{ for(let q=0;q<3;q++) setTimeout(launch,q*500); },2600); } } },{threshold:.2}).observe(stage);
 const v=new T.Vector3();
 function frame(now){
   requestAnimationFrame(frame);
   if(!visible) return;
   const dt=Math.min(50,now-t0); t0=now;
   if(anim){ const u=Math.min(1,(now-anim.t0)/anim.dur), e=ease(u); for(const key in anim.to) cam[key]=lerp(anim.from[key],anim.to[key],e); if(u>=1){ const d=anim.done; anim=null; d&&d(); } }
+  if(tour&&!fly&&!anim) cam.theta+=dt*.000035;
   if(hAnim){ const u=Math.min(1,(now-hAnim.t0)/hAnim.dur); applyHour(lerp(hAnim.from,hAnim.to,ease(u))); if(u>=1) hAnim=null; }
-  if(autoSpin&&!anim&&!tour&&ptrs.size===0&&now-lastInteract>3500&&cap.hidden){ cam.theta+=dt*.00005; }
+  if(autoSpin&&!anim&&!fly&&!tour&&ptrs.size===0&&now-lastInteract>3500&&cap.hidden){ cam.theta+=dt*.00005; }
+  if(!reduce&&hour>=19.6&&!(tour&&!TOUR[tour.i].fin)){ fwT-=dt; if(fwT<=0){ launch(); fwT=(PH?1500:1000)+rnd()*1400; } }
+  if(fw.length||rockets.length||flash.intensity>.02) stepFireworks(dt/16.67);
   if(!reduce){
     tS+=dt*.0009;
     birds.forEach(b=>{ b.a+=b.sp*dt; const x=Math.cos(b.a)*b.r+2, z=Math.sin(b.a)*b.r; b.g.position.set(x,b.h+Math.sin(b.a*2+b.ph)*1.4,z);
@@ -1925,9 +2077,13 @@ function frame(now){
   }
   placeTroop(now);
   if(lampI.visible) mLamp.color.setHSL(.1,1,.6+Math.sin(now*.006)*.05);
-  camera.position.set(cam.tx+cam.radius*Math.cos(cam.elev)*Math.cos(cam.theta), cam.ty+cam.radius*Math.sin(cam.elev), cam.tz+cam.radius*Math.cos(cam.elev)*Math.sin(cam.theta));
-  const gy=H(camera.position.x,camera.position.z)+1.2; if(camera.position.y<gy) camera.position.y=gy;
-  camera.lookAt(cam.tx,cam.ty,cam.tz);
+  if(fly){ const u=Math.min(1,(now-fly.t0)/fly.dur), e=easeS(u), q=1-e;
+    camera.position.set(q*q*fly.p0.x+2*q*e*fly.c.x+e*e*fly.p1.x, q*q*fly.p0.y+2*q*e*fly.c.y+e*e*fly.p1.y, q*q*fly.p0.z+2*q*e*fly.c.z+e*e*fly.p1.z);
+    curTg.copy(fly.tg0).lerp(fly.tg1,ease(Math.min(1,u*1.12)));
+    if(u>=1){ Object.assign(cam,fly.dst); const d=fly.done; fly=null; d&&d(); } }
+  else { camera.position.copy(sphPos(cam)); curTg.set(cam.tx,cam.ty,cam.tz); }
+  const gy=H(camera.position.x,camera.position.z)+1.4; if(camera.position.y<gy) camera.position.y=gy;
+  camera.lookAt(curTg);
   renderer.render(scene,camera);
   const w=stage.clientWidth, h=stage.clientHeight;
   const items=LM.map(l=>{ v.copy(l.obj()).project(camera); const bw=l.el.offsetWidth, bh=24;
@@ -1941,7 +2097,7 @@ function frame(now){
     stem=Math.min(stem,140); placed.push({l:it.x-it.bw/2-4,r:it.x+it.bw/2+4,t:it.y-stem-it.bh,b:it.y-stem});
     el.style.setProperty('--stem',stem+'px'); el.style.transform='translate('+it.x+'px,'+it.y+'px) translate(-50%,-100%)'; el.style.opacity=''; el.style.pointerEvents=''; });
 }
-applyHour(16.8); setTourBtn(false);
+applyHour(20.5); setTourBtn(false);
 requestAnimationFrame(frame);
 host.classList.add('ready');
 })();

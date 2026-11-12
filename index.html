@@ -885,6 +885,15 @@ body.lang-hi .sw-k{font-size:15px;letter-spacing:.01em;text-transform:none}
 @keyframes mping{0%{transform:scale(.85);opacity:.9}100%{transform:scale(1.35);opacity:0}}
 .tgl{display:flex;align-items:center;gap:8px}
 @media (prefers-reduced-motion:reduce){#musicBtn .m-bars i,#musicBtn::after{animation:none!important}}
+
+/* time of day chips inside the fort scene */
+.f-time{position:absolute;right:14px;top:14px;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(36,6,18,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,184,28,.5);z-index:3}
+.f-time button{border:0;background:transparent;color:#fff4e0;font-family:var(--f-label);font-weight:600;font-size:13px;padding:6px 11px;border-radius:999px;cursor:pointer}
+.f-time button .h{font-family:var(--f-hindi);font-size:14px}
+.f-time button[aria-pressed=true]{background:var(--genda);color:var(--raat)}
+.fort3d .f-tour.on~.f-time{display:none}
+@media (min-width:601px){.fort3d .f-tour.on{top:62px}}
+@media (max-width:600px){.f-time{right:8px;top:8px}.f-time button{padding:5px 8px;font-size:12px}.f-clock{max-width:46%}}
 /* petals canvas for sections */
 #petals{position:fixed;inset:0;pointer-events:none;z-index:70;width:100%;height:100%}
 .reveal{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -1228,12 +1237,13 @@ body.lang-hi .sw-k{font-size:15px;letter-spacing:.01em;text-transform:none}
       <div class="label"><span class="e">Chittor ka Kila</span><span class="h">चित्तौड़ का किला</span></div>
       <h2 class="shine"><span class="e">Where Padmini's story lives</span><span class="h">जहाँ पद्मिनी की गाथा बसती है</span></h2>
       <svg class="orn" viewBox="0 0 180 30" aria-hidden="true"><path d="M0 15h60M120 15h60" stroke="#e0b03a"/><g stroke="#e0b03a" stroke-width="2.2" stroke-linecap="round"><path d="M70 3 L110 27"/><path d="M110 3 L70 27"/></g><g stroke="#e0b03a" stroke-width="4" stroke-linecap="round"><path d="M106 24.6 L110 27"/><path d="M74 24.6 L70 27"/></g><circle cx="90" cy="15" r="9.5" fill="#b3121f" stroke="#e0b03a" stroke-width="2"/><circle cx="90" cy="15" r="2.2" fill="#ffb81c"/><g fill="#ffb81c"><circle cx="85.3" cy="10.3" r="1.3"/><circle cx="94.7" cy="10.3" r="1.3"/><circle cx="85.3" cy="19.7" r="1.3"/><circle cx="94.7" cy="19.7" r="1.3"/></g></svg>
-      <p class="sub"><span class="e">Chittor is where our story is celebrated. Tap the button for a guided tour of the fort, from the seven pols to the Varmala fireworks.</span><span class="h">हमारे उत्सव का साक्षी है चित्तौड़। बटन दबाइए और किले की सैर कीजिए — सात पोलों से वरमाला की आतिशबाज़ी तक।</span></p>
+      <p class="sub"><span class="e">While you are in Chittorgarh, don't miss the fort. Take a virtual tour of its gates, towers, palaces and water tanks, by day or by night.</span><span class="h">चित्तौड़गढ़ आएँ तो किला ज़रूर देखें। यहाँ इसकी आभासी सैर कीजिए — द्वार, स्तंभ, महल और कुंड, दिन में या रात में।</span></p>
     </div>
     <div class="fort3d" id="fort3d">
       <div class="stage">
         <div class="labels"></div>
         <div class="f-clock" aria-live="polite"></div>
+        <div class="f-time" role="group" aria-label="Time of day"><button type="button" data-h="9.5"><span class="e">Day</span><span class="h">दिन</span></button><button type="button" data-h="17.6"><span class="e">Sunset</span><span class="h">शाम</span></button><button type="button" data-h="20.5"><span class="e">Night</span><span class="h">रात</span></button></div>
         <div class="f-hint"><span class="e">Drag sideways to turn · pinch to zoom</span><span class="h">घुमाने के लिए खींचें · ज़ूम के लिए पिंच करें</span></div>
         <div class="zoom"><button type="button" class="zoom-in" aria-label="Zoom in">+</button><button type="button" class="zoom-out" aria-label="Zoom out">−</button></div>
         <button type="button" class="f-tour"></button>
@@ -1460,7 +1470,6 @@ if(reduce){ document.querySelectorAll('animateMotion').forEach(a=>a.remove()); }
 const host=document.getElementById('fort3d'); if(!host) return;
 const stage=host.querySelector('.stage');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isHi=()=>document.body.classList.contains('lang-hi');
 if(!window.THREE){ host.classList.add('nogl'); return; }
 let renderer;
 try{ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'}); }catch(e){ host.classList.add('nogl'); return; }
@@ -1473,365 +1482,356 @@ renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
 stage.insertBefore(renderer.domElement,stage.firstChild);
 
 const scene=new T.Scene();
-const camera=new T.PerspectiveCamera(36,1,0.5,600);
-const target=new T.Vector3(0,6.5,0);
+const camera=new T.PerspectiveCamera(36,1,0.5,700);
+const target=new T.Vector3(0,4.5,0);
 
-/* sky */
+/* ---------- sky, sun, stars, light ---------- */
 const skyU={}; for(let j=0;j<6;j++) skyU['c'+j]={value:new T.Color()};
 const skyMat=new T.ShaderMaterial({side:T.BackSide,depthWrite:false,fog:false,uniforms:skyU,
   vertexShader:'varying vec3 vP; void main(){ vP=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
   fragmentShader:'uniform vec3 c0,c1,c2,c3,c4,c5; varying vec3 vP; void main(){ float t=0.5-asin(clamp(vP.y,-1.0,1.0))/3.14159265; vec3 c; if(t<0.28) c=mix(c0,c1,t/0.28); else if(t<0.4) c=mix(c1,c2,(t-0.28)/0.12); else if(t<0.47) c=mix(c2,c3,(t-0.4)/0.07); else if(t<0.5) c=mix(c3,c4,(t-0.47)/0.03); else c=mix(c4,c5,clamp((t-0.5)/0.1,0.0,1.0)); gl_FragColor=vec4(c,1.0); }'});
-const sky=new T.Mesh(new T.SphereGeometry(300,32,24),skyMat); scene.add(sky); scene.fog=new T.Fog(0xb4603e,95,280);
+scene.add(new T.Mesh(new T.SphereGeometry(330,32,24),skyMat)); scene.fog=new T.Fog(0xb4603e,95,280);
 const orbMat=new T.MeshBasicMaterial({color:0xffd45a,fog:false});
 const orb=new T.Mesh(new T.SphereGeometry(9,24,16),orbMat); scene.add(orb);
 const glowC=document.createElement('canvas'); glowC.width=glowC.height=128; { const g=glowC.getContext('2d'); const r=g.createRadialGradient(64,64,0,64,64,64); r.addColorStop(0,'rgba(255,220,140,.9)'); r.addColorStop(1,'rgba(255,220,140,0)'); g.fillStyle=r; g.fillRect(0,0,128,128); }
 const glow=new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(glowC),transparent:true,depthWrite:false,fog:false,blending:T.AdditiveBlending}));
 glow.scale.set(70,70,1); scene.add(glow);
-
-/* stars */
 const starGeo=new T.BufferGeometry(); const sp=[];
-for(let i=0;i<700;i++){ const th=Math.random()*Math.PI*2, ph=Math.random()*1.2; sp.push(Math.cos(th)*Math.cos(ph)*280, Math.sin(ph)*280+10, Math.sin(th)*Math.cos(ph)*280); }
+for(let i=0;i<800;i++){ const th=Math.random()*Math.PI*2, ph=Math.random()*1.2; sp.push(Math.cos(th)*Math.cos(ph)*300, Math.sin(ph)*300+10, Math.sin(th)*Math.cos(ph)*300); }
 starGeo.setAttribute('position',new T.Float32BufferAttribute(sp,3));
 const stars=new T.Points(starGeo,new T.PointsMaterial({color:0xfff2d0,size:1.1,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false}));
 scene.add(stars);
-
-/* lights */
 const hemi=new T.HemisphereLight(0xffffff,0x443322,0.6); scene.add(hemi);
 const sun=new T.DirectionalLight(0xffffff,1.4);
 sun.castShadow=true; sun.shadow.mapSize.set(PH?1024:2048,PH?1024:2048);
-Object.assign(sun.shadow.camera,{left:-34,right:34,top:22,bottom:-22,near:1,far:200}); sun.shadow.bias=-0.0006;
+Object.assign(sun.shadow.camera,{left:-46,right:46,top:30,bottom:-30,near:1,far:220}); sun.shadow.bias=-0.0007; sun.shadow.normalBias=.02;
 scene.add(sun); scene.add(sun.target);
-const warm=new T.PointLight(0xffa040,0,28,2);  scene.add(warm);
+const warm=new T.PointLight(0xffa040,0,40,2); scene.add(warm);
 
-/* materials */
-const M=(c,o={})=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.92,metalness:0,flatShading:true},o));
-const mGround=M(0x7a5a34), mRock=M(0xffffff,{vertexColors:true}), mRock2=M(0x86603a), mWall=M(0xd6a36c), mWallDark=M(0xb48351),
-      mStone=M(0xe6b880), mMarble=M(0xf4ead8,{roughness:.6}), mRoof=M(0xb8432c), mGold=M(0xe0b03a,{metalness:.5,roughness:.4}),
-      mGreen=M(0x5d7a3a), mGreen2=M(0x4a6630), mWood=M(0x5a3018), mRoad=M(0xc9a06a),
-      mWater=new T.MeshStandardMaterial({color:0x2f6f8f,roughness:.15,metalness:.6});
-const mDiya=new T.MeshBasicMaterial({color:0xffc35a}), mWin=new T.MeshBasicMaterial({color:0xffcf7a}), mFlag=new T.MeshBasicMaterial({color:0xff8a1f,side:T.DoubleSide});
-const add=(geo,mat,x,y,z,parent)=>{ const m=new T.Mesh(geo,mat); m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; (parent||scene).add(m); return m; };
-const winG=new T.Group(); scene.add(winG);
-const win=(x,y,z,w,h,d)=>{ const m=new T.Mesh(new T.BoxGeometry(w,h,d),mWin); m.position.set(x,y,z); winG.add(m); };
+/* ---------- helpers ---------- */
+const lerp=(a,b,t)=>a+(b-a)*t, clamp01=x=>Math.max(0,Math.min(1,x)), smooth=x=>{x=clamp01(x);return x*x*(3-2*x);}, sstep=(a,b,x)=>smooth((x-a)/(b-a));
+let seed=7; const rnd=()=>{ seed=(seed*16807)%2147483647; return (seed-1)/2147483646; };
+function hash(ix,iz){ let h=ix*374761393+iz*668265263; h=(h^(h>>>13))*1274126177; return ((h^(h>>>16))>>>0)/4294967295; }
+function vnoise(x,z){ const ix=Math.floor(x), iz=Math.floor(z), fx=x-ix, fz=z-iz, u=fx*fx*(3-2*fx), v=fz*fz*(3-2*fz);
+  return lerp(lerp(hash(ix,iz),hash(ix+1,iz),u),lerp(hash(ix,iz+1),hash(ix+1,iz+1),u),v); }
+const fbm=(x,z)=>vnoise(x,z)*.55+vnoise(x*2.1,z*2.1)*.3+vnoise(x*4.3,z*4.3)*.15;
+const M=(c,o={})=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.93,metalness:0,flatShading:true},o));
+const mWall=M(0xa8916c), mWallDark=M(0x8a785c), mStone=M(0xbca27a), mRuin=M(0x9a8b74), mMarble=M(0xe6ddcc,{roughness:.6}),
+      mYellow=M(0xd8b56e), mRoof=M(0xa8553a), mGold=M(0xd8ad4a,{metalness:.4,roughness:.5}), mWood=M(0x5a3a22), mRoad=M(0xb79c74),
+      mStambh=M(0xb98d58), mKirti=M(0xcfc0a0), mStep=M(0x8f7f66), mDark=M(0x3a2a1c);
+const mWater=new T.MeshStandardMaterial({color:0x2c5d6e,roughness:.12,metalness:.55});
+const mLamp=new T.MeshBasicMaterial({color:0xffc35a}), mWin=new T.MeshBasicMaterial({color:0x4a2414}), mFlag=new T.MeshBasicMaterial({color:0xf2801f,side:T.DoubleSide});
+const glowMats=[mWall,mWallDark,mStone,mStambh,mKirti,mYellow,mMarble];
+const add=(geo,mat,x,y,z,parent,shadow=true)=>{ const m=new T.Mesh(geo,mat); m.position.set(x,y,z); m.castShadow=shadow; m.receiveShadow=true; (parent||scene).add(m); return m; };
+const box=(w,h,d)=>new T.BoxGeometry(w,h,d);
 const flagShape=new T.Shape(); flagShape.moveTo(0,0); flagShape.lineTo(1,-.26); flagShape.lineTo(.72,-.36); flagShape.lineTo(1,-.5); flagShape.lineTo(0,-.72);
 const flagGeo=new T.ShapeGeometry(flagShape); const flags=[];
 function flag(x,y,z,s,parent){ const g=new T.Group(); g.position.set(x,y,z);
-  add(new T.CylinderGeometry(.03*s,.03*s,1.5*s,5),mWood,0,.75*s,0,g).castShadow=false;
-  const m=new T.Mesh(flagGeo,mFlag); m.scale.setScalar(.95*s); m.position.set(0,1.5*s,0); g.add(m); flags.push(m); (parent||scene).add(g); return g; }
-
-/* ground */
-const ground=new T.Mesh(new T.CircleGeometry(260,64),mGround); ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
-for(let i=0;i<90;i++){ const r=32+Math.random()*120, a=Math.random()*Math.PI*2; const s=1+Math.random()*2.2;
-  const t=add(new T.ConeGeometry(s*.7,s*1.6,6),Math.random()<.5?mGreen:mGreen2,Math.cos(a)*r,s*.8,Math.sin(a)*r); t.castShadow=false; }
-for(let i=0;i<14;i++){ const r=70+Math.random()*90, a=Math.random()*Math.PI*2; const h=3+Math.random()*7;
-  const hill=add(new T.ConeGeometry(10+Math.random()*12,h,7),mRock2,Math.cos(a)*r,h/2-.3,Math.sin(a)*r); hill.castShadow=false; }
-
-/* the hill: Chittor's long fish-shaped plateau, with rough coloured slopes and a talus skirt */
-const A=22, B=6.2;
-const P=t=>[A*Math.cos(t), B*Math.sin(t)*(1-.22*Math.cos(t))+0.8*Math.sin(3*t)*.3];
-const NP=96;
-function outline(k){ const sh=new T.Shape(); for(let i=0;i<=NP;i++){ const [x,y]=P(i/NP*Math.PI*2); i?sh.lineTo(x*k,y*k):sh.moveTo(x*k,y*k); } return sh; }
-const mesaGeo=new T.ExtrudeGeometry(outline(1),{depth:3.4,bevelEnabled:true,bevelThickness:1.3,bevelSize:3.2,bevelSegments:3,curveSegments:48});
-mesaGeo.rotateX(-Math.PI/2);
-{ const pos=mesaGeo.attributes.position, col=new Float32Array(pos.count*3), c=new T.Color(), lo=new T.Color(0x6b4526), mid=new T.Color(0xa9743f), hi=new T.Color(0xcfa064), cap=new T.Color(0xb7a05a);
-  let ymin=1e9,ymax=-1e9; for(let i=0;i<pos.count;i++){ const y=pos.getY(i); ymin=Math.min(ymin,y); ymax=Math.max(ymax,y); }
-  for(let i=0;i<pos.count;i++){ const x=pos.getX(i), y=pos.getY(i), z=pos.getZ(i), t=(y-ymin)/(ymax-ymin);
-    const n=Math.sin(x*1.7+z*2.3+y*1.9)*Math.cos(z*1.3-x*.7+y*.8);
-    if(t<.97){ const k=1+n*.035*(1-t*.6); pos.setX(i,x*k); pos.setZ(i,z*k); pos.setY(i,y+n*.12); }
-    if(t>=.97) c.copy(cap); else if(t<.5) c.copy(lo).lerp(mid,t*2); else c.copy(mid).lerp(hi,(t-.5)*2);
-    c.offsetHSL(0,0,n*.035); col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b; }
-  mesaGeo.setAttribute('color',new T.BufferAttribute(col,3)); mesaGeo.computeVertexNormals(); }
-const mesa=add(mesaGeo,mRock,0,1.3,0);
-const topY=mesa.position.y+3.4+1.3;
-const skirtGeo=new T.ExtrudeGeometry(outline(1.1),{depth:.9,bevelEnabled:true,bevelThickness:1.6,bevelSize:6,bevelSegments:2,curveSegments:40}); skirtGeo.rotateX(-Math.PI/2);
-add(skirtGeo,M(0x7f6a3c),0,.2,0).castShadow=false;
-warm.position.set(4,topY+6,0);
-
-/* rampart with kangura and round burj */
-const NW=120, wallH=1.25; const pts=[];
-for(let i=0;i<NW;i++){ const [x,y]=P(i/NW*Math.PI*2); pts.push(new T.Vector3(x*.985,topY,-y*.985)); }
-const wallI=new T.InstancedMesh(new T.BoxGeometry(1,1,1),mWall,NW);
-const merI=new T.InstancedMesh(new T.BoxGeometry(.26,.34,.5),mWallDark,NW*3);
-const diyaI=new T.InstancedMesh(new T.SphereGeometry(.13,6,4),mDiya,NW);
-const dummy=new T.Object3D();
-for(let i=0;i<NW;i++){ const a=pts[i], b=pts[(i+1)%NW]; const d=a.distanceTo(b); const mid=a.clone().add(b).multiplyScalar(.5);
-  const ang=-Math.atan2(b.z-a.z,b.x-a.x);
-  dummy.position.set(mid.x,topY+wallH/2,mid.z); dummy.rotation.set(0,ang,0); dummy.scale.set(d+.06,wallH,.46); dummy.updateMatrix(); wallI.setMatrixAt(i,dummy.matrix);
-  for(let k=0;k<3;k++){ const f=(k+.5)/3; dummy.position.set(a.x+(b.x-a.x)*f,topY+wallH+.17,a.z+(b.z-a.z)*f); dummy.scale.set(1,1,1); dummy.updateMatrix(); merI.setMatrixAt(i*3+k,dummy.matrix); }
-  dummy.position.set(mid.x,topY+wallH+.42,mid.z); dummy.rotation.set(0,0,0); dummy.updateMatrix(); diyaI.setMatrixAt(i,dummy.matrix);
-}
-[wallI,merI].forEach(m=>{ m.castShadow=true; m.receiveShadow=true; scene.add(m); });
-scene.add(diyaI);
-const burjN=Math.floor(NW/6), burjMer=new T.InstancedMesh(new T.BoxGeometry(.24,.32,.24),mWallDark,burjN*8); let bm=0;
-for(let i=0;i<NW;i+=6){ const p=pts[i];
-  add(new T.CylinderGeometry(.95,1.15,wallH+1.1,12),mWall,p.x,topY+(wallH+1.1)/2-.4,p.z);
-  add(new T.CylinderGeometry(1.08,1.02,.22,12),mWallDark,p.x,topY+wallH+.26,p.z);
-  for(let k=0;k<8;k++){ const a=k/8*Math.PI*2; dummy.position.set(p.x+Math.cos(a)*.98,topY+wallH+.53,p.z+Math.sin(a)*.98); dummy.rotation.set(0,-a,0); dummy.scale.set(1,1,1); dummy.updateMatrix(); if(bm<burjN*8) burjMer.setMatrixAt(bm++,dummy.matrix); }
-  if((i/6)%4===0) flag(p.x,topY+wallH+.3,p.z,1.1);
-}
-burjMer.count=bm; burjMer.castShadow=true; scene.add(burjMer);
-
-/* building blocks: flat or pyramid roofs only */
+  add(new T.CylinderGeometry(.03*s,.03*s,1.5*s,5),mWood,0,.75*s,0,g,false);
+  const m=new T.Mesh(flagGeo,mFlag); m.scale.setScalar(.9*s); m.position.set(0,1.5*s,0); g.add(m); flags.push(m); (parent||scene).add(g); return g; }
 function pyramid(w,h,mat){ const g=new T.ConeGeometry(w*.72,h,4); g.rotateY(Math.PI/4); return new T.Mesh(g,mat||mRoof); }
-function chhatri(x,z,s,base,parent){ base=base===undefined?topY:base; const g=new T.Group(); g.position.set(x,base,z);
-  const pw=.12*s, ph=.9*s, r=.5*s;
-  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b])=>add(new T.BoxGeometry(pw,ph,pw),mStone,a*r*.7,ph/2,b*r*.7,g));
-  add(new T.BoxGeometry(r*2,.1*s,r*2),mStone,0,ph+.05*s,0,g);
-  const p=pyramid(r*2,.55*s); p.position.set(0,ph+.1*s+.27*s,0); p.castShadow=true; g.add(p);
-  add(new T.SphereGeometry(.06*s,6,4),mGold,0,ph+.1*s+.6*s,0,g);
-  (parent||scene).add(g); return g; }
-function shikhara(x,z,s,mat){ const g=new T.Group(); g.position.set(x,topY,z);
-  add(new T.BoxGeometry(1.7*s,.8*s,1.7*s),mat||mStone,0,.4*s,0,g);
-  const prof=[[0,0],[.85,0],[.84,.5],[.76,1.1],[.6,1.8],[.4,2.4],[.22,2.85],[.1,3.05],[0,3.08]].map(p=>new T.Vector2(p[0]*s,p[1]*s));
-  add(new T.LatheGeometry(prof,8),mat||mStone,0,.8*s,0,g);
-  add(new T.CylinderGeometry(.2*s,.2*s,.1*s,8),mGold,0,.8*s+3.1*s,0,g);
-  add(new T.BoxGeometry(1.3*s,.7*s,1.3*s),mat||mStone,-1.45*s,.35*s,0,g);
-  const p=pyramid(1.5*s,.6*s,mat||mStone); p.position.set(-1.45*s,1.0*s,0); p.castShadow=true; g.add(p);
-  flag(0,.8*s+3.15*s,0,.8*s,g);
+
+/* ---------- the hill and the land around it ---------- */
+const A=22, B=6.2, topY=6;
+const wOf=x=>B*(1-.22*x/A);
+const dOf=(x,z)=>Math.sqrt((x/A)*(x/A)+(z/wOf(x))*(z/wOf(x)));
+const P=t=>[A*Math.cos(t), B*Math.sin(t)*(1-.22*Math.cos(t))];
+const riverX=z=>-60+5*Math.sin(z*.045)+2*Math.sin(z*.11);
+/* stepped water tanks cut into the plateau: [x,z,w,d] */
+const KUNDS={gaumukh:[3.6,-3.4,3.0,1.8],ratan:[6.2,3.4,3.6,1.9],bhimlat:[16.2,-.6,2.2,1.6],suraj:[-5.2,3.6,2.2,1.4],padmini:[9.6,-2.3,5.6,3.8]};
+/* the fort road zig-zags up the gentler north-west slope */
+const roadXZ=[[-66,15.5],[-54,15.5],[-46,14],[-38,12.8],[-31,14.6],[-26.5,11],[-29.5,8.6],[-24,7.2],[-21.4,8.6],[-19.6,6.2],[-18.7,3.6]];
+function baseH(x,z){
+  const d=dOf(x,z), g=sstep(-12,-20,x)*sstep(-.5,2.5,z);
+  let h;
+  if(d<=1.0) h=topY-.04+(fbm(x*.5,z*.5)-.5)*.12;
+  else { const f1=1-sstep(1.0,1.09+.95*g,d), t=1-sstep(1.0,1.8+.7*g,d);
+    h=topY*((.62-.3*g)*f1+(.38+.3*g)*Math.pow(t,1.4));
+    const band=sstep(1.0,1.15,d)*(1-sstep(1.5,2.0,d)); h+=(fbm(x*.35,z*.35)-.5)*1.6*band; }
+  const r=Math.hypot(x,z);
+  h+=((fbm(x*.04+3,z*.04)-.5)*.9+.45)*sstep(1.3,2.4,d);
+  h+=Math.max(0,fbm(x*.018+11,z*.018-4)-.35)*26*sstep(85,135,r);   /* Aravalli ridges on the horizon */
+  const rv=Math.abs(x-riverX(z)); h-=1.25*(1-sstep(2.2,4.6,rv));       /* Gambhiri river bed */
+  for(const k in KUNDS){ const [kx,kz,kw,kd]=KUNDS[k]; if(Math.abs(x-kx)<kw/2+.2&&Math.abs(z-kz)<kd/2+.2) h=Math.min(h,topY-1.0); }
+  return h; }
+const road=roadXZ.map(([x,z])=>new T.Vector3(x,0,z)); road.forEach(p=>p.y=baseH(p.x,p.z)+.05);
+road[road.length-1].y=topY+.02; road[road.length-2].y=Math.max(road[road.length-2].y,topY-1.6);
+function roadInfo(x,z){ let best=1e9, by=0;
+  for(let i=0;i<road.length-1;i++){ const a=road[i], b=road[i+1], vx=b.x-a.x, vz=b.z-a.z, L=vx*vx+vz*vz; let t=((x-a.x)*vx+(z-a.z)*vz)/L; t=clamp01(t);
+    const px=a.x+vx*t, pz=a.z+vz*t, dd=Math.hypot(x-px,z-pz); if(dd<best){ best=dd; by=lerp(a.y,b.y,t); } }
+  return [best,by]; }
+function H(x,z){ let h=baseH(x,z); if(x<-14&&x>-70&&z>0&&z<20){ const [dd,ry]=roadInfo(x,z); if(dd<2.4) h=lerp(h,ry-.08,1-sstep(.9,2.4,dd)); } return h; }
+
+const SEG=PH?190:280, SIZE=300;
+const tGeo=new T.PlaneGeometry(SIZE,SIZE,SEG,SEG); tGeo.rotateX(-Math.PI/2);
+{ const pos=tGeo.attributes.position; for(let i=0;i<pos.count;i++) pos.setY(i,H(pos.getX(i),pos.getZ(i))); }
+tGeo.computeVertexNormals();
+{ const pos=tGeo.attributes.position, nor=tGeo.attributes.normal, col=new Float32Array(pos.count*3), c=new T.Color(), c2=new T.Color();
+  const FIELD=[0xc9b23a,0x7d9a3c,0xb59c68,0x5f7f35,0xd4bf52,0x8aa04a].map(h=>new T.Color(h));
+  const ROCK=new T.Color(0x6e5c49), ROCK2=new T.Color(0x8b7760), TOP=new T.Color(0x9b8d5c), TOP2=new T.Color(0x7d7a48), SCRUB=new T.Color(0x6d6f3a), DUST=new T.Color(0xb59c74), BANK=new T.Color(0x5b7a3a), HILL=new T.Color(0x7c6a4e);
+  for(let i=0;i<pos.count;i++){ const x=pos.getX(i), y=pos.getY(i), z=pos.getZ(i), ny=nor.getY(i), d=dOf(x,z), r=Math.hypot(x,z), n=fbm(x*.3,z*.3);
+    if(d<1.0){ c.copy(TOP).lerp(TOP2,n); if(y<topY-.5) c.copy(mStep.color); }
+    else if(d<2.2){ c.copy(SCRUB).lerp(DUST,n*.6); if(ny<.8) c.copy(ROCK2).lerp(ROCK,clamp01((.8-ny)*2.2)+n*.2); }
+    else { const fx=Math.floor((x+z*.25)/7.5), fz=Math.floor((z-x*.25)/5.5); c.copy(FIELD[Math.floor(hash(fx,fz)*FIELD.length)]); c.lerp(DUST,(n-.3)*.5);
+      const town=(x<-26&&x>-58&&z>-24&&z<30); if(town) c.lerp(DUST,.75);
+      if(r>110) c.lerp(HILL,sstep(110,160,r)); }
+    const rv=Math.abs(x-riverX(z)); if(rv<6) c.lerp(BANK,1-sstep(2,6,rv));
+    const [rd]=x<-14&&x>-70&&z>0&&z<20?roadInfo(x,z):[9]; if(rd<1.1) c.copy(mRoad.color);
+    c.offsetHSL(0,0,(hash(Math.floor(x*3),Math.floor(z*3))-.5)*.04);
+    col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b; }
+  tGeo.setAttribute('color',new T.BufferAttribute(col,3)); }
+const terrain=new T.Mesh(tGeo,new T.MeshStandardMaterial({vertexColors:true,roughness:.97,metalness:0,flatShading:true}));
+terrain.receiveShadow=true; scene.add(terrain);
+const far=new T.Mesh(new T.CircleGeometry(420,48),M(0x7c6a4e)); far.rotation.x=-Math.PI/2; far.position.y=-1.4; scene.add(far);
+const water=new T.Mesh(new T.PlaneGeometry(SIZE,SIZE),mWater); water.rotation.x=-Math.PI/2; water.position.y=-.32; water.receiveShadow=true; scene.add(water);
+warm.position.set(2,topY+7,0);
+
+/* ---------- ramparts: kangura battlements and round bastions ---------- */
+const NW=150, wallH=1.15; const pts=[];
+for(let i=0;i<NW;i++){ const [x,y]=P(i/NW*Math.PI*2); pts.push(new T.Vector3(x*.99,topY,-y*.99)); }
+const gateI=pts.reduce((bi,p,i)=>p.distanceTo(new T.Vector3(-18.7,topY,3.6))<pts[bi].distanceTo(new T.Vector3(-18.7,topY,3.6))?i:bi,0);
+const wallI=new T.InstancedMesh(box(1,1,1),mWall,NW), merI=new T.InstancedMesh(box(.24,.3,.46),mWallDark,NW*3), lampI=new T.InstancedMesh(new T.SphereGeometry(.12,6,4),mLamp,NW);
+const dm=new T.Object3D(); let wc=0, mc=0;
+for(let i=0;i<NW;i++){ if(i===gateI) continue; const a=pts[i], b=pts[(i+1)%NW]; const d=a.distanceTo(b); const ang=-Math.atan2(b.z-a.z,b.x-a.x);
+  const gy=Math.min(H(a.x,a.z),H(b.x,b.z));
+  dm.position.set((a.x+b.x)/2,(gy+topY+wallH)/2-.4,(a.z+b.z)/2); dm.rotation.set(0,ang,0); dm.scale.set(d+.06,topY+wallH-gy+.4,.5); dm.updateMatrix(); wallI.setMatrixAt(wc++,dm.matrix);
+  for(let k=0;k<3;k++){ const f=(k+.5)/3; dm.position.set(a.x+(b.x-a.x)*f,topY+wallH+.15,a.z+(b.z-a.z)*f); dm.scale.set(1,1,1); dm.updateMatrix(); merI.setMatrixAt(mc++,dm.matrix); }
+  dm.position.set((a.x+b.x)/2,topY+wallH+.36,(a.z+b.z)/2); dm.rotation.set(0,0,0); dm.updateMatrix(); lampI.setMatrixAt(i,dm.matrix); }
+dm.position.set(0,-60,0); dm.updateMatrix(); lampI.setMatrixAt(gateI,dm.matrix);
+wallI.count=wc; merI.count=mc;
+[wallI,merI].forEach(m=>{ m.castShadow=true; m.receiveShadow=true; scene.add(m); }); scene.add(lampI);
+for(let i=3;i<NW;i+=7){ if(Math.abs(i-gateI)<3) continue; const p=pts[i], gy=H(p.x,p.z), hh=topY+wallH+.5-gy;
+  add(new T.CylinderGeometry(.95,1.25,hh+.6,10),mWall,p.x,gy+hh/2-.3,p.z);
+  add(new T.CylinderGeometry(1.08,1.02,.2,10),mWallDark,p.x,topY+wallH+.3,p.z);
+  for(let k=0;k<8;k++){ const a=k/8*Math.PI*2; const m=add(box(.22,.3,.22),mWallDark,p.x+Math.cos(a)*.98,topY+wallH+.55,p.z+Math.sin(a)*.98,null,false); }
+  if(i%21===3) flag(p.x,topY+wallH+.4,p.z,1.0); }
+
+/* ---------- building kit (flat roofs, chhatris with pyramid caps; no domes) ---------- */
+function chhatri(x,y,z,s,parent,mat){ const g=new T.Group(); g.position.set(x,y,z); const ph=.8*s, r=.42*s;
+  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b])=>add(box(.1*s,ph,.1*s),mat||mStone,a*r*.75,ph/2,b*r*.75,g,false));
+  add(box(r*2.2,.08*s,r*2.2),mat||mStone,0,ph+.04*s,0,g,false);
+  const p=pyramid(r*2.1,.5*s,mat||mStone); p.position.set(0,ph+.32*s,0); g.add(p);
+  add(new T.SphereGeometry(.05*s,6,4),mGold,0,ph+.6*s,0,g,false); (parent||scene).add(g); return g; }
+function windows(g,bx,by,bz,w,h,d,rows){ const n=Math.max(2,Math.round(w/.5));
+  for(let r=0;r<rows;r++) for(let k=0;k<n;k++){ const wx=bx-w/2+w*(k+.5)/n, wy=by+.45+r*(h-.3)/rows;
+    [d/2+.01,-d/2-.01].forEach(dz=>{ const m=new T.Mesh(box(.14,.26,.03),mWin); m.position.set(wx,wy,bz+dz); g.add(m); }); } }
+function palace(x,z,rot,blocks,mat){ const g=new T.Group(); g.position.set(x,topY,z); g.rotation.y=rot||0;
+  blocks.forEach(([bx,bz,w,h,d,ch])=>{ add(box(w,h,d),mat,bx,h/2,bz,g); add(box(w+.14,.1,d+.14),mWallDark,bx,h+.05,bz,g,false);
+    for(let k=0;k<Math.floor(w/.42);k++) add(box(.16,.16,.16),mWallDark,bx-w/2+.21+k*.42,h+.18,bz+d/2,g,false);
+    windows(g,bx,0,bz,w,h,d,Math.max(1,Math.floor(h/.8)));
+    if(h>1.2) add(box(.6,.32,.3),mat,bx,h*.62,bz+d/2+.15,g,false);   /* jharokha */
+    if(ch) { chhatri(bx-w*.34,h+.1,bz,.7,g,mat); chhatri(bx+w*.34,h+.1,bz,.7,g,mat); } });
   scene.add(g); return g; }
-/* stambh: a square, many-storeyed tower with a balcony at every floor */
-function tower(x,z,tiers,w,h,mat){ const g=new T.Group(); g.position.set(x,topY,z);
-  add(new T.BoxGeometry(w*3,.4,w*3),mWallDark,0,.2,0,g);
-  let y=.4;
-  for(let i=0;i<tiers;i++){ const ww=w*(1-i*.018);
-    add(new T.BoxGeometry(ww,h,ww),mat,0,y+h/2,0,g);
-    add(new T.BoxGeometry(ww*1.38,.09,ww*1.38),mWallDark,0,y+h-.045,0,g);
-    [[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>win(x+a*ww*.51,topY+y+h*.45,z+b*ww*.51,a?.04:ww*.26,h*.42,b?.04:ww*.26));
+function shikhara(x,z,s,mat,flagOn=true){ const g=new T.Group(); g.position.set(x,topY,z);
+  add(box(2.2*s,.35*s,2.2*s),mStep,0,.17*s,0,g);
+  add(box(1.6*s,.9*s,1.6*s),mat,0,.8*s,0,g);
+  const prof=[[0,0],[.82,0],[.8,.5],[.72,1.2],[.56,1.9],[.38,2.45],[.2,2.85],[.08,3.05],[0,3.08]].map(p=>new T.Vector2(p[0]*s,p[1]*s));
+  add(new T.LatheGeometry(prof,8),mat,0,1.25*s,0,g);
+  add(new T.CylinderGeometry(.22*s,.22*s,.08*s,8),mGold,0,1.25*s+3.1*s,0,g,false);
+  add(box(1.3*s,.75*s,1.5*s),mat,-1.5*s,.72*s,0,g); const p=pyramid(1.5*s,.6*s,mat); p.position.set(-1.5*s,1.4*s,0); p.castShadow=true; g.add(p);
+  if(flagOn) flag(0,1.25*s+3.1*s,0,.7*s,g); scene.add(g); return g; }
+function stambh(x,z,tiers,w,h,mat){ const g=new T.Group(); g.position.set(x,topY,z);
+  add(box(w*3.2,.35,w*3.2),mStep,0,.17,0,g); add(box(w*2.2,.35,w*2.2),mat,0,.52,0,g);
+  let y=.7;
+  for(let i=0;i<tiers;i++){ const ww=w*(1-i*.02);
+    add(box(ww,h,ww),mat,0,y+h/2,0,g);
+    add(box(ww*.5,h*.86,ww*1.18),mat,0,y+h*.45,0,g,false); add(box(ww*1.18,h*.86,ww*.5),mat,0,y+h*.45,0,g,false);
+    add(box(ww*1.36,.08,ww*1.36),mWallDark,0,y+h-.04,0,g,false);
+    add(box(ww*1.02,.05,ww*1.02),mDark,0,y+h*.5,0,g,false);
+    [[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{ const m=new T.Mesh(box(a?.04:ww*.22,h*.38,b?.04:ww*.22),mWin); m.position.set(a*ww*.6,y+h*.42,b*ww*.6); g.add(m); });
     y+=h; }
-  add(new T.BoxGeometry(w*.62,h*.8,w*.62),mat,0,y+h*.4,0,g);
-  add(new T.BoxGeometry(w*1.05,.08,w*1.05),mWallDark,0,y+h*.84,0,g);
-  const p=pyramid(w*1.0,h*.6); p.position.set(0,y+h*.84+h*.3,0); p.castShadow=true; g.add(p);
-  add(new T.SphereGeometry(.08,6,4),mGold,0,y+h*1.5,0,g);
-  scene.add(g); return {g,top:y+h*1.5};
-}
-function palace(x,z,blocks,rot){ const g=new T.Group(); g.position.set(x,topY,z); g.rotation.y=rot||0;
-  blocks.forEach(([bx,bz,w,h,d,roof])=>{ add(new T.BoxGeometry(w,h,d),mStone,bx,h/2,bz,g);
-    add(new T.BoxGeometry(w+.16,.12,d+.16),mWallDark,bx,h+.06,bz,g);
-    if(roof){ chhatri(bx-w*.32,bz,.62,h+.12,g); chhatri(bx+w*.32,bz,.62,h+.12,g); }
-    const n=Math.max(2,Math.round(w/.55)); for(let r=0;r<Math.floor(h/.75);r++) for(let k=0;k<n;k++){
-      const wx=bx-w/2+w*(k+.5)/n, wy=.55+r*.72; [d/2+.02,-d/2-.02].forEach(dz=>{ const m=new T.Mesh(new T.BoxGeometry(.17,.3,.04),mWin); m.position.set(wx,wy,bz+dz); g.add(m); m.userData.win=1; }); } });
+  add(box(w*1.2,.1,w*1.2),mWallDark,0,y+.05,0,g,false);
+  chhatri(0,y+.1,0,w*1.15,g,mat);
+  scene.add(g); return {g,top:y+w*1.15*1.1}; }
+function ruin(x,z,rot,segs){ const g=new T.Group(); g.position.set(x,topY,z); g.rotation.y=rot||0;
+  segs.forEach(([sx,sz,len,ang,hmax])=>{ const n=Math.max(2,Math.round(len/.6));
+    for(let i=0;i<n;i++){ const t=(i+.5)/n-.5, hh=hmax*(.35+.65*rnd()); if(rnd()<.15) continue;
+      const m=add(box(len/n+.02,hh,.42),mRuin,sx+Math.cos(ang)*t*len,hh/2,sz+Math.sin(ang)*t*len,g); m.rotation.y=-ang; } });
   scene.add(g); return g; }
+function kund(k){ const [x,z,w,d]=KUNDS[k];
+  for(let s=0;s<4;s++){ const ww=w+.5-s*.32, dd=d+.5-s*.32, y=topY-.12-s*.22;
+    add(box(ww,.22,.16),mStep,x,y,z-dd/2,null,false); add(box(ww,.22,.16),mStep,x,y,z+dd/2,null,false);
+    add(box(.16,.22,dd),mStep,x-ww/2,y,z,null,false); add(box(.16,.22,dd),mStep,x+ww/2,y,z,null,false); }
+  const wt=add(box(w,.04,d),mWater,x,topY-.8,z,null,false); wt.receiveShadow=true; }
+function gate(x,y,z,rot,s){ const g=new T.Group(); g.position.set(x,y,z); g.rotation.y=rot;
+  add(box(.9,2.6,1.2),mWall,-1.15,1.3,0,g); add(box(.9,2.6,1.2),mWall,1.15,1.3,0,g);
+  add(box(3.3,.8,1.3),mWallDark,0,2.85,0,g);
+  for(let k=0;k<6;k++) add(box(.22,.28,.22),mWallDark,-1.4+k*.56,3.39,0,g,false);
+  add(box(1.4,1.9,.1),mWood,0,.95,.0,g); chhatri(-1.15,3.25,0,.55,g,mWall); chhatri(1.15,3.25,0,.55,g,mWall);
+  flag(0,3.3,0,.6,g); scene.add(g); return g; }
 
-/* landmarks */
-const vijay=tower(5.5,1.2,9,1.25,.74,mStone);             // Vijay Stambh
-const kirti=tower(-13.5,-1.4,7,.9,.56,M(0xead7b6));        // Kirti Stambh
-shikhara(1.2,-2.8,.9);                                      // Meera temple
-shikhara(-7.5,2.6,.75); shikhara(15,2.2,.62,mMarble); shikhara(-10.5,-2.4,.55);
-const kumbha=palace(-3.5,2.4,[[0,0,3.4,2.0,1.8,1],[2.5,.2,1.6,2.8,1.5,0],[-2.3,-.3,1.8,1.4,1.4,0],[.6,-1.5,2.0,1.1,1.0,0]]);   // Kumbha Mahal
-palace(8.6,-.4,[[0,0,3.6,1.7,1.5,1],[0,-1.3,1.6,2.5,1.2,0]],.12);                                                             // Fateh Prakash
-// Padmini Mahal: a white pavilion in its pool
-const pad=new T.Group(); pad.position.set(11.5,topY,-2.2);
-add(new T.BoxGeometry(6.4,.3,4.6),mWallDark,0,.15,0,pad);
-const water=add(new T.BoxGeometry(5.8,.2,4.0),mWater,0,.28,0,pad); water.castShadow=false;
-add(new T.BoxGeometry(2.1,1.0,1.5),mMarble,.6,.85,0,pad);
-add(new T.BoxGeometry(2.4,.1,1.8),mMarble,.6,1.4,0,pad);
-add(new T.BoxGeometry(1.2,.7,1.0),mMarble,.6,1.8,0,pad);
-{ const p=pyramid(1.6,.6,mMarble); p.position.set(.6,2.45,0); p.castShadow=true; pad.add(p); }
-add(new T.SphereGeometry(.07,6,4),mGold,.6,2.8,0,pad);
-add(new T.BoxGeometry(1.4,1.2,4.6),mMarble,-3.7,.6,0,pad);
-scene.add(pad); chhatri(7.8,-3.9,.62,topY+1.2); chhatri(7.8,-.5,.62,topY+1.2);
-add(new T.BoxGeometry(2.6,.2,1.7),mWater,-1.2,topY+.08,-3.6).castShadow=false;                 // Gaumukh kund
-[[-9,-2.8],[-16.5,1.2],[17.5,-.6],[8.5,3.3],[-19,0],[13.5,1.4]].forEach(([x,z])=>chhatri(x,z,.85));
-for(let i=0;i<70;i++){ const t=Math.random()*Math.PI*2, f=.15+Math.random()*.75; const [x,y]=P(t); const s=.35+Math.random()*.5;
-  const px=x*f, pz=-y*f; if(Math.hypot(px-5.5,pz-1.2)<2||Math.hypot(px-11.5,pz+2.2)<4.2||Math.hypot(px+3.5,pz-2.4)<3.4||Math.hypot(px-8.6,pz+.4)<2.6) continue;
-  add(new T.ConeGeometry(s,s*2,6),Math.random()<.5?mGreen:mGreen2,px,topY+s,pz); }
-// the climb: a zig-zag road through the seven pols
-const rampPts=[[-40,0,11],[-33,.9,8.6],[-27,1.9,9.8],[-22.5,3.0,7.4],[-19.5,4.2,5.6],[-18.2,topY-1.3,3.4],[-19.2,topY-.2,1.6]];
-for(let i=0;i<rampPts.length-1;i++){ const a=new T.Vector3(...rampPts[i]), b=new T.Vector3(...rampPts[i+1]); const d=a.distanceTo(b), mid=a.clone().add(b).multiplyScalar(.5);
-  const seg=new T.Mesh(new T.BoxGeometry(d+.4,.3,1.5),mRoad); seg.position.copy(mid); seg.lookAt(b); seg.rotateY(Math.PI/2); seg.receiveShadow=true; scene.add(seg); }
-rampPts.forEach(([x,y,z],i)=>{ const g=new T.Group(); g.position.set(x,y,z); g.rotation.y=i%2?.5:-.3;
-  add(new T.BoxGeometry(.6,2.0,.9),mWall,-.95,1.0,0,g); add(new T.BoxGeometry(.6,2.0,.9),mWall,.95,1.0,0,g); add(new T.BoxGeometry(2.6,.6,1.0),mWallDark,0,2.2,0,g);
-  add(new T.BoxGeometry(1.3,1.7,.12),mWood,0,.85,0,g); flag(0,2.5,0,.8,g); scene.add(g); });
-flag(5.5,topY+vijay.top,1.2,.9);
+/* ---------- the fort's monuments ---------- */
+const vijay=stambh(1.4,1.0,9,1.15,.78,mStambh);                 /* Vijay Stambh */
+const kirti=stambh(14.2,1.7,7,.78,.62,mKirti);                  /* Kirti Stambh */
+shikhara(-6.6,-2.0,.8,mStone);                                  /* Meera temple */
+shikhara(-4.2,-2.4,1.0,mStone);                                 /* Kumbha Shyam temple */
+shikhara(6.9,-.6,.75,mStone);                                   /* Kalika Mata temple */
+shikhara(12.0,2.6,.55,mMarble,false); shikhara(-1.6,3.2,.5,mStone,false);
+ruin(-11.2,1.2,.05,[[0,0,5.4,0,2.2],[0,-2.3,5.4,0,1.8],[-2.7,-1.15,2.3,Math.PI/2,2.0],[2.7,-1.15,2.3,Math.PI/2,1.6],[0,1.4,4,0,2.6],[-1.2,-1.1,2.2,Math.PI/2,1.2]]);  /* Kumbha Mahal */
+palace(-11.2,3.4,.05,[[0,0,3.6,2.4,1.2,1],[1.9,-.3,.9,3.0,.9,0]],mRuin);
+palace(-7.8,3.0,0,[[0,0,3.2,2.0,1.6,1],[-1.8,-.2,1.2,2.6,1.4,0]],mYellow);               /* Fateh Prakash */
+palace(6.2,4.9,0,[[0,0,3.2,1.3,.9,1]],mStone);                                             /* Ratan Singh palace */
+/* Padmini Mahal: a palace on the bank and a water pavilion in the pool */
+kund('padmini');
+{ const [px,pz,pw,pd]=KUNDS.padmini;
+  palace(px,pz+pd/2+.85,0,[[0,0,3.4,2.0,1.2,1]],mMarble);
+  const g=new T.Group(); g.position.set(px+.6,topY-.8,pz-.2);
+  add(box(1.6,.2,1.4),mMarble,0,.1,0,g); add(box(1.4,1.1,1.2),mMarble,0,.75,0,g); add(box(1.6,.1,1.4),mWallDark,0,1.35,0,g,false);
+  add(box(1.0,.7,.9),mMarble,0,1.75,0,g); chhatri(0,2.1,0,.75,g,mMarble);
+  windows(g,0,.2,0,1.4,1.1,1.2,1); scene.add(g); }
+['gaumukh','ratan','bhimlat','suraj'].forEach(kund);
+/* gaumukh: the cow-mouth spring on the cliff wall */
+add(box(.5,.5,.4),mStone,3.6,topY-.4,-3.4-1.05,null,false);
+/* a village still lives inside the fort */
+const houseGeo=box(1,1,1); houseGeo.translate(0,.5,0);
+const HCOL=[0xdcd2c0,0xd8c39c,0xcc9e5c,0x8eaac2,0xd6ae92,0xe2dccf].map(h=>new T.Color(h));
+function houses(n,place,k=1){ const im=new T.InstancedMesh(houseGeo,M(0xffffff),n); let c=0;
+  for(let i=0;i<n*6&&c<n;i++){ const p=place(); if(!p) continue; const [x,y,z]=p, w=(.55+rnd()*.7)*k, d=(.55+rnd()*.7)*k, h=(.45+rnd()*.75)*(k<1?.75:1);
+    dm.position.set(x,y,z); dm.rotation.set(0,(rnd()-.5)*.6,0); dm.scale.set(w,h,d); dm.updateMatrix(); im.setMatrixAt(c,dm.matrix); im.setColorAt(c,HCOL[Math.floor(rnd()*HCOL.length)]); c++; }
+  im.count=c; im.castShadow=true; im.receiveShadow=true; scene.add(im); return im; }
+const BUSY=[[1.4,1.0,2.4],[14.2,1.7,1.8],[-6.6,-2,1.8],[-4.2,-2.4,1.9],[6.9,-.6,1.5],[-11.2,1.6,3.6],[-7.8,3,2.4],[6.2,4.9,2.2],[12,2.6,1.2],[-1.6,3.2,1.2]];
+const free=(x,z)=>{ if(dOf(x,z)>.86) return false; for(const [bx,bz,r] of BUSY) if(Math.hypot(x-bx,z-bz)<r) return false;
+  for(const k in KUNDS){ const [kx,kz,kw,kd]=KUNDS[k]; if(Math.abs(x-kx)<kw/2+.8&&Math.abs(z-kz)<kd/2+.8) return false; } return true; };
+houses(PH?26:40,()=>{ const x=-14+rnd()*24, z=-4+rnd()*8.5; return free(x,z)?[x,topY,z]:null; },.55);
+/* Chittorgarh town at the foot of the hill */
+houses(PH?260:460,()=>{ const x=-58+rnd()*33, z=-26+rnd()*58; if(dOf(x,z)<2.1) return null; if(Math.abs(x-riverX(z))<6) return null;
+  if(roadInfo(x,z)[0]<2.2) return null; if(Math.hypot(x+42,z-2)>30) return null; return [x,H(x,z)-.05,z]; });
+[[-44,-6],[-36,-14],[-50,6]].forEach(([x,z])=>{ const s=shikhara(0,0,.6,mMarble,true); s.position.set(x,H(x,z),z); });
+/* the seven pols on the road */
+const POLN=[['Padan Pol','पाडन पोल'],['Bhairon Pol','भैरव पोल'],['Hanuman Pol','हनुमान पोल'],['Ganesh Pol','गणेश पोल'],['Jodla Pol','जोड़ला पोल'],['Laxman Pol','लक्ष्मण पोल'],['Ram Pol','राम पोल']];
+const polIdx=[3,4,5,6,7,8,10];
+polIdx.forEach((ri,i)=>{ const p=road[ri], q=road[Math.max(0,ri-1)]; const rot=-Math.atan2(p.z-q.z,p.x-q.x)+Math.PI/2; gate(p.x,p.y-.05,p.z,rot,1); });
+/* road surface */
+for(let i=0;i<road.length-1;i++){ const a=road[i], b=road[i+1]; const L=a.distanceTo(b), seg=new T.Mesh(box(L+.5,.14,1.4),mRoad);
+  seg.position.set((a.x+b.x)/2,(a.y+b.y)/2+.04,(a.z+b.z)/2); seg.lookAt(b.x,(a.y+b.y)/2+.04+(b.y-a.y)/2,b.z); seg.rotateY(Math.PI/2); seg.receiveShadow=true; scene.add(seg); }
+/* the old ten-arched bridge over the Gambhiri */
+{ const z=15.5, x0=riverX(z), g=new T.Group(); g.position.set(x0,.05,z);
+  add(box(13,.32,1.5),mStone,0,.95,0,g); add(box(13,.22,.12),mWallDark,0,1.2,.7,g,false); add(box(13,.22,.12),mWallDark,0,1.2,-.7,g,false);
+  for(let i=0;i<11;i++) add(box(.42,1.3,1.6),mStone,-6.2+i*1.24,.3,0,g);
+  scene.add(g); }
 
-/* ================= the living fort ================= */
-const lerp=(a,b,t)=>a+(b-a)*t, clamp01=x=>Math.max(0,Math.min(1,x)), smooth=x=>{x=clamp01(x);return x*x*(3-2*x);};
-const mRed=M(0xb3121f), mGrey=M(0x8d8580), mWhite=M(0xf4efe6), mSkin=M(0xb97a4e), mSaff=M(0xf07d1a), mPink=M(0xd6246e), mYel=M(0xffb81c);
+/* ---------- trees: neem and khejri on the hill and in the fields ---------- */
+const canopy=new T.IcosahedronGeometry(1,0); canopy.scale(1,.72,1);
+const trunkG=new T.CylinderGeometry(.08,.12,1,5); trunkG.translate(0,.5,0);
+const TCOL=[0x5d6f33,0x6b7a3a,0x4e6430,0x7a8a44,0x5a6a2e].map(h=>new T.Color(h));
+const NT=PH?520:900, treeI=new T.InstancedMesh(canopy,M(0xffffff),NT), trunkI=new T.InstancedMesh(trunkG,mWood,NT); let tc=0;
+for(let i=0;i<NT*5&&tc<NT;i++){ const x=(rnd()-.5)*200, z=(rnd()-.5)*160, d=dOf(x,z);
+  let ok=false; if(d<.88) ok=free(x,z)&&rnd()<.6; else if(d<2.3) ok=rnd()<.85; else ok=rnd()<.22;
+  if(!ok) continue; if(roadInfo(x,z)[0]<1.6) continue; if(Math.abs(x-riverX(z))<3) continue; if(x<-26&&x>-58&&Math.hypot(x+42,z-2)<28&&rnd()<.75) continue;
+  const y=H(x,z); if(y<-.2) continue; const s=.45+rnd()*.7, th=.35+rnd()*.5;
+  dm.position.set(x,y,z); dm.rotation.set(0,rnd()*6,0); dm.scale.set(1,th,1); dm.updateMatrix(); trunkI.setMatrixAt(tc,dm.matrix);
+  dm.position.set(x,y+th+s*.5,z); dm.scale.set(s*(1+rnd()*.3),s,s*(1+rnd()*.3)); dm.updateMatrix(); treeI.setMatrixAt(tc,dm.matrix); treeI.setColorAt(tc,TCOL[Math.floor(rnd()*TCOL.length)]); tc++; }
+treeI.count=tc; trunkI.count=tc; treeI.castShadow=true; treeI.receiveShadow=true; scene.add(treeI,trunkI);
 
-/* soft round sprite textures */
-function glowTex(stops){ const c=document.createElement('canvas'); c.width=c.height=64; const g=c.getContext('2d'); const r=g.createRadialGradient(32,32,0,32,32,32); stops.forEach(s=>r.addColorStop(s[0],s[1])); g.fillStyle=r; g.fillRect(0,0,64,64); return new T.CanvasTexture(c); }
-const dotTex=glowTex([[0,'rgba(255,255,255,1)'],[.25,'rgba(255,255,255,.9)'],[1,'rgba(255,255,255,0)']]);
-const lanTex=glowTex([[0,'rgba(255,248,200,1)'],[.22,'rgba(255,190,80,.95)'],[.5,'rgba(255,120,30,.35)'],[1,'rgba(255,90,0,0)']]);
-
-/* fireworks: a rising rocket with a trail, then a shell (sphere, ring, willow or double) */
-const fw=[], rockets=[]; const flash=new T.PointLight(0xffd080,0,70,2); scene.add(flash);
-const PAL=[[1,.74,.12],[.95,.2,.5],[.98,.5,.1],[1,.95,.78],[.35,.85,.45],[.6,.45,1],[1,.3,.2]];
-function launch(){ const N=12, pos=new Float32Array(N*3), x=(Math.random()-.5)*34, z=(Math.random()-.5)*10;
-  for(let i=0;i<N;i++){ pos[i*3]=x; pos[i*3+1]=topY; pos[i*3+2]=z; }
-  const g=new T.BufferGeometry(); g.setAttribute('position',new T.BufferAttribute(pos,3));
-  const p=new T.Points(g,new T.PointsMaterial({size:.55,map:dotTex,color:0xffd9a0,transparent:true,blending:T.AdditiveBlending,depthWrite:false,fog:false}));
-  scene.add(p); rockets.push({p,x,z,y:topY,vy:.34+Math.random()*.06,apex:topY+14+Math.random()*8}); }
-function burst(x,y,z){ const kind=['sphere','ring','willow','double'][Math.floor(Math.random()*4)];
-  const n=PH?110:180, pos=new Float32Array(n*3), col=new Float32Array(n*3), vel=[];
-  const p1=PAL[Math.floor(Math.random()*PAL.length)], p2=PAL[Math.floor(Math.random()*PAL.length)];
-  const ax=new T.Vector3(Math.random()-.5,1,Math.random()-.5).normalize(), u1=new T.Vector3(1,0,0).cross(ax).normalize(), u2=ax.clone().cross(u1);
-  for(let i=0;i<n;i++){ pos[i*3]=x; pos[i*3+1]=y; pos[i*3+2]=z; let v, c=p1;
-    if(kind==='ring'){ const a=i/n*Math.PI*2, s=.24; v=u1.clone().multiplyScalar(Math.cos(a)*s).addScaledVector(u2,Math.sin(a)*s).addScaledVector(ax,(Math.random()-.5)*.03); }
-    else { const uu=Math.random()*2-1, th=Math.random()*Math.PI*2, r=Math.sqrt(1-uu*uu); let s=kind==='willow'?.13+Math.random()*.04:.19+Math.random()*.07;
-      if(kind==='double'&&i%2){ s*=.55; c=p2; } v=new T.Vector3(r*Math.cos(th)*s,uu*s,r*Math.sin(th)*s); }
-    if(kind==='willow') c=[1,.78,.35];
-    vel.push(v); col[i*3]=c[0]; col[i*3+1]=c[1]; col[i*3+2]=c[2]; }
-  const g=new T.BufferGeometry(); g.setAttribute('position',new T.BufferAttribute(pos,3)); g.setAttribute('color',new T.BufferAttribute(col,3));
-  const p=new T.Points(g,new T.PointsMaterial({size:PH?.75:.6,map:dotTex,vertexColors:true,transparent:true,blending:T.AdditiveBlending,depthWrite:false,fog:false}));
-  scene.add(p); fw.push({p,vel,life:1,decay:kind==='willow'?.0065:.0105,grav:kind==='willow'?.0055:.0038,tw:Math.random()<.6});
-  flash.position.set(x,y,z); flash.color.setRGB(p1[0],p1[1],p1[2]); flash.intensity=PH?3:4.5; }
-function stepFireworks(k){
-  for(let r=rockets.length-1;r>=0;r--){ const R=rockets[r], a=R.p.geometry.attributes.position.array;
-    R.y+=R.vy*k; R.vy*=Math.pow(.99,k);
-    for(let i=a.length/3-1;i>0;i--){ a[i*3]=a[i*3-3]; a[i*3+1]=a[i*3-2]; a[i*3+2]=a[i*3-1]; }
-    a[0]=R.x+Math.sin(R.y*3)*.05; a[1]=R.y; a[2]=R.z; R.p.geometry.attributes.position.needsUpdate=true;
-    if(R.y>=R.apex){ burst(R.x,R.y,R.z); scene.remove(R.p); R.p.geometry.dispose(); R.p.material.dispose(); rockets.splice(r,1); } }
-  for(let q=fw.length-1;q>=0;q--){ const F=fw[q], a=F.p.geometry.attributes.position;
-    for(let i=0;i<F.vel.length;i++){ const v=F.vel[i]; v.multiplyScalar(Math.pow(.965,k)); v.y-=F.grav*k; a.array[i*3]+=v.x*k; a.array[i*3+1]+=v.y*k; a.array[i*3+2]+=v.z*k; }
-    a.needsUpdate=true; F.life-=F.decay*k;
-    F.p.material.opacity=Math.max(0,F.life)*(F.tw&&F.life<.5?(.45+.55*Math.random()):1);
-    if(F.life<=0){ scene.remove(F.p); F.p.geometry.dispose(); F.p.material.dispose(); fw.splice(q,1); } }
-  flash.intensity*=Math.pow(.88,k);
-}
-
-/* sky lanterns drifting up after dark */
-const lanterns=[];
-function spawnLantern(){ const sp=new T.Sprite(new T.SpriteMaterial({map:lanTex,transparent:true,depthWrite:false,blending:T.AdditiveBlending,fog:false,opacity:0}));
-  const [x,y]=P(Math.random()*Math.PI*2), f=Math.random()*.85; sp.position.set(x*f,topY+1.5,-y*f); sp.scale.set(1,1.3,1); scene.add(sp);
-  lanterns.push({sp,vy:.012+Math.random()*.01,ph:Math.random()*6,age:0}); }
-function stepLanterns(k,dt){ for(let i=lanterns.length-1;i>=0;i--){ const L=lanterns[i]; L.age+=dt/1000;
-  L.sp.position.y+=L.vy*k; L.sp.position.x+=Math.sin(L.age*.7+L.ph)*.008*k; L.sp.position.z+=.004*k;
-  L.sp.material.opacity=Math.min(1,L.age/2)*clamp01(1-(L.age-24)/5)*(.85+.15*Math.sin(L.age*7+L.ph));
-  if(L.age>29){ scene.remove(L.sp); L.sp.material.dispose(); lanterns.splice(i,1); } } }
-
-/* drifting clouds */
-const cloudC=document.createElement('canvas'); cloudC.width=256; cloudC.height=128;
-{ const g=cloudC.getContext('2d'); [[70,80,46],[120,62,58],[176,78,44],[140,90,40],[96,92,36]].forEach(([x,y,r])=>{ const gr=g.createRadialGradient(x,y,0,x,y,r); gr.addColorStop(0,'rgba(255,255,255,.95)'); gr.addColorStop(1,'rgba(255,255,255,0)'); g.fillStyle=gr; g.fillRect(0,0,256,128); }); }
-const cloudTex=new T.CanvasTexture(cloudC), clouds=[];
-for(let i=0;i<8;i++){ const s=new T.Sprite(new T.SpriteMaterial({map:cloudTex,transparent:true,depthWrite:false,fog:false,opacity:.6}));
-  const a=i/8*Math.PI*2+Math.random()*.5, r=170+Math.random()*70; s.userData={a,r,y:48+Math.random()*34}; s.scale.set(80+Math.random()*30,28+Math.random()*8,1); scene.add(s); clouds.push(s); }
-
-/* birds wheeling over the ramparts */
-const wingGeo=new T.BufferGeometry(); wingGeo.setAttribute('position',new T.Float32BufferAttribute([0,0,0, .38,0,0, .08,0,.95],3));
-const birdMat=new T.MeshBasicMaterial({color:0x2a1812,side:T.DoubleSide});
-const birdG=new T.Group(); scene.add(birdG); const birds=[];
-for(let i=0;i<(PH?10:16);i++){ const g=new T.Group(); const wl=new T.Mesh(wingGeo,birdMat), wr=new T.Mesh(wingGeo,birdMat); wr.scale.z=-1; g.add(wl,wr); g.scale.setScalar(.9+Math.random()*.4);
-  birdG.add(g); birds.push({g,wl,wr,a:Math.random()*Math.PI*2,r:16+Math.random()*14,h:topY+8+Math.random()*6,sp:.00016+Math.random()*.00008,ph:Math.random()*6}); }
-
-/* January kites over Chittor */
-const kShape=new T.Shape(); kShape.moveTo(0,.62); kShape.lineTo(.44,0); kShape.lineTo(0,-.72); kShape.lineTo(-.44,0); kShape.closePath();
-const kGeo=new T.ShapeGeometry(kShape), kiteG=new T.Group(); scene.add(kiteG); const kites=[];
-[[0xf07d1a,[-3.5,topY+2.2,2.4],[-2,topY+15,9]],[0xd6246e,[8.6,topY+2,-.4],[12,topY+17,5]],[0xffb81c,[1.2,topY+1,-2.8],[-9,topY+13,-7]],[0x2e7d32,[15,topY+1,2.2],[18,topY+12,-6]]].forEach(([c,an,b],i)=>{
-  const m=new T.Mesh(kGeo,new T.MeshBasicMaterial({color:c,side:T.DoubleSide})); m.scale.setScalar(1.15);
-  const tail=new T.Mesh(new T.PlaneGeometry(.18,.5),new T.MeshBasicMaterial({color:0xfff4e0,side:T.DoubleSide})); tail.position.set(0,-.95,0); m.add(tail);
-  const lg=new T.BufferGeometry().setFromPoints([new T.Vector3(...an),new T.Vector3(...b)]);
-  const line=new T.Line(lg,new T.LineBasicMaterial({color:0xfff4e0,transparent:true,opacity:.45}));
-  kiteG.add(m,line); kites.push({m,line,an:new T.Vector3(...an),b:new T.Vector3(...b),i}); });
-
-/* a little baraat climbing the road to the fort */
-function person(safa,cloth,extra){ const g=new T.Group();
-  add(new T.CylinderGeometry(.13,.18,.62,8),cloth,0,.31,0,g);
-  add(new T.SphereGeometry(.12,8,6),mSkin,0,.74,0,g);
-  add(new T.CylinderGeometry(.15,.13,.13,8),safa,0,.87,0,g);
-  if(extra==='dhol'){ const d=add(new T.CylinderGeometry(.13,.13,.28,10),mRed,.17,.45,0,g); d.rotation.x=Math.PI/2; }
-  if(extra==='flag'){ add(new T.CylinderGeometry(.02,.02,1.7,4),mWood,.14,.85,0,g); const fl=new T.Mesh(flagGeo,mFlag); fl.scale.setScalar(.6); fl.position.set(.14,1.7,0); g.add(fl); flags.push(fl); }
-  if(extra==='baja'){ const t=add(new T.CylinderGeometry(.03,.1,.4,8),mGold,.2,.62,0,g); t.rotation.z=-1.2; }
-  return g; }
-function elephant(){ const g=new T.Group();
-  [[.5,.27],[.5,-.27],[-.5,.27],[-.5,-.27]].forEach(([x,z])=>add(new T.CylinderGeometry(.15,.16,.75,8),mGrey,x,.37,z,g));
-  add(new T.BoxGeometry(1.5,.85,.82),mGrey,0,1.12,0,g);
-  add(new T.BoxGeometry(.55,.65,.6),mGrey,.95,1.25,0,g);
-  const tr=add(new T.CylinderGeometry(.06,.1,.8,6),mGrey,1.22,.78,0,g); tr.rotation.z=.22;
-  [.34,-.34].forEach(z=>add(new T.BoxGeometry(.06,.52,.45),mGrey,.8,1.3,z,g));
-  add(new T.BoxGeometry(1.1,.58,.9),mRed,-.05,1.06,0,g);
-  add(new T.BoxGeometry(1.12,.08,.92),mGold,-.05,.79,0,g);
-  add(new T.BoxGeometry(.32,.3,.62),mGold,.98,1.42,0,g);
-  add(new T.BoxGeometry(.7,.35,.62),mGold,-.05,1.72,0,g);
-  const r=pyramid(.8,.45); r.position.set(-.05,2.12,0); r.castShadow=true; g.add(r);
-  return g; }
-function ghodi(){ const g=new T.Group();
-  [[.35,.12],[.35,-.12],[-.35,.12],[-.35,-.12]].forEach(([x,z])=>add(new T.BoxGeometry(.09,.7,.09),mWhite,x,.35,z,g));
-  add(new T.BoxGeometry(.95,.4,.34),mWhite,0,.88,0,g);
-  const n=add(new T.BoxGeometry(.22,.55,.2),mWhite,.5,1.15,0,g); n.rotation.z=-.5;
-  add(new T.BoxGeometry(.38,.18,.17),mWhite,.72,1.38,0,g);
-  add(new T.BoxGeometry(.62,.14,.44),mRed,-.02,1.1,0,g);
-  add(new T.CylinderGeometry(.13,.16,.46,8),mGold,-.05,1.4,0,g);
-  add(new T.SphereGeometry(.11,8,6),mSkin,-.05,1.72,0,g);
-  add(new T.CylinderGeometry(.15,.13,.14,8),mSaff,-.05,1.84,0,g);
-  add(new T.SphereGeometry(.05,6,4),mGold,-.05,1.95,0,g);
-  return g; }
-const ORDER=[['p',mSaff,mWhite,'flag'],['p',mPink,mWhite,'dhol'],['p',mYel,mWhite,'dhol'],['p',mSaff,mRed,'baja'],['p',mPink,mYel],['p',mSaff,mPink],['p',mYel,mWhite],['e'],['g'],['p',mSaff,mWhite],['p',mPink,mWhite],['p',mYel,mRed],['p',mSaff,mWhite]];
-const bPath=rampPts.map(p=>new T.Vector3(p[0],p[1]+.15,p[2])); bPath.push(new T.Vector3(-16.5,topY,2.8));
+/* ---------- a Rajput cavalcade climbs the road (history, not a wedding) ---------- */
+const mHorse=M(0x6b4a30), mHorse2=M(0x3b2a20), mSkin=M(0xa8724a), mCloth=M(0xe9dcc4), mSafa=M(0xc8611c), mSafa2=M(0xb8202a), mSteel=M(0x9aa0a6,{metalness:.6,roughness:.4}), mGrey=M(0x7f7a75), mShield=M(0x4a3020);
+function soldier(safa){ const g=new T.Group();
+  add(new T.CylinderGeometry(.13,.17,.62,7),mCloth,0,.31,0,g,false); add(new T.SphereGeometry(.11,7,5),mSkin,0,.73,0,g,false);
+  add(new T.CylinderGeometry(.14,.12,.13,7),safa,0,.85,0,g,false);
+  add(new T.CylinderGeometry(.015,.015,1.5,4),mWood,.18,.75,0,g,false); add(new T.ConeGeometry(.04,.16,4),mSteel,.18,1.55,0,g,false);
+  const sh=add(new T.CylinderGeometry(.16,.16,.04,10),mShield,-.04,.45,.17,g,false); sh.rotation.x=Math.PI/2; return g; }
+function rider(horseMat,safa){ const g=new T.Group();
+  [[.33,.11],[.33,-.11],[-.33,.11],[-.33,-.11]].forEach(([x,z])=>add(box(.09,.66,.09),horseMat,x,.33,z,g,false));
+  add(box(.92,.38,.32),horseMat,0,.84,0,g); const n=add(box(.2,.5,.18),horseMat,.48,1.1,0,g,false); n.rotation.z=-.55;
+  add(box(.36,.16,.15),horseMat,.68,1.32,0,g,false); add(box(.5,.12,.4),mSafa2,-.02,1.05,0,g,false);
+  add(new T.CylinderGeometry(.12,.15,.44,7),mCloth,-.05,1.33,0,g,false); add(new T.SphereGeometry(.1,7,5),mSkin,-.05,1.64,0,g,false);
+  add(new T.CylinderGeometry(.13,.11,.12,7),safa,-.05,1.75,0,g,false);
+  const sp=add(new T.CylinderGeometry(.015,.015,1.7,4),mWood,.12,1.6,0,g,false); sp.rotation.z=-.25; return g; }
+function gaj(){ const g=new T.Group();
+  [[.5,.27],[.5,-.27],[-.5,.27],[-.5,-.27]].forEach(([x,z])=>add(new T.CylinderGeometry(.15,.16,.75,8),mGrey,x,.37,z,g,false));
+  add(box(1.5,.85,.82),mGrey,0,1.12,0,g); add(box(.55,.65,.6),mGrey,.95,1.25,0,g,false);
+  const tr=add(new T.CylinderGeometry(.06,.1,.8,6),mGrey,1.22,.78,0,g,false); tr.rotation.z=.22;
+  [.34,-.34].forEach(z=>add(box(.06,.52,.45),mGrey,.8,1.3,z,g,false));
+  add(box(1.1,.5,.88),mSafa2,-.05,1.1,0,g,false); add(box(.66,.32,.6),mGold,-.05,1.68,0,g,false);
+  const r=pyramid(.78,.42,mSafa2); r.position.set(-.05,2.05,0); g.add(r); flag(-.05,2.2,0,.55,g); return g; }
+const ORDER=[['s',mSafa],['s',mSafa2],['r',mHorse,mSafa],['s',mSafa],['s',mSafa2],['e'],['r',mHorse2,mSafa2],['s',mSafa],['s',mSafa],['s',mSafa2]];
+const bPath=road.slice(2).map(p=>p.clone()); bPath.push(new T.Vector3(-16.4,topY,2.6));
 const bLen=[0]; for(let i=1;i<bPath.length;i++) bLen.push(bLen[i-1]+bPath[i].distanceTo(bPath[i-1]));
 const BL=bLen[bLen.length-1];
 function pathAt(s,out){ s=Math.max(0,Math.min(BL-.001,s)); let i=1; while(bLen[i]<s) i++; const t=(s-bLen[i-1])/(bLen[i]-bLen[i-1]); out.copy(bPath[i-1]).lerp(bPath[i],t); return Math.atan2(-(bPath[i].z-bPath[i-1].z),bPath[i].x-bPath[i-1].x); }
-const baraat=[]; let off=0;
-ORDER.forEach(o=>{ const g=o[0]==='e'?elephant():o[0]==='g'?ghodi():person(o[1],o[2],o[3]); g.scale.setScalar(1.25); scene.add(g);
-  const gap=o[0]==='e'?2.6:o[0]==='g'?2.0:1.05; off+=gap/2; baraat.push({g,off,dance:o[0]==='p'&&!o[3]}); off+=gap/2; });
-const bSpan=off+4; let bS=BL*.55;
-const tmpV=new T.Vector3();
-function placeBaraat(now){ baraat.forEach((b,i)=>{ const s=((bS-b.off)%(BL+bSpan)+(BL+bSpan))%(BL+bSpan)-2;
-    if(s<0||s>BL){ b.g.visible=false; return; } b.g.visible=true; const yaw=pathAt(s,tmpV); b.g.position.copy(tmpV); b.g.rotation.y=yaw;
-    if(!reduce) b.g.position.y+=b.dance?Math.abs(Math.sin(now*.012+i))*.12:Math.abs(Math.sin(now*.008+i))*.03; }); }
+const troop=[]; let off=0;
+ORDER.forEach(o=>{ const g=o[0]==='e'?gaj():o[0]==='r'?rider(o[1],o[2]):soldier(o[1]); g.scale.setScalar(1.15); scene.add(g);
+  const gap=o[0]==='e'?2.6:o[0]==='r'?1.9:1.0; off+=gap/2; troop.push({g,off}); off+=gap/2; });
+const tSpan=off+5; let tS=BL*.35; const tmpV=new T.Vector3();
+function placeTroop(now){ troop.forEach((b,i)=>{ const s=((tS-b.off)%(BL+tSpan)+(BL+tSpan))%(BL+tSpan)-2;
+  if(s<0||s>BL){ b.g.visible=false; return; } b.g.visible=true; const yaw=pathAt(s,tmpV); b.g.position.copy(tmpV); b.g.position.y+=.1; b.g.rotation.y=yaw;
+  if(!reduce) b.g.position.y+=Math.abs(Math.sin(now*.008+i))*.03; }); }
 
-/* ---------- a day at Chittor: continuous time of day ---------- */
+/* ---------- clouds and birds ---------- */
+const cloudC=document.createElement('canvas'); cloudC.width=256; cloudC.height=128;
+{ const g=cloudC.getContext('2d'); [[70,80,46],[120,62,58],[176,78,44],[140,90,40],[96,92,36]].forEach(([x,y,r])=>{ const gr=g.createRadialGradient(x,y,0,x,y,r); gr.addColorStop(0,'rgba(255,255,255,.95)'); gr.addColorStop(1,'rgba(255,255,255,0)'); g.fillStyle=gr; g.fillRect(0,0,256,128); }); }
+const cloudTex=new T.CanvasTexture(cloudC), clouds=[];
+for(let i=0;i<9;i++){ const s=new T.Sprite(new T.SpriteMaterial({map:cloudTex,transparent:true,depthWrite:false,fog:false,opacity:.6}));
+  const a=i/9*Math.PI*2+rnd()*.5, r=180+rnd()*80; s.userData={a,r,y:52+rnd()*36}; s.scale.set(80+rnd()*30,26+rnd()*8,1); s.position.set(Math.cos(a)*r,s.userData.y,Math.sin(a)*r); scene.add(s); clouds.push(s); }
+const wingGeo=new T.BufferGeometry(); wingGeo.setAttribute('position',new T.Float32BufferAttribute([0,0,0, .34,0,0, .07,0,.85],3));
+const birdMat=new T.MeshBasicMaterial({color:0x2a1812,side:T.DoubleSide});
+const birdG=new T.Group(); scene.add(birdG); const birds=[];
+for(let i=0;i<(PH?10:16);i++){ const g=new T.Group(); const wl=new T.Mesh(wingGeo,birdMat), wr=new T.Mesh(wingGeo,birdMat); wr.scale.z=-1; g.add(wl,wr); g.scale.setScalar(.8+rnd()*.4);
+  birdG.add(g); birds.push({g,wl,wr,a:rnd()*Math.PI*2,r:14+rnd()*16,h:topY+7+rnd()*6,sp:.00015+rnd()*.00008,ph:rnd()*6}); }
+
+/* ---------- time of day ---------- */
 const C=h=>new T.Color(h);
 const KF=[
- {h:5,   sky:['#0b0a22','#1c1a44','#3a2c5c','#5a3a66','#6a4870','#120c18'],fog:'#2a2240',sun:['#b0b8ff',.25],hemi:['#3e4c8f','#0b0612',.18],exp:.9,stars:1,diya:1,fn:40,ff:170},
- {h:6.3, sky:['#1a1a3e','#3a3466','#8a5a7a','#e0907a','#f4b88a','#3a2a24'],fog:'#6a5470',sun:['#ffb48a',.5],hemi:['#6a70a8','#2a1a1a',.32],exp:.95,stars:.45,diya:.6,fn:70,ff:240},
- {h:7.4, sky:['#7b8cc7','#a9b4dc','#f2b6a6','#ffd9a0','#fff0cf','#8c6a3e'],fog:'#f0c9a2',sun:['#ffd6a8',1.4],hemi:['#ffe8cc','#6b4a2a',.62],exp:1,stars:0,diya:0,fn:95,ff:280},
- {h:11.5,sky:['#3a78c0','#62a0dc','#a8cbe8','#e6eef0','#f6efe0','#9a7a50'],fog:'#d9d4c8',sun:['#fff4e0',1.75],hemi:['#dfefff','#7a5a36',.7],exp:1,stars:0,diya:0,fn:110,ff:300},
- {h:15.6,sky:['#4f86c6','#7fb0dc','#c8d8e0','#f6dcae','#ffe6b8','#8c6a3e'],fog:'#e6cfa6',sun:['#ffe2b0',1.65],hemi:['#fff0d8','#6b4a2a',.65],exp:1,stars:0,diya:0,fn:100,ff:290},
- {h:17.6,sky:['#4a0a1e','#971230','#d6246e','#f07d1a','#ffc94d','#5a3a22'],fog:'#b4603e',sun:['#ff9a4a',1.55],hemi:['#ffa4c8','#3a2030',.55],exp:1.05,stars:.12,diya:.6,fn:95,ff:280},
- {h:18.6,sky:['#1a1240','#4a1a5a','#a03a6a','#e0704a','#f4a050','#2a1a20'],fog:'#5a3050',sun:['#ff7a4a',.55],hemi:['#8a6ab0','#1a1020',.3],exp:.95,stars:.55,diya:1,fn:60,ff:220},
- {h:19.8,sky:['#04030d','#120f33','#2b1f5c','#3a2a6a','#3a2a6a','#0c0710'],fog:'#110d2a',sun:['#9fb4ff',.32],hemi:['#4a5aa0','#140a1c',.26],exp:.95,stars:1,diya:1,fn:34,ff:170},
- {h:24,  sky:['#04030d','#120f33','#2b1f5c','#3a2a6a','#3a2a6a','#0c0710'],fog:'#110d2a',sun:['#9fb4ff',.32],hemi:['#4a5aa0','#140a1c',.26],exp:.95,stars:1,diya:1,fn:34,ff:170}];
+ {h:5,   sky:['#0b0a22','#1c1a44','#3a2c5c','#5a3a66','#6a4870','#120c18'],fog:'#2a2240',sun:['#b0b8ff',.25],hemi:['#3e4c8f','#0b0612',.2],exp:.9,stars:1,lit:1,fn:40,ff:190},
+ {h:6.3, sky:['#1a1a3e','#3a3466','#8a5a7a','#e0907a','#f4b88a','#3a2a24'],fog:'#6a5470',sun:['#ffb48a',.55],hemi:['#6a70a8','#2a1a1a',.34],exp:.95,stars:.45,lit:.6,fn:70,ff:250},
+ {h:7.4, sky:['#7b8cc7','#a9b4dc','#f2b6a6','#ffd9a0','#fbeacb','#8c6a3e'],fog:'#d8c6a8',sun:['#ffd2a0',1.35],hemi:['#ffe8cc','#6b4a2a',.55],exp:.98,stars:0,lit:0,fn:150,ff:380},
+ {h:11.5,sky:['#3a78c0','#5f9ad6','#9cc2e4','#d4e2ea','#e4e8e2','#9a7a50'],fog:'#b9c8cf',sun:['#fff1dc',1.35],hemi:['#cfe3ff','#6a4e30',.5],exp:.92,stars:0,lit:0,fn:170,ff:420},
+ {h:15.6,sky:['#4f86c6','#78a8d6','#bcd0dc','#ecd6ae','#f2e0bc','#8c6a3e'],fog:'#d6c4a2',sun:['#ffdcaa',1.45],hemi:['#fbe8cc','#6b4a2a',.56],exp:.96,stars:0,lit:0,fn:160,ff:400},
+ {h:17.6,sky:['#4a2350','#a0405a','#e0766a','#f4a35a','#ffd27a','#5a3a22'],fog:'#c88a64',sun:['#ffa05a',1.55],hemi:['#ffc0a8','#3a2030',.56],exp:1.05,stars:.08,lit:.35,fn:95,ff:290},
+ {h:18.6,sky:['#1a1240','#4a1a5a','#a03a6a','#e0704a','#f4a050','#2a1a20'],fog:'#5a3050',sun:['#ff7a4a',.55],hemi:['#8a6ab0','#1a1020',.32],exp:.96,stars:.55,lit:1,fn:60,ff:230},
+ {h:19.8,sky:['#04030d','#120f33','#2b1f5c','#3a2a6a','#3a2a6a','#0c0710'],fog:'#110d2a',sun:['#9fb4ff',.34],hemi:['#4a5aa0','#140a1c',.28],exp:.96,stars:1,lit:1,fn:38,ff:190},
+ {h:24,  sky:['#04030d','#120f33','#2b1f5c','#3a2a6a','#3a2a6a','#0c0710'],fog:'#110d2a',sun:['#9fb4ff',.34],hemi:['#4a5aa0','#140a1c',.28],exp:.96,stars:1,lit:1,fn:38,ff:190}];
 KF.forEach(k=>{ k.skyC=k.sky.map(C); k.fogC=C(k.fog); k.sunC=C(k.sun[0]); k.hs=C(k.hemi[0]); k.hg=C(k.hemi[1]); });
-const winOff=C('#4a2414'), winOn=C('#ffcf7a'), moonDir=new T.Vector3(40,50,-30).normalize(), dirV=new T.Vector3(), white=new T.Color(1,1,1);
-let hour=17.6, diyaLvl=.6, night=0;
+const winOff=C('#3a2014'), winOn=C('#ffcf7a'), moonDir=new T.Vector3(40,50,-30).normalize(), dirV=new T.Vector3(), white=new T.Color(1,1,1), glowCol=C('#ff9a3c');
+let hour=16.8, litLvl=0, night=0;
 function sunDir(h){ const u=clamp01((h-6)/12.4), az=.59+(-2.79-.59)*u, el=Math.max(.05,Math.sin(Math.PI*u))*.95; return new T.Vector3(Math.cos(el)*Math.cos(az),Math.sin(el),Math.cos(el)*Math.sin(az)); }
-const MOM=[[0,'Night over Chittor','चित्तौड़ की रात'],[5.5,'Bhor · first light on the ramparts','भोर · प्राचीर पर पहली किरण'],[9,'Morning in the fort','किले की सुबह'],
-  [11,'Thamb Sthapana','थंब स्थापना'],[13,'Baraat & Swagat at Solista','बारात एवं स्वागत · सोलिस्टा'],[15,'Sagai Dastur','सगाई दस्तूर'],
-  [17,'Baraat Aagman · band baaja to Padmini','बारात आगमन · बैंड-बाजे संग पद्मिनी'],[17.5,'Shaadi & Pheras','विवाह एवं फेरे'],[19,'Reception under the stars','तारों तले रिसेप्शन'],
-  [20,'Varmala ✦ fireworks over Chittor','वरमाला ✦ चित्तौड़ पर आतिशबाज़ी'],[21.5,'Night over Chittor','चित्तौड़ की रात']];
-const dev=s=>String(s).replace(/\d/g,d=>'0123456789'[d]);
-const clockEl=host.querySelector('.f-clock'), slider=host.querySelector('#fHour');
+const MOM=[[0,'Night over Chittor','चित्तौड़ की रात'],[5.3,'Dawn on the ramparts','प्राचीर पर भोर'],[7.5,'Morning','सुबह'],[11,'Midday','दोपहर'],[15,'Afternoon','दोपहर बाद'],[16.6,'Golden hour','सुनहरी शाम'],[18,'Sunset','सूर्यास्त'],[19,'Chittor by night','रात में चित्तौड़']];
+const clockEl=host.querySelector('.f-clock');
 function updateClock(){ let hh=Math.floor(hour), mm=Math.round((hour-hh)*60/5)*5; if(mm===60){ mm=0; hh++; } hh%=24;
   const h12=((hh+11)%12)+1, m2=String(mm).padStart(2,'0'), per=hh<12?'सुबह':hh<16?'दोपहर':hh<19?'शाम':'रात';
   const mo=MOM.filter(x=>x[0]<=hour).pop();
-  clockEl.innerHTML='<b><span class="e">'+h12+':'+m2+' '+(hh<12?'AM':'PM')+'</span><span class="h">'+per+' '+dev(h12)+':'+dev(m2)+'</span></b><span class="e">26 January · '+mo[1]+'</span><span class="h">26 जनवरी · '+mo[2]+'</span>';
-  if(slider && document.activeElement!==slider) slider.value=Math.min(23,Math.max(6,hour)); }
+  clockEl.innerHTML='<b><span class="e">'+h12+':'+m2+' '+(hh<12?'AM':'PM')+'</span><span class="h">'+per+' '+h12+':'+m2+'</span></b><span class="e">'+mo[1]+'</span><span class="h">'+mo[2]+'</span>';
+  host.querySelectorAll('.f-time button').forEach(b=>b.setAttribute('aria-pressed',Math.abs(+b.dataset.h-hour)<.6)); }
 function applyHour(h){ hour=h; let i=0; while(i<KF.length-2&&h>KF[i+1].h) i++; const a=KF[i], b=KF[i+1]; const t=smooth((h-a.h)/(b.h-a.h));
   for(let j=0;j<6;j++) skyU['c'+j].value.copy(a.skyC[j]).lerp(b.skyC[j],t);
   scene.fog.color.copy(a.fogC).lerp(b.fogC,t); scene.fog.near=lerp(a.fn,b.fn,t); scene.fog.far=lerp(a.ff,b.ff,t);
   sun.color.copy(a.sunC).lerp(b.sunC,t); sun.intensity=lerp(a.sun[1],b.sun[1],t);
   hemi.color.copy(a.hs).lerp(b.hs,t); hemi.groundColor.copy(a.hg).lerp(b.hg,t); hemi.intensity=lerp(a.hemi[2],b.hemi[2],t);
   renderer.toneMappingExposure=lerp(a.exp,b.exp,t); stars.material.opacity=lerp(a.stars,b.stars,t);
-  diyaLvl=lerp(a.diya,b.diya,t); diyaI.visible=diyaLvl>.05; mWin.color.copy(winOff).lerp(winOn,diyaLvl); warm.intensity=diyaLvl*1.25;
+  litLvl=lerp(a.lit,b.lit,t); lampI.visible=litLvl>.05; mWin.color.copy(winOff).lerp(winOn,litLvl); warm.intensity=litLvl*1.6;
+  glowMats.forEach(m=>{ m.emissive.copy(glowCol); m.emissiveIntensity=litLvl*.16; });
   night=h<6.3?1-smooth((h-5)/1.3):smooth((h-18.3)/.9);
   const sd=sunDir(Math.min(18.4,Math.max(6,h))); dirV.copy(sd).lerp(moonDir,night).normalize();
-  sun.position.copy(target).addScaledVector(dirV,90); sun.target.position.copy(target);
-  const od=night>.5?moonDir:sd; orb.position.copy(od).multiplyScalar(260); glow.position.copy(orb.position);
+  sun.position.copy(target).addScaledVector(dirV,100); sun.target.position.copy(target);
+  const od=night>.5?moonDir:sd; orb.position.copy(od).multiplyScalar(290); glow.position.copy(orb.position);
   orbMat.color.set(night>.5?0xf4f1e2:(h>16.6||h<8.2?0xffc23a:0xfff4d6)); orb.scale.setScalar(night>.5?.6:1); glow.material.opacity=night>.5?.28:.85;
-  clouds.forEach(s=>{ s.material.color.copy(skyU.c3.value).lerp(white,night>.5?.15:.55); s.material.opacity=(1-night)*.6+.12; });
-  birdG.visible=night<.6; kiteG.visible=night<.75;
+  clouds.forEach(s=>{ s.material.color.copy(skyU.c3.value).lerp(white,night>.5?.15:.55); s.material.opacity=(1-night)*.6+.1; });
+  birdG.visible=night<.6;
   updateClock(); }
 
 /* ---------- landmarks ---------- */
 const LM=[
-  {k:'vijay',obj:()=>new T.Vector3(5.5,topY+vijay.top+.6,1.2),en:'Vijay Stambh',hi:'विजय स्तंभ',
-   ien:'The nine-storey Tower of Victory, raised by Maharana Kumbha in the 15th century after his victory over the Sultan of Malwa. Its walls are carved with gods from top to bottom.',
-   ihi:'महाराणा कुंभा द्वारा 15वीं सदी में मालवा के सुल्तान पर विजय की स्मृति में बनवाया गया नौ मंज़िला विजय स्तंभ। ऊपर से नीचे तक देवी-देवताओं की नक्काशी।'},
-  {k:'kirti',obj:()=>new T.Vector3(-13.5,topY+kirti.top+.5,-1.4),en:'Kirti Stambh',hi:'कीर्ति स्तंभ',
-   ien:'The older Tower of Fame, a 12th-century Jain tower dedicated to Adinath, carved with Jain tirthankaras.',
-   ihi:'12वीं सदी का जैन कीर्ति स्तंभ, आदिनाथ को समर्पित, तीर्थंकरों की नक्काशी के साथ।'},
-  {k:'padmini',obj:()=>new T.Vector3(11.5,topY+2.6,-2.2),en:'Padmini Mahal',hi:'पद्मिनी महल',
-   ien:'The water palace linked to Rani Padmini, whose courage made Chittor a legend. Our wedding venue carries her name.',
-   ihi:'रानी पद्मिनी से जुड़ा जल महल, जिनके साहस ने चित्तौड़ को अमर कर दिया। हमारा विवाह स्थल भी उन्हीं के नाम पर है।'},
-  {k:'meera',obj:()=>new T.Vector3(1.2,topY+3.3,-2.8),en:'Meera Mandir',hi:'मीरा मंदिर',
-   ien:'The temple where Meera Bai, the poet-saint princess of Mewar, sang her bhajans to Krishna.',
-   ihi:'जहाँ मेवाड़ की राजकुमारी, भक्त कवयित्री मीरा बाई ने कृष्ण के भजन गाए।'},
-  {k:'kumbha',obj:()=>new T.Vector3(-3.5,topY+3.4,2.4),en:'Kumbha Mahal',hi:'कुंभा महल',
-   ien:'Ruins of Rana Kumbha\'s palace, the oldest in the fort and the birthplace of Maharana Udai Singh, founder of Udaipur.',
-   ihi:'राणा कुंभा के महल के अवशेष, किले का सबसे पुराना महल और उदयपुर के संस्थापक महाराणा उदय सिंह का जन्मस्थान।'},
-  {k:'pols',obj:()=>new T.Vector3(-27,5.2,9.8),en:'Seven Pols',hi:'सात पोल',
-   ien:'The climb to the fort passes through seven great gates, from Padan Pol to Ram Pol.',
-   ihi:'किले तक की चढ़ाई सात विशाल द्वारों से होकर जाती है — पाडन पोल से राम पोल तक।'}
+  {k:'vijay',obj:()=>new T.Vector3(1.4,topY+vijay.top+.6,1.0),en:'Vijay Stambh',hi:'विजय स्तंभ',
+   ien:'The Tower of Victory: nine storeys and about 37 metres of carved stone, completed by Maharana Kumbha in 1448 after his victory over Mahmud Khilji of Malwa. A narrow stair of 157 steps climbs inside.',
+   ihi:'विजय स्तंभ: लगभग 37 मीटर ऊँचा, नौ मंज़िला, नक्काशीदार पत्थर का स्तंभ, जिसे महाराणा कुंभा ने मालवा के महमूद खिलजी पर विजय की स्मृति में 1448 में पूरा करवाया। भीतर 157 सीढ़ियाँ ऊपर तक जाती हैं।'},
+  {k:'kirti',obj:()=>new T.Vector3(14.2,topY+kirti.top+.5,1.7),en:'Kirti Stambh',hi:'कीर्ति स्तंभ',
+   ien:'The Tower of Fame, about 22 metres high, raised in the 12th century by a Jain merchant and dedicated to Adinath, the first tirthankara. It is older than the Vijay Stambh.',
+   ihi:'कीर्ति स्तंभ: लगभग 22 मीटर ऊँचा, 12वीं सदी में एक जैन व्यापारी द्वारा बनवाया गया और प्रथम तीर्थंकर आदिनाथ को समर्पित। यह विजय स्तंभ से भी पुराना है।'},
+  {k:'padmini',obj:()=>new T.Vector3(KUNDS.padmini[0],topY+2.6,KUNDS.padmini[1]),en:'Padmini Mahal',hi:'पद्मिनी महल',
+   ien:'A white palace beside a pool, with a pavilion standing in the water. Legend says Alauddin Khilji was shown Rani Padmini\'s reflection here before the siege of 1303.',
+   ihi:'तालाब के किनारे सफ़ेद महल, और पानी के बीच एक मंडप। मान्यता है कि 1303 की घेराबंदी से पहले अलाउद्दीन खिलजी को यहीं रानी पद्मिनी का प्रतिबिंब दिखाया गया था।'},
+  {k:'meera',obj:()=>new T.Vector3(-5.4,topY+4.6,-2.2),en:'Meera & Kumbha Shyam temples',hi:'मीरा एवं कुंभ श्याम मंदिर',
+   ien:'Twin temples of the 15th century. Meera Bai, the poet-saint princess of Mewar, sang her bhajans to Krishna here.',
+   ihi:'15वीं सदी के जुड़वाँ मंदिर। मेवाड़ की राजकुमारी, भक्त कवयित्री मीरा बाई ने यहीं कृष्ण के भजन गाए।'},
+  {k:'kumbha',obj:()=>new T.Vector3(-11.2,topY+3.2,1.4),en:'Rana Kumbha Mahal',hi:'राणा कुंभा महल',
+   ien:'The oldest palace in the fort, now in ruins. Here the nurse Panna Dhai gave up her own son to save the infant prince Udai Singh, who later founded Udaipur.',
+   ihi:'किले का सबसे पुराना महल, अब खंडहर। यहीं पन्ना धाय ने अपने पुत्र का बलिदान देकर बालक राजकुमार उदय सिंह को बचाया, जिन्होंने आगे चलकर उदयपुर बसाया।'},
+  {k:'gaumukh',obj:()=>new T.Vector3(KUNDS.gaumukh[0],topY+.8,KUNDS.gaumukh[1]),en:'Gaumukh Kund',hi:'गौमुख कुंड',
+   ien:'A spring flows from a rock carved like a cow\'s mouth into this deep tank. Reservoirs like this kept the fort alive through long sieges.',
+   ihi:'गाय के मुख जैसी चट्टान से निकलता झरना इस गहरे कुंड में गिरता है। ऐसे ही जलाशयों ने लंबी घेराबंदियों में किले को जीवित रखा।'},
+  {k:'pols',obj:()=>{ const p=road[6]; return new T.Vector3(p.x,p.y+3.6,p.z); },en:'The seven pols',hi:'सात पोल',
+   ien:'The road climbs through seven great gates: Padan Pol, Bhairon Pol, Hanuman Pol, Ganesh Pol, Jodla Pol, Laxman Pol and finally Ram Pol.',
+   ihi:'रास्ता सात विशाल द्वारों से होकर चढ़ता है: पाडन पोल, भैरव पोल, हनुमान पोल, गणेश पोल, जोड़ला पोल, लक्ष्मण पोल और अंत में राम पोल।'}
 ];
 const labelLayer=host.querySelector('.labels'), cap=host.querySelector('.f-cap');
 const L2=(en,hi)=>'<span class="e">'+en+'</span><span class="h">'+hi+'</span>';
@@ -1839,8 +1839,8 @@ function caption(title,text,step){ cap.hidden=false; cap.querySelector('.f-step'
 LM.forEach(l=>{ const b=document.createElement('button'); b.type='button'; b.className='lm'; b.dataset.k=l.k;
   b.innerHTML='<i></i>'+L2(l.en,l.hi); b.addEventListener('click',e=>{ e.stopPropagation(); visit(l); }); labelLayer.appendChild(b); l.el=b; });
 
-/* ---------- camera: orbit, fly-to, intro and the royal tour ---------- */
-const cam={theta:.62,elev:.2,radius:56,tx:0,ty:6.5,tz:0};
+/* ---------- camera, fly-to and the guided tour ---------- */
+const cam={theta:.62,elev:.22,radius:58,tx:-1,ty:4.5,tz:0};
 let DEF={...cam};
 let anim=null, hAnim=null, tour=null, autoSpin=!reduce, lastInteract=0, introDone=false;
 const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
@@ -1849,34 +1849,37 @@ function camTo(to,dur,done){ const from={...cam}, dst=Object.assign({},cam,to);
   anim={from,to:dst,t0:performance.now(),dur:reduce?1:dur,done}; }
 function hourTo(h,dur){ hAnim={from:hour,to:h,t0:performance.now(),dur:reduce?1:dur}; }
 const rf=()=>stage.clientWidth<600?1.22:1;
-function visit(l){ stopTour(); const p=l.obj(); LM.forEach(x=>x.el.classList.toggle('on',x===l));
-  caption(L2(l.en,l.hi),L2(l.ien,l.ihi)); autoSpin=false;
-  camTo({tx:p.x,ty:p.y-2.2,tz:p.z,radius:(l.k==='pols'?22:19)*rf(),elev:.3},1800); }
-cap.querySelector('.x').addEventListener('click',()=>{ cap.hidden=true; LM.forEach(x=>x.el.classList.remove('on')); if(tour) stopTour(); camTo(DEF,1600); autoSpin=!reduce; });
 const lmK=k=>LM.find(l=>l.k===k);
+const VIEW={kumbha:[-2.25,.5,15,1],meera:[-1.3,.3,14,2],vijay:[-1.15,.16,16,4.4],gaumukh:[-1.5,1.0,12,-.6],padmini:[-1.3,.78,15,0],kirti:[-.6,.2,14,3],pols:[1.0,.34,20,1]};
+function viewOf(k){ const l=lmK(k), p=l.obj(), v=VIEW[k]; return {tx:p.x,ty:k==='pols'?p.y-2.6:topY+v[3],tz:p.z,theta:v[0],elev:v[1],radius:v[2]}; }
+function visit(l){ stopTour(); LM.forEach(x=>x.el.classList.toggle('on',x===l));
+  caption(L2(l.en,l.hi),L2(l.ien,l.ihi)); autoSpin=false;
+  const to=viewOf(l.k); to.radius*=rf(); camTo(to,2000); }
+cap.querySelector('.x').addEventListener('click',()=>{ cap.hidden=true; LM.forEach(x=>x.el.classList.remove('on')); if(tour) stopTour(); camTo(DEF,1600); autoSpin=!reduce; });
+const rp=road[6];
 const TOUR=[
-  {to:{tx:-27,ty:4,tz:8.5,radius:15,elev:.2,theta:1.05},h:16.9,k:'pols',t:['The road of seven pols','सात पोलों का रास्ता'],x:['Every baraat to Chittor once climbed this road, through seven great gates from Padan Pol to Ram Pol. Ours is already on its way up.','चित्तौड़ आने वाली हर बारात इसी रास्ते से, पाडन पोल से राम पोल तक सात विशाल द्वारों से होकर चढ़ती थी। हमारी बारात भी चढ़ाई पर है।']},
-  {to:{tx:-13.5,ty:topY+3,tz:-1.4,radius:15,elev:.28,theta:.85},h:17.15,k:'kirti'},
-  {to:{tx:-1.5,ty:topY+1.5,tz:0,radius:19,elev:.52,theta:.25},h:17.4,k:'kumbha'},
-  {to:{tx:5.5,ty:topY+4.5,tz:1.2,radius:16,elev:.16,theta:.78},h:17.65,k:'vijay'},
-  {to:{tx:11.5,ty:topY+1,tz:-2.2,radius:14,elev:.45,theta:.15},h:18.35,k:'padmini'},
-  {to:{tx:0,ty:6.5,tz:0,radius:60,elev:.24,theta:.62},h:20.05,fin:1,t:['26 January, 8 PM · Varmala','26 जनवरी, रात 8 बजे · वरमाला'],x:['Chittor lights up for Riya & Dushyant. Come and see it for yourself.','रिया और दुष्यंत के लिए चित्तौड़ जगमगा उठा है। आइए, अपनी आँखों से देखिए।']}];
+  {to:{tx:0,ty:3,tz:0,radius:78,elev:.34,theta:.9},h:8.2,t:['Chittorgarh, the great fort of Mewar','चित्तौड़गढ़, मेवाड़ का महान दुर्ग'],x:['One of the largest forts in India: about 700 acres on a hill some 180 metres high, ringed by walls that run for roughly 13 kilometres. A UNESCO World Heritage Site since 2013.','भारत के सबसे बड़े किलों में से एक: लगभग 180 मीटर ऊँची पहाड़ी पर करीब 700 एकड़ में फैला, लगभग 13 किलोमीटर लंबी प्राचीर से घिरा। 2013 से यूनेस्को विश्व धरोहर।']},
+  {to:{tx:-54,ty:1.5,tz:12,radius:24,elev:.24,theta:1.25},h:8.6,t:['The Gambhiri and the old town','गंभीरी नदी और पुराना शहर'],x:['Below the fort, the Gambhiri river is crossed by a medieval bridge of ten stone arches, and the town of Chittorgarh spreads out at the foot of the hill.','किले के नीचे गंभीरी नदी पर दस पत्थर के मेहराबों वाला मध्यकालीन पुल है, और पहाड़ी की तलहटी में चित्तौड़गढ़ शहर बसा है।']},
+  {h:8.8,k:'pols'},
+  {h:9,k:'kumbha'},
+  {h:9.8,k:'meera'},
+  {h:15,k:'vijay'},
+  {h:15.6,k:'gaumukh'},
+  {h:16.6,k:'padmini'},
+  {h:17.6,k:'kirti'},
+  {to:{tx:-1,ty:4.5,tz:0,radius:60,elev:.24,theta:.62},h:20,t:['Chittor by night','रात में चित्तौड़'],x:['As night falls the ramparts are lit, and the fort glows above the plain, just as it has watched over Mewar for more than a thousand years.','रात होते ही प्राचीर रोशन हो उठती है और किला मैदान के ऊपर जगमगाता है, जैसे हज़ार वर्षों से भी अधिक समय से मेवाड़ की रखवाली करता आया है।']}];
 const tourBtn=host.querySelector('.f-tour');
 function setTourBtn(on){ tourBtn.classList.toggle('on',on); tourBtn.innerHTML=on?'<span class="ico">■</span>'+L2('Stop the tour','सैर रोकें'):'<span class="ico">▶</span>'+L2('Take the Chittor fort tour','चित्तौड़ किले की सैर करें'); }
-function runStep(i){ if(!tour) return; tour.i=i; const s=TOUR[i]; if(!s){ stopTour(true); return; }
-  const l=s.k&&lmK(s.k), r=rf(), to=Object.assign({},s.to,{radius:s.to.radius*r});
+function runStep(i){ if(!tour) return; tour.i=i; const s=TOUR[i]; if(!s){ stopTour(true); camTo(DEF,2000); return; }
+  const l=s.k&&lmK(s.k), r=rf(), to=Object.assign({},s.k?viewOf(s.k):s.to); to.radius*=r;
   const title=s.t?L2(s.t[0],s.t[1]):L2(l.en,l.hi), text=s.x?L2(s.x[0],s.x[1]):L2(l.ien,l.ihi);
   caption(title,text,'<span class="e">Chittor fort tour</span><span class="h">किले की सैर</span> · '+(i+1)+' / '+TOUR.length);
-  const dur=i===0?3000:4200; camTo(to,dur); hourTo(s.h,dur);
-  if(s.fin){ setTimeout(()=>{ if(tour) for(let q=0;q<4;q++) setTimeout(launch,q*350); },dur-600); }
-  tour.timer=setTimeout(()=>runStep(i+1),dur+(s.fin?6000:4300)); }
+  const dur=i===0?3200:4400; camTo(to,dur); hourTo(s.h,dur);
+  tour.timer=setTimeout(()=>runStep(i+1),dur+(i===TOUR.length-1?6500:5200)); }
 function startTour(){ stopTour(); host.classList.add('touched'); tour={i:0}; autoSpin=false; labelLayer.classList.add('quiet'); setTourBtn(true); runStep(0); }
 function stopTour(finished){ if(!tour) return; clearTimeout(tour.timer); tour=null; labelLayer.classList.remove('quiet'); setTourBtn(false); autoSpin=!reduce; lastInteract=performance.now(); if(finished){ cap.hidden=true; } }
 tourBtn.addEventListener('click',()=>tour?(stopTour(),cap.hidden=true,camTo(DEF,1500)):startTour());
-
-/* slider + moment ticks */
-if(slider) slider.addEventListener('input',()=>{ hAnim=null; applyHour(+slider.value); if(tour) stopTour(); });
-host.querySelectorAll('.f-ticks button').forEach(b=>b.addEventListener('click',()=>{ if(tour) stopTour(); hourTo(+b.dataset.h,1800); }));
+host.querySelectorAll('.f-time button').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); if(tour) stopTour(); hourTo(+b.dataset.h,1800); }));
 
 /* drag to turn, pinch or buttons to zoom; vertical swipes still scroll the page */
 const cv=renderer.domElement; const ptrs=new Map(); let pinch0=0, rad0=0;
@@ -1884,52 +1887,46 @@ const interrupt=()=>{ lastInteract=performance.now(); anim=null; if(tour) stopTo
 cv.addEventListener('pointerdown',e=>{ ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); cv.setPointerCapture(e.pointerId); interrupt();
   if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinch0=Math.hypot(a.x-b.x,a.y-b.y); rad0=cam.radius; } });
 cv.addEventListener('pointermove',e=>{ const p=ptrs.get(e.pointerId); if(!p) return; const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
-  if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); if(pinch0) cam.radius=Math.max(16,Math.min(95,rad0*pinch0/d)); }
-  else { cam.theta-=dx*.006; if(e.pointerType!=='touch') cam.elev=Math.min(.95,Math.max(.08,cam.elev+dy*.004)); }
+  if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); if(pinch0) cam.radius=Math.max(12,Math.min(110,rad0*pinch0/d)); }
+  else { cam.theta-=dx*.006; if(e.pointerType!=='touch') cam.elev=Math.min(1.1,Math.max(.06,cam.elev+dy*.004)); }
   lastInteract=performance.now(); });
 const end=e=>{ ptrs.delete(e.pointerId); if(ptrs.size<2) pinch0=0; }; cv.addEventListener('pointerup',end); cv.addEventListener('pointercancel',end);
-cv.addEventListener('wheel',e=>{ if(!e.ctrlKey) return; e.preventDefault(); cam.radius=Math.max(16,Math.min(95,cam.radius*(1+e.deltaY*.002))); },{passive:false});
-host.querySelector('.zoom-in').addEventListener('click',()=>{ interrupt(); camTo({radius:Math.max(16,cam.radius*.8)},500); });
-host.querySelector('.zoom-out').addEventListener('click',()=>{ interrupt(); camTo({radius:Math.min(95,cam.radius*1.25)},500); });
+cv.addEventListener('wheel',e=>{ if(!e.ctrlKey) return; e.preventDefault(); cam.radius=Math.max(12,Math.min(110,cam.radius*(1+e.deltaY*.002))); },{passive:false});
+host.querySelector('.zoom-in').addEventListener('click',()=>{ interrupt(); camTo({radius:Math.max(12,cam.radius*.8)},500); });
+host.querySelector('.zoom-out').addEventListener('click',()=>{ interrupt(); camTo({radius:Math.min(110,cam.radius*1.25)},500); });
 
 /* size */
 let sizedMobile=false;
 function size(){ const w=stage.clientWidth, h=stage.clientHeight; if(!w||!h) return; renderer.setSize(w,h,false); camera.aspect=w/h;
   camera.fov=w<600?48:34; camera.updateProjectionMatrix();
-  if(w<600&&!sizedMobile){ sizedMobile=true; DEF={theta:.32,elev:.3,radius:58,tx:1,ty:5,tz:0}; if(!anim&&!tour) Object.assign(cam,DEF); } }
+  if(w<600&&!sizedMobile){ sizedMobile=true; DEF={theta:.34,elev:.3,radius:60,tx:-2,ty:4,tz:0}; if(!anim&&!tour) Object.assign(cam,DEF); } }
 new ResizeObserver(size).observe(stage); size();
 function capHome(){ const ph=stage.clientWidth<600; if(ph&&cap.parentNode===stage) host.appendChild(cap); else if(!ph&&cap.parentNode!==stage) stage.appendChild(cap); }
 capHome(); addEventListener('resize',capHome);
 
 /* loop */
-let visible=false, fwTimer=0, lanTimer=0, t0=performance.now();
+let visible=false, t0=performance.now();
 new IntersectionObserver(es=>{ visible=es[0].isIntersecting;
-  if(visible&&!introDone){ introDone=true; if(!reduce){ Object.assign(cam,{theta:DEF.theta-1.25,elev:.66,radius:DEF.radius*1.9,tx:DEF.tx,ty:DEF.ty,tz:DEF.tz}); applyHour(16.3); camTo(DEF,3800); hourTo(17.6,3800); } } },{threshold:.2}).observe(stage);
+  if(visible&&!introDone){ introDone=true; if(!reduce){ Object.assign(cam,{theta:DEF.theta-1.2,elev:.62,radius:DEF.radius*1.9,tx:DEF.tx,ty:DEF.ty,tz:DEF.tz}); applyHour(15.4); camTo(DEF,3800); hourTo(16.8,3800); } } },{threshold:.2}).observe(stage);
 const v=new T.Vector3();
 function frame(now){
   requestAnimationFrame(frame);
   if(!visible) return;
-  const dt=Math.min(50,now-t0); t0=now; const k=dt/16.67;
+  const dt=Math.min(50,now-t0); t0=now;
   if(anim){ const u=Math.min(1,(now-anim.t0)/anim.dur), e=ease(u); for(const key in anim.to) cam[key]=lerp(anim.from[key],anim.to[key],e); if(u>=1){ const d=anim.done; anim=null; d&&d(); } }
   if(hAnim){ const u=Math.min(1,(now-hAnim.t0)/hAnim.dur); applyHour(lerp(hAnim.from,hAnim.to,ease(u))); if(u>=1) hAnim=null; }
   if(autoSpin&&!anim&&!tour&&ptrs.size===0&&now-lastInteract>3500&&cap.hidden){ cam.theta+=dt*.00005; }
   if(!reduce){
-    if(hour>=19.7){ fwTimer-=dt; if(fwTimer<=0){ launch(); fwTimer=(PH?900:600)+Math.random()*900; } }
-    if(hour>=18.9&&lanterns.length<(PH?18:34)){ lanTimer-=dt; if(lanTimer<=0){ spawnLantern(); lanTimer=380+Math.random()*500; } }
-    bS+=dt*.0011;
+    tS+=dt*.0009;
     birds.forEach(b=>{ b.a+=b.sp*dt; const x=Math.cos(b.a)*b.r+2, z=Math.sin(b.a)*b.r; b.g.position.set(x,b.h+Math.sin(b.a*2+b.ph)*1.4,z);
       b.g.rotation.y=Math.atan2(-Math.cos(b.a),-Math.sin(b.a)); const fl=Math.sin(now*.018+b.ph)*.65; b.wl.rotation.x=-fl; b.wr.rotation.x=fl; });
-    kites.forEach(K=>{ K.m.position.set(K.b.x+Math.sin(now*.0007+K.i)*1.6,K.b.y+Math.sin(now*.0011+K.i*2)*1.1,K.b.z+Math.cos(now*.0005+K.i)*1.2);
-      K.m.quaternion.copy(camera.quaternion); K.m.rotateZ(Math.sin(now*.0016+K.i)*.35);
-      const a=K.line.geometry.attributes.position.array; a[3]=K.m.position.x; a[4]=K.m.position.y-.6; a[5]=K.m.position.z; K.line.geometry.attributes.position.needsUpdate=true; });
     clouds.forEach(s=>{ s.userData.a+=dt*.000012; s.position.set(Math.cos(s.userData.a)*s.userData.r,s.userData.y,Math.sin(s.userData.a)*s.userData.r); });
     for(let i=0;i<flags.length;i++) flags[i].rotation.y=Math.sin(now*.003+i)*.45;
-  } else if(!clouds[0].userData.placed){ clouds.forEach(s=>{ s.userData.placed=1; s.position.set(Math.cos(s.userData.a)*s.userData.r,s.userData.y,Math.sin(s.userData.a)*s.userData.r); }); }
-  placeBaraat(now);
-  if(fw.length||rockets.length||flash.intensity>.02) stepFireworks(k);
-  if(lanterns.length) stepLanterns(k,dt);
-  if(diyaI.visible) mDiya.color.setHSL(.1,1,.6+Math.sin(now*.006)*.06);
+  }
+  placeTroop(now);
+  if(lampI.visible) mLamp.color.setHSL(.1,1,.6+Math.sin(now*.006)*.05);
   camera.position.set(cam.tx+cam.radius*Math.cos(cam.elev)*Math.cos(cam.theta), cam.ty+cam.radius*Math.sin(cam.elev), cam.tz+cam.radius*Math.cos(cam.elev)*Math.sin(cam.theta));
+  const gy=H(camera.position.x,camera.position.z)+1.2; if(camera.position.y<gy) camera.position.y=gy;
   camera.lookAt(cam.tx,cam.ty,cam.tz);
   renderer.render(scene,camera);
   const w=stage.clientWidth, h=stage.clientHeight;
@@ -1944,7 +1941,7 @@ function frame(now){
     stem=Math.min(stem,140); placed.push({l:it.x-it.bw/2-4,r:it.x+it.bw/2+4,t:it.y-stem-it.bh,b:it.y-stem});
     el.style.setProperty('--stem',stem+'px'); el.style.transform='translate('+it.x+'px,'+it.y+'px) translate(-50%,-100%)'; el.style.opacity=''; el.style.pointerEvents=''; });
 }
-applyHour(17.6); setTourBtn(false);
+applyHour(16.8); setTourBtn(false);
 requestAnimationFrame(frame);
 host.classList.add('ready');
 })();

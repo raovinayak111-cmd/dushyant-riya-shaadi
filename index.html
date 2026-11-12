@@ -873,6 +873,18 @@ body.lang-hi .sw-k{font-size:15px;letter-spacing:.01em;text-transform:none}
 .vn-names>span{display:block}
 .vn-names .h{font-family:var(--f-hindi);font-size:17.5px}
 .vn-names .nw{white-space:nowrap}
+
+/* music button */
+#musicBtn{position:relative;display:grid;place-items:center;width:38px;height:38px;min-width:38px;padding:0;border-radius:50%;border:1px solid rgba(255,184,28,.7);background:rgba(36,6,18,.4);color:var(--genda);cursor:pointer}
+#musicBtn .m-bars{display:none;align-items:flex-end;gap:2px;height:14px}
+#musicBtn .m-bars i{width:3px;height:100%;background:var(--genda);border-radius:2px;transform-origin:bottom;animation:mbar .9s ease-in-out infinite}
+#musicBtn .m-bars i:nth-child(2){animation-delay:-.3s}#musicBtn .m-bars i:nth-child(3){animation-delay:-.6s}#musicBtn .m-bars i:nth-child(4){animation-delay:-.15s}
+@keyframes mbar{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+#musicBtn.on .m-note{display:none}#musicBtn.on .m-bars{display:flex}
+#musicBtn:not(.on)::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(255,184,28,.55);animation:mping 2.4s ease-out infinite}
+@keyframes mping{0%{transform:scale(.85);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+.tgl{display:flex;align-items:center;gap:8px}
+@media (prefers-reduced-motion:reduce){#musicBtn .m-bars i,#musicBtn::after{animation:none!important}}
 /* petals canvas for sections */
 #petals{position:fixed;inset:0;pointer-events:none;z-index:70;width:100%;height:100%}
 .reveal{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -895,6 +907,7 @@ body.lang-hi .sw-k{font-size:15px;letter-spacing:.01em;text-transform:none}
 
 <canvas id="petals" aria-hidden="true"></canvas>
 
+<audio id="bgm" src="music.mp3" preload="none" loop playsinline></audio>
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
     <a class="mono" href="#top" aria-label="Rao Parivaar, back to top"><svg viewBox="0 0 40 40" aria-hidden="true"><g stroke="#e0b03a" stroke-width="2.4" stroke-linecap="round"><path d="M7 5 L33 35"/><path d="M33 5 L7 35"/></g><g stroke="#e0b03a" stroke-width="4" stroke-linecap="round"><path d="M30.5 32.2 L33 35"/><path d="M9.5 32.2 L7 35"/></g><circle cx="20" cy="20" r="11.5" fill="#b3121f" stroke="#e0b03a" stroke-width="2"/><circle cx="20" cy="20" r="3.4" fill="#ffb81c"/><g fill="#ffb81c"><circle cx="15" cy="15" r="1.5"/><circle cx="25" cy="15" r="1.5"/><circle cx="15" cy="25" r="1.5"/><circle cx="25" cy="25" r="1.5"/></g></svg><span class="mono-t"><span class="e">Rao Parivaar</span><span class="h">राव परिवार</span><small><span class="e">Riya weds Dushyant</span><span class="h">रिया संग दुष्यंत</span></small></span></a>
@@ -908,6 +921,7 @@ body.lang-hi .sw-k{font-size:15px;letter-spacing:.01em;text-transform:none}
     </div>
     <div class="tgl">
       
+      <button id="musicBtn" type="button" aria-pressed="false" aria-label="Play music"><svg class="m-note" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span class="m-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
       <button id="lng" aria-label="Switch language"><span class="e">हिंदी</span><span class="h">English</span></button>
     </div>
   </div>
@@ -1413,6 +1427,24 @@ renderSchedule();
 setInterval(()=>{ if(Date.now()>istToUTC(22,'00:00') && Date.now()<istToUTC(27,'06:00')) renderSchedule(); },60000);
 
 function bell(){}
+
+/* ---------- background music ---------- */
+(function(){
+  const au=$('#bgm'), btn=$('#musicBtn'); if(!au||!btn) return;
+  let on=false, userPaused=false, fadeT=null, resumeOnShow=false;
+  const TARGET=.7;
+  function fade(to,ms,done){ clearInterval(fadeT); const from=au.volume, t0=performance.now();
+    fadeT=setInterval(()=>{ const u=Math.min(1,(performance.now()-t0)/ms); try{ au.volume=from+(to-from)*u; }catch(e){} if(u>=1){ clearInterval(fadeT); done&&done(); } },40); }
+  function ui(){ btn.classList.toggle('on',on); btn.setAttribute('aria-pressed',on); btn.setAttribute('aria-label',on?L('Pause music','संगीत रोकें'):L('Play music','संगीत चलाएँ')); }
+  function play(){ try{ au.volume=0; }catch(e){} const p=au.play(); on=true; ui(); if(p&&p.catch) p.catch(()=>{ on=false; ui(); }); fade(TARGET,1800); }
+  function pause(){ on=false; ui(); fade(0,700,()=>au.pause()); }
+  btn.addEventListener('click',e=>{ e.stopPropagation(); if(on){ userPaused=true; pause(); } else { userPaused=false; play(); } });
+  /* start softly on the first tap on the language switch or the scroll */
+  const firstTap=()=>{ if(!on&&!userPaused) play(); document.querySelectorAll('.lang-seg button, #painting').forEach(el=>el.removeEventListener('click',firstTap)); };
+  document.querySelectorAll('.lang-seg button, #painting').forEach(el=>el.addEventListener('click',firstTap));
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(on){ resumeOnShow=true; au.pause(); } } else if(resumeOnShow){ resumeOnShow=false; if(on) au.play().catch(()=>{}); } });
+  ui();
+})();
 
 /* ---------- gentle reveal (content always visible) ---------- */
 if(!reduce && 'IntersectionObserver' in window){

@@ -1322,28 +1322,27 @@ const I={
 const svg=(k,cls='')=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="${cls}" aria-hidden="true">${I[k]}</svg>`;
 const EV=[
  {d:22,s:'09:00',e:'11:00',en:'Ganesh Sthapana',hi:'गणेश स्थापना',v:'pad-room',t:'rite',ic:'kalash',a:['Shri Ganesh is installed and worshipped so that every ceremony ahead is free of obstacles.','विघ्नहर्ता श्री गणेश की स्थापना एवं पूजन, ताकि सभी मांगलिक कार्य निर्विघ्न संपन्न हों।']},
- {d:25,s:'07:00',e:'09:00',en:'Chai & Nashta',hi:'चाय-नाश्ता',v:'pad-garden',t:'meal',ic:'cup'},
  {d:25,s:'10:00',e:'11:00',en:'Rodi Pujan',hi:'रोड़ी पूजन',v:'pad-garden',t:'rite',ic:'mound',a:['A traditional Rajasthani rite in which the women of the family pray for the household\'s well-being before the wedding.','विवाह से पूर्व परिवार की महिलाओं द्वारा घर-परिवार की खुशहाली के लिए की जाने वाली पारंपरिक राजस्थानी पूजा।']},
  {d:25,s:'11:00',e:'13:00',en:'Lunch',hi:'भोजन',v:'pad-garden',t:'meal',ic:'plate'},
  {d:25,s:'12:00',e:'13:00',en:'Mayra',hi:'मायरा',v:'pad-hall',t:'rite',ic:'gift',a:['The maternal family, led by the mama, arrives with gifts and blessings. One of the most emotional Marwari traditions.','ननिहाल पक्ष (मामा) उपहार और आशीर्वाद लेकर पधारते हैं — मारवाड़ी परंपरा की सबसे भावुक रस्मों में से एक।']},
  {d:25,s:'14:00',e:'16:00',en:'Mehendi & Haldi',hi:'मेहंदी एवं हल्दी',v:'pad-roof',t:'rite',ic:'paisley',star:1,a:['Turmeric for the glow, henna for the colour. Expect yellow everywhere and a dhol on the rooftop.','हल्दी की चमक और मेहंदी का रंग — छत पर ढोल के साथ।']},
- {d:25,s:'16:00',e:'17:00',en:'Snacks & Tea',hi:'चाय एवं स्नैक्स',v:'pad-garden',t:'meal',ic:'cup'},
  {d:25,s:'16:00',e:'18:00',en:'Basan-Kalash',hi:'बासन-कलश',v:'pad-room',t:'rite',ic:'kalash',a:['Worship of the sacred kalash and household vessels, asking for abundance in the new home.','पवित्र कलश एवं बर्तनों का पूजन, नए घर में समृद्धि की कामना के साथ।']},
  {d:25,s:'19:00',e:'22:00',en:'Mahila Sangeet & DJ Night',hi:'महिला संगीत एवं DJ नाइट',v:'pad-garden',t:'rite',ic:'music',star:1,a:['Folk songs of the mahila sangeet give way to a DJ night under the open sky. Bring dancing shoes and a shawl.','पारंपरिक महिला संगीत के लोकगीत, फिर खुले आसमान तले DJ नाइट। नाचने के जूते और शॉल साथ लाएँ।']},
- {d:25,s:'19:00',e:'22:00',en:'Dinner',hi:'रात्रि भोज',v:'pad-garden',t:'meal',ic:'plate'},
+ {d:25,s:'19:00',e:'22:00',en:'Dinner',hi:'रात्रि भोज',v:'pad-garden',t:'meal',ic:'plate',from:['from 7 PM','शाम 7 बजे से शुरू']},
  {d:26,s:'11:00',e:'13:00',en:'Thamb Sthapana',hi:'थंब स्थापना',v:'pad-hall',t:'rite',ic:'pillar',a:['The pillar (thamb) of the wedding mandap is raised and worshipped.','विवाह मंडप के थंब (खंभ) की विधिवत स्थापना एवं पूजन।']},
  {d:26,s:'13:00',e:'14:00',en:'Baraat & Swagat',hi:'बारात एवं स्वागत',v:'sol',t:'rite',ic:'diya',a:['The baraat arrives at Solista and is welcomed with tilak, garlands and folk music.','बारात का सोलिस्टा में आगमन एवं तिलक, माला और लोक संगीत के साथ स्वागत।']},
- {d:26,s:'14:00',e:'15:00',en:'Brunch',hi:'ब्रंच',sub:['Chai-nashta + lunch','चाय-नाश्ता + भोजन'],v:'sol',t:'meal',ic:'plate'},
+ {d:26,s:'14:00',e:'15:00',en:'Brunch',hi:'ब्रंच',v:'sol',t:'meal',ic:'plate'},
  {d:26,s:'15:00',e:'16:00',en:'Sagai Dastur',hi:'सगाई दस्तूर',v:'sol',t:'rite',ic:'ring',a:['The formal engagement customs between the two families: tilak, gifts and blessings.','दोनों परिवारों के बीच सगाई का दस्तूर — तिलक, उपहार और आशीर्वाद।']},
  {d:26,s:'17:00',e:'17:10',en:'Baraat Aagman',hi:'बारात आगमन',v:'pad-gate',t:'rite',ic:'bus',a:['We welcome the baraat at the Padmini garden gate, as it arrives with the band baaja from Sainik School. Please gather at the gate by 5 PM.','बैंड-बाजे के साथ सैनिक स्कूल से आती बारात का पद्मिनी गार्डन गेट पर स्वागत। कृपया शाम 5 बजे तक गेट पर पहुँचें।']},
  {d:26,s:'17:30',e:'19:00',en:'Shaadi & Pheras',hi:'विवाह एवं फेरे',v:'pad-hall',t:'rite',ic:'agni',star:1,a:['Riya and Dushyant take the seven pheras around the sacred fire.','पवित्र अग्नि के समक्ष रिया और दुष्यंत के सात फेरे।']},
+ {d:26,s:'19:00',e:'23:00',en:'Dinner',hi:'रात्रि भोज',v:'pad-garden',t:'meal',ic:'plate',from:['from 7 PM','शाम 7 बजे से शुरू']},
  {d:26,s:'19:00',e:'23:00',en:'Reception',hi:'रिसेप्शन',v:'pad-garden',t:'rite',ic:'diya',star:1,a:['The first celebration as husband and wife: dinner, music and blessings in the garden.','पति-पत्नी के रूप में पहला उत्सव — गार्डन में भोज, संगीत और आशीर्वाद।']},
  {d:26,s:'20:00',e:'20:10',en:'Varmala',hi:'वरमाला',v:'pad-garden',t:'rite',ic:'garland',a:['The exchange of garlands.','वरमाला का आदान-प्रदान।']},
  {d:26,s:'20:00',e:'21:00',en:'Vidaai',hi:'विदाई',v:'pad-garden',t:'rite',ic:'doli',a:['Riya\'s farewell from her family.','रिया की भावभीनी विदाई।']}
 ];
 const DAYS=[
  {d:22,w:['Friday, 22 January','शुक्रवार, 22 जनवरी'],m:['Jan · Fri','जन · शुक्र'],t:['Ganesh Sthapana','गणेश स्थापना'],note:['An intimate puja to begin the wedding rituals, three days ahead.','विवाह की रस्मों की शुरुआत, तीन दिन पहले।']},
- {d:25,w:['Monday, 25 January','सोमवार, 25 जनवरी'],m:['Jan · Mon','जन · सोम'],t:['Haldi · Mehendi · Sangeet','हल्दी · मेहंदी · संगीत'],note:['A full day at Hotel Padmini, from morning chai to the last song of the night.','होटल पद्मिनी में पूरा दिन — सुबह की चाय से रात के आखिरी गीत तक।']},
+ {d:25,w:['Monday, 25 January','सोमवार, 25 जनवरी'],m:['Jan · Mon','जन · सोम'],t:['Haldi · Mehendi · Sangeet','हल्दी · मेहंदी · संगीत'],note:['A full day at Hotel Padmini, from the Rodi Pujan to the last song of the night.','होटल पद्मिनी में पूरा दिन — रोड़ी पूजन से रात के आखिरी गीत तक।']},
  {d:26,w:['Tuesday, 26 January','मंगलवार, 26 जनवरी'],m:['Jan · Tue','जन · मंगल'],t:['Baraat · Pheras · Reception','बारात · फेरे · रिसेप्शन'],note:['Republic Day, and our wedding day. The baraat spends the afternoon at Solista and walks to Padmini at 5.','गणतंत्र दिवस — और हमारा विवाह दिवस। दोपहर सोलिस्टा में, शाम 5 बजे बारात पद्मिनी की ओर।']}
 ];
 const toHi = n => String(n).replace(/\d/g,d=>'0123456789'[d]);
@@ -1367,7 +1366,7 @@ function renderSchedule(){
     const title=L(e.en,e.hi);
     if(e.t==='meal'){
       return `<div class="ev meal${live?' now':''}"><div class="tm">${a.t}<small>${a.ap}</small></div><div class="dot"></div>
-      <div class="card"><div class="ic">${svg(e.ic)}</div><h3>${title}${e.sub?` <span style="font-weight:400;opacity:.8">· ${L(e.sub[0],e.sub[1])}</span>`:''} <span class="chip ${v.c}">${L(v.en,v.hi)}</span> <span style="font-weight:400;opacity:.7;font-size:13px">${lang==='hi'?'':'until '}${b.t} ${b.ap}${lang==='hi'?' तक':''}</span>${live?' <span class="nowtag">'+L('Now','अभी')+'</span>':''}</h3></div></div>`;
+      <div class="card"><div class="ic">${svg(e.ic)}</div><h3>${title}${e.sub?` <span style="font-weight:400;opacity:.8">· ${L(e.sub[0],e.sub[1])}</span>`:''} <span class="chip ${v.c}">${L(v.en,v.hi)}</span> <span style="font-weight:400;opacity:.7;font-size:13px">${e.from?L(e.from[0],e.from[1]):(lang==='hi'?'':'until ')+b.t+' '+b.ap+(lang==='hi'?' तक':'')}</span>${live?' <span class="nowtag">'+L('Now','अभी')+'</span>':''}</h3></div></div>`;
     }
     return `<div class="ev${e.star?' star':''}${live?' now':''}"><div class="tm">${a.t}<small>${a.ap}</small></div><div class="dot"></div>
       <article class="card">${e.star?`<span class="ribbon">${L('Main ceremony','मुख्य रस्म')}</span>`:''}<div class="ic">${svg(e.ic)}</div>
